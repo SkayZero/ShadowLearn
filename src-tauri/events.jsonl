@@ -1,0 +1,13 @@
+{"bypass_cooldown":true,"event":"chat_request","ok":false,"provider":"unknown","ts":"2025-10-27T16:14:23.898323+00:00","ttfr_ms":14039,"used_fallback":false}
+{"bypass_cooldown":true,"event":"chat_request","ok":false,"provider":"unknown","ts":"2025-10-27T16:14:41.250937+00:00","ttfr_ms":14017,"used_fallback":false}
+{"bypass_cooldown":true,"event":"chat_request","ok":true,"provider":"ollama","ts":"2025-10-27T16:47:14.279662+00:00","ttfr_ms":24864,"used_fallback":false}
+{"bypass_cooldown":true,"event":"chat_request","ok":true,"provider":"ollama","ts":"2025-10-27T16:47:51.750022+00:00","ttfr_ms":1290,"used_fallback":false}
+{"bypass_cooldown":true,"event":"chat_request","ok":true,"provider":"ollama","ts":"2025-10-27T16:48:01.925346+00:00","ttfr_ms":754,"used_fallback":false}
+{"bypass_cooldown":true,"event":"chat_request","ok":true,"provider":"ollama","ts":"2025-10-27T16:48:33.328903+00:00","ttfr_ms":2005,"used_fallback":false}
+{"bypass_cooldown":true,"event":"chat_request","ok":true,"provider":"ollama","ts":"2025-10-27T16:48:58.416957+00:00","ttfr_ms":1273,"used_fallback":false}
+{"bypass_cooldown":true,"event":"chat_request","ok":true,"provider":"ollama","ts":"2025-10-27T16:49:55.621186+00:00","ttfr_ms":1600,"used_fallback":false}
+{"bypass_cooldown":true,"event":"chat_request","ok":true,"provider":"ollama","ts":"2025-10-27T16:50:31.628377+00:00","ttfr_ms":2206,"used_fallback":false}
+{"bypass_cooldown":true,"event":"chat_request","ok":true,"provider":"ollama","ts":"2025-10-27T16:51:17.069176+00:00","ttfr_ms":1535,"used_fallback":false}
+{"bypass_cooldown":true,"event":"chat_request","ok":true,"provider":"ollama","ts":"2025-10-27T16:51:59.070656+00:00","ttfr_ms":1477,"used_fallback":false}
+{"bypass_cooldown":true,"event":"chat_request","ok":true,"provider":"ollama","ts":"2025-10-27T16:52:55.338295+00:00","ttfr_ms":1265,"used_fallback":false}
+{"bypass_cooldown":true,"event":"chat_request","ok":true,"provider":"ollama","ts":"2025-10-27T16:53:40.043142+00:00","ttfr_ms":1564,"used_fallback":false}

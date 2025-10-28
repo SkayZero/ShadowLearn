@@ -1,0 +1,959 @@
+
+> shadowlearn@0.1.0 tauri /Users/syloh/Desktop/ShadowLearn
+> tauri dev
+
+     Running BeforeDevCommand (`pnpm dev`)
+
+> shadowlearn@0.1.0 dev /Users/syloh/Desktop/ShadowLearn
+> vite
+
+
+  VITE v7.1.12  ready in 92 ms
+
+  ➜  Local:   http://localhost:1420/
+     Running DevCommand (`cargo  run --no-default-features --color always --`)
+        Info Watching /Users/syloh/Desktop/ShadowLearn/src-tauri for changes...
+[0m[1m[33mwarning[0m[0m[1m: unused import: `serde_json::json`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/chat/commands.rs:3:5[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m3[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0muse serde_json::json;[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^^^^^^^^[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m  [0m[0m[1m[38;5;12m= [0m[0m[1mnote[0m[0m: `#[warn(unused_imports)]` on by default[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused import: `tokio::sync::Mutex`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/chat/commands.rs:8:5[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m8[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0muse tokio::sync::Mutex;[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused imports: `chat_with_ai`, `check_llm_health`, and `get_llm_stats`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/chat/mod.rs:4:20[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m4[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub use commands::{chat_with_ai, check_llm_health, get_llm_stats};[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m                    [0m[0m[1m[33m^^^^^^^^^^^^[0m[0m  [0m[0m[1m[33m^^^^^^^^^^^^^^^^[0m[0m  [0m[0m[1m[33m^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused import: `ChatResponse`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/chat/mod.rs:5:50[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m5[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub use llm_client::{LLMChatClient, ChatRequest, ChatResponse, ChatMessage};[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m                                                  [0m[0m[1m[33m^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused import: `slash::execute_slash_command`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/commands/mod.rs:8:9[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m8[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub use slash::execute_slash_command;[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m         [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused import: `std::time::Duration`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/config/types.rs:2:5[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m2[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0muse std::time::Duration;[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused import: `types::*`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/config/mod.rs:5:9[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m5[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub use types::*;[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m         [0m[0m[1m[33m^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused imports: `KeyManagerError`, `KeyManager`, `KeychainStatus`, and `check_keychain_status`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/crypto/mod.rs:3:22[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m3[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub use keymanager::{check_keychain_status, KeyManager, KeyManagerError, KeychainStatus};[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m                      [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^^^[0m[0m  [0m[0m[1m[33m^^^^^^^^^^[0m[0m  [0m[0m[1m[33m^^^^^^^^^^^^^^^[0m[0m  [0m[0m[1m[33m^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused imports: `PermissionChecker`, `PermissionStatus`, `check_permissions`, `request_accessibility_permission`, and `request_screen_recording_permission`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/permissions/mod.rs:4:5[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m4[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    check_permissions, request_accessibility_permission, request_screen_recording_permission,[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^^^^^^^^^[0m[0m  [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m[0m  [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m5[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    PermissionChecker, PermissionStatus,[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^^^^^^^^^[0m[0m  [0m[0m[1m[33m^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused import: `warn`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/context/clipboard_monitor.rs:4:22[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m4[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0muse tracing::{debug, warn};[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m                      [0m[0m[1m[33m^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused import: `std::sync::Arc`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/pause/mod.rs:2:5[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m2[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0muse std::sync::Arc;[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused import: `tokio::sync::Mutex`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/pause/mod.rs:3:5[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m3[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0muse tokio::sync::Mutex;[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused import: `Datelike`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/streaks/mod.rs:1:29[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m1[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0muse chrono::{DateTime, Utc, Datelike};[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m                             [0m[0m[1m[33m^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused import: `serde_json::Value`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/streaks/commands.rs:2:5[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m2[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0muse serde_json::Value;[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused imports: `DynamicImage` and `ImageBuffer`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/screenshot/capturer.rs:3:13[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m3[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0muse image::{DynamicImage, ImageBuffer, RgbImage};[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m             [0m[0m[1m[33m^^^^^^^^^^^^[0m[0m  [0m[0m[1m[33m^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused import: `std::time::Instant`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/triggers/state_machine.rs:3:5[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m3[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0muse std::time::Instant;[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused import: `StateTransition`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/triggers/trigger_loop.rs:8:28[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m8[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0muse super::state_machine::{StateTransition, TriggerEvent, TriggerStateMachine};[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m                            [0m[0m[1m[33m^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused import: `UserResponse`[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/triggers/trigger_loop.rs:10:78[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m10[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0muse crate::ml::{EventType as MLEventType, PersonalizationManager, UserEvent, UserResponse};[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m                                                                              [0m[0m[1m[33m^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused imports: `OpportunityPreview`, `StateTransition`, `TriggerEvent`, `TriggerStateMachine`, `TriggerState`, `get_state_explanation`, `get_state_history`, and `get_trigger_state`[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/triggers/mod.rs:7:5[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m7[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    get_state_explanation, get_state_history, get_trigger_state, CooldownReason, OpportunityPreview,[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^^^[0m[0m  [0m[0m[1m[33m^^^^^^^^^^^^^^^^^[0m[0m  [0m[0m[1m[33m^^^^^^^^^^^^^^^^^[0m[0m                  [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m8[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    StateTransition, TriggerEvent, TriggerState, TriggerStateMachine,[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^^^^^^^[0m[0m  [0m[0m[1m[33m^^^^^^^^^^^^[0m[0m  [0m[0m[1m[33m^^^^^^^^^^^^[0m[0m  [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused import: `GeneratedArtifact`[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/lib.rs:843:46[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m843[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    use crate::artefact::{ArtefactGenerator, GeneratedArtifact};[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m                                              [0m[0m[1m[33m^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: use of deprecated function `base64::decode`: Use Engine::decode[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/crypto/keymanager.rs:60:45[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m60[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m                        let bytes = base64::decode(&b64)[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m                                             [0m[0m[1m[33m^^^^^^[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m   [0m[0m[1m[38;5;12m= [0m[0m[1mnote[0m[0m: `#[warn(deprecated)]` on by default[0m
+
+[0m[1m[33mwarning[0m[0m[1m: use of deprecated function `base64::encode`: Use Engine::encode[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/crypto/keymanager.rs:71:53[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m71[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m                        entry.set_password(&base64::encode(k))[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m                                                     [0m[0m[1m[33m^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: use of deprecated function `base64::encode`: Use Engine::encode[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/crypto/keymanager.rs:141:41[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m141[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m            entry.set_password(&base64::encode(nb)).map_err(|e| format!("store new key: {}", e))?;[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m                                         [0m[0m[1m[33m^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused variable: `timestamp`[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/chat/commands.rs:19:9[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m19[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    let timestamp = Utc::now().to_rfc3339();[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m         [0m[0m[1m[33m^^^^^^^^^[0m[0m [0m[0m[1m[33mhelp: if this is intentional, prefix it with an underscore: `_timestamp`[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m   [0m[0m[1m[38;5;12m= [0m[0m[1mnote[0m[0m: `#[warn(unused_variables)]` on by default[0m
+
+[0m[1m[33mwarning[0m[0m[1m: value assigned to `last_error` is never read[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/chat/llm_client.rs:116:17[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m116[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m        let mut last_error = None;[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m                 [0m[0m[1m[33m^^^^^^^^^^[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m    [0m[0m[1m[38;5;12m= [0m[0m[1mhelp[0m[0m: maybe it is overwritten before being read?[0m
+[0m    [0m[0m[1m[38;5;12m= [0m[0m[1mnote[0m[0m: `#[warn(unused_assignments)]` on by default[0m
+
+[0m[1m[33mwarning[0m[0m[1m: value assigned to `last_error` is never read[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/chat/llm_client.rs:141:21[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m141[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m                    last_error = Some("Timeout after 12s".to_string());[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m                     [0m[0m[1m[33m^^^^^^^^^^[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m    [0m[0m[1m[38;5;12m= [0m[0m[1mhelp[0m[0m: maybe it is overwritten before being read?[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused variable: `ttfr`[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/chat/llm_client.rs:166:21[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m166[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m                let ttfr = start.elapsed().as_millis() as u64;[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m                     [0m[0m[1m[33m^^^^[0m[0m [0m[0m[1m[33mhelp: if this is intentional, prefix it with an underscore: `_ttfr`[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused variable: `ttfr`[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/chat/llm_client.rs:172:21[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m172[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m                let ttfr = start.elapsed().as_millis() as u64;[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m                     [0m[0m[1m[33m^^^^[0m[0m [0m[0m[1m[33mhelp: if this is intentional, prefix it with an underscore: `_ttfr`[0m
+
+[0m[1m[33mwarning[0m[0m[1m: use of deprecated associated function `aes_gcm::aead::generic_array::GenericArray::<T, N>::from_slice`: please upgrade to generic-array 1.x[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/crypto/keymanager.rs:65:47[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m65[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m                        Ok(*Key::<Aes256Gcm>::from_slice(&bytes))[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m                                               [0m[0m[1m[33m^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: use of deprecated associated function `aes_gcm::aead::generic_array::GenericArray::<T, N>::from_slice`: please upgrade to generic-array 1.x[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/crypto/keymanager.rs:74:47[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m74[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m                        Ok(*Key::<Aes256Gcm>::from_slice(&k))[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m                                               [0m[0m[1m[33m^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: use of deprecated associated function `aes_gcm::aead::generic_array::GenericArray::<T, N>::from_slice`: please upgrade to generic-array 1.x[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/crypto/keymanager.rs:85:45[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m85[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m                let kk = *Key::<Aes256Gcm>::from_slice(&k);[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m                                             [0m[0m[1m[33m^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: use of deprecated associated function `aes_gcm::aead::generic_array::GenericArray::<T, N>::from_slice`: please upgrade to generic-array 1.x[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/crypto/keymanager.rs:119:37[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m119[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m        let new = Key::<Aes256Gcm>::from_slice(&nb);[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m                                     [0m[0m[1m[33m^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused variable: `artifact`[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/artefact/mod.rs:52:16[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m52[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m            Ok(artifact) => {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m                [0m[0m[1m[33m^^^^^^^^[0m[0m [0m[0m[1m[33mhelp: if this is intentional, prefix it with an underscore: `_artifact`[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused variable: `timestamp`[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/opportunities/commands.rs:36:9[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m36[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    let timestamp = chrono::Utc::now().timestamp();[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m         [0m[0m[1m[33m^^^^^^^^^[0m[0m [0m[0m[1m[33mhelp: if this is intentional, prefix it with an underscore: `_timestamp`[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused variable: `pills_manager`[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/pills/mod.rs:80:5[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m80[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pills_manager: State<'_, Arc<Mutex<PillsManager>>>,[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^^^^^[0m[0m [0m[0m[1m[33mhelp: if this is intentional, prefix it with an underscore: `_pills_manager`[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused variable: `state_change_result`[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/triggers/trigger_loop.rs:182:13[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m182[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m        let state_change_result = {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m             [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^[0m[0m [0m[0m[1m[33mhelp: if this is intentional, prefix it with an underscore: `_state_change_result`[0m
+
+[0m[1m[33mwarning[0m[0m[1m: unused variable: `size`[0m
+[0m    [0m[0m[1m[38;5;12m--> [0m[0msrc/lib.rs:1197:25[0m
+[0m     [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m1197[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m                    let size = monitor.size();[0m
+[0m     [0m[0m[1m[38;5;12m|[0m[0m                         [0m[0m[1m[33m^^^^[0m[0m [0m[0m[1m[33mhelp: if this is intentional, prefix it with an underscore: `_size`[0m
+
+[0m[1m[33mwarning[0m[0m[1m: use of deprecated associated function `aes_gcm::aead::generic_array::GenericArray::<T, N>::from_slice`: please upgrade to generic-array 1.x[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/crypto/keymanager.rs:97:29[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m97[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m            .encrypt(Nonce::from_slice(&nonce), data)[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m                             [0m[0m[1m[33m^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: use of deprecated associated function `aes_gcm::aead::generic_array::GenericArray::<T, N>::from_slice`: please upgrade to generic-array 1.x[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/crypto/keymanager.rs:111:29[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m111[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m            .decrypt(Nonce::from_slice(&enc[..12]), &enc[12..])[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m                             [0m[0m[1m[33m^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: variable `total_days` is assigned to, but never used[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/streaks/mod.rs:54:17[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m54[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m        let mut total_days = 0;[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m                 [0m[0m[1m[33m^^^^^^^^^^[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m   [0m[0m[1m[38;5;12m= [0m[0m[1mnote[0m[0m: consider using `_total_days` instead[0m
+
+[0m[1m[33mwarning[0m[0m[1m: function `log_to_jsonl` is never used[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/chat/commands.rs:67:4[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m67[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mfn log_to_jsonl(entry: &serde_json::Value) -> Result<(), Box<dyn std::error::Error>> {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m    [0m[0m[1m[33m^^^^^^^^^^^^[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m   [0m[0m[1m[38;5;12m= [0m[0m[1mnote[0m[0m: `#[warn(dead_code)]` on by default[0m
+
+[0m[1m[33mwarning[0m[0m[1m: struct `RetentionConfig` is never constructed[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/config/manager.rs:14:12[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m14[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub struct RetentionConfig {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: struct `PrivacyStats` is never constructed[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/config/types.rs:48:12[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m48[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub struct PrivacyStats {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: enum `KeyManagerError` is never used[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/crypto/keymanager.rs:13:10[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m13[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub enum KeyManagerError {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m          [0m[0m[1m[33m^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: field `0` is never read[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/crypto/keymanager.rs:25:14[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m25[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    Keychain(Entry),[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[38;5;12m--------[0m[0m [0m[0m[1m[33m^^^^^[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[38;5;12m|[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[38;5;12mfield in this variant[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;14mhelp[0m[0m: consider changing the field to be of unit type to suppress this warning while preserving the field numbering, or remove the field[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m25[0m[0m [0m[0m[38;5;9m- [0m[0m    Keychain([0m[0m[38;5;9mEntry[0m[0m),[0m
+[0m[1m[38;5;12m25[0m[0m [0m[0m[38;5;10m+ [0m[0m    Keychain([0m[0m[38;5;10m()[0m[0m),[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+
+[0m[1m[33mwarning[0m[0m[1m: field `0` is never read[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/crypto/keymanager.rs:26:14[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m26[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    Volatile(Arc<Mutex<Option<Key<Aes256Gcm>>>>),[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[38;5;12m--------[0m[0m [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[38;5;12m|[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[38;5;12mfield in this variant[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;14mhelp[0m[0m: consider changing the field to be of unit type to suppress this warning while preserving the field numbering, or remove the field[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m26[0m[0m [0m[0m[38;5;9m- [0m[0m    Volatile([0m[0m[38;5;9mArc<Mutex<Option<Key<Aes256Gcm>>>>[0m[0m),[0m
+[0m[1m[38;5;12m26[0m[0m [0m[0m[38;5;10m+ [0m[0m    Volatile([0m[0m[38;5;10m()[0m[0m),[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+
+[0m[1m[33mwarning[0m[0m[1m: methods `get_or_create_key`, `encrypt_with_key`, `decrypt_with_key`, and `rotate_key` are never used[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/crypto/keymanager.rs:55:18[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m [0m[0m[1m[38;5;12m33[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl KeyManager {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m---------------[0m[0m [0m[0m[1m[38;5;12mmethods in this implementation[0m
+[0m[1m[38;5;12m...[0m
+[0m [0m[0m[1m[38;5;12m55[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub async fn get_or_create_key(&self) -> Result<Key<Aes256Gcm>, KeyManagerError> {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m                  [0m[0m[1m[33m^^^^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m [0m[0m[1m[38;5;12m92[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn encrypt_with_key(&self, key: &Key<Aes256Gcm>, data: &[u8]) -> Result<Vec<u8>, KeyManagerError> {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m105[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn decrypt_with_key(&self, key: &Key<Aes256Gcm>, enc: &[u8]) -> Result<Vec<u8>, KeyManagerError> {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m115[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub async fn rotate_key(&self, dir: &Path) -> Result<(), String> {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m                  [0m[0m[1m[33m^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: method `reset_daily` is never used[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/digest/mod.rs:99:12[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m32[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl DigestManager {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m------------------[0m[0m [0m[0m[1m[38;5;12mmethod in this implementation[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m99[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn reset_daily(&mut self) {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: field `domain` is never read[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/learning/mod.rs:29:9[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m28[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub struct ContextFingerprint {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[38;5;12m------------------[0m[0m [0m[0m[1m[38;5;12mfield in this struct[0m
+[0m[1m[38;5;12m29[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub domain: String,[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m         [0m[0m[1m[33m^^^^^^[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m   [0m[0m[1m[38;5;12m= [0m[0m[1mnote[0m[0m: `ContextFingerprint` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis[0m
+
+[0m[1m[33mwarning[0m[0m[1m: fields `adaptive_engine` and `artefact_system` are never read[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/learning/mod.rs:55:5[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m47[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub struct LearningSystem {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[38;5;12m--------------[0m[0m [0m[0m[1m[38;5;12mfields in this struct[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m55[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    adaptive_engine: AdaptivePromptEngine, // J22[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m56[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    artefact_system: ArtefactSystem, // J23[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: method `switch_llm_provider` is never used[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/learning/mod.rs:471:12[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m339[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl LearningSystem {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m-------------------[0m[0m [0m[0m[1m[38;5;12mmethod in this implementation[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m471[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn switch_llm_provider(&mut self, provider: LLMProvider, _api_key: Option<String>) {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: associated items `with_config`, `detect_pattern_anomaly`, `detect_temporal_drift`, and `detect_repetitive_pattern` are never used[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/learning/anomaly.rs:19:12[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m [0m[0m[1m[38;5;12m11[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl AnomalyDetector {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m--------------------[0m[0m [0m[0m[1m[38;5;12massociated items in this implementation[0m
+[0m[1m[38;5;12m...[0m
+[0m [0m[0m[1m[38;5;12m19[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn with_config(window_size: usize, mad_threshold: f32) -> Self {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m [0m[0m[1m[38;5;12m65[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn detect_pattern_anomaly(&self, rewards: &[f32]) -> bool {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m [0m[0m[1m[38;5;12m90[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn detect_temporal_drift(&self, rewards: &[f32], timestamps: &[Instant]) -> bool {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m144[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    fn detect_repetitive_pattern(&self, rewards: &[f32]) -> bool {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m        [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: field `created_at` is never read[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/learning/trust.rs:54:9[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m46[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub struct UserTrust {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[38;5;12m---------[0m[0m [0m[0m[1m[38;5;12mfield in this struct[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m54[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub created_at: Instant,[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m         [0m[0m[1m[33m^^^^^^^^^^[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m   [0m[0m[1m[38;5;12m= [0m[0m[1mnote[0m[0m: `UserTrust` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis[0m
+
+[0m[1m[33mwarning[0m[0m[1m: associated items `with_config` and `save_recent_events` are never used[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/learning/trust.rs:85:12[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m [0m[0m[1m[38;5;12m75[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl TrustManager {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m-----------------[0m[0m [0m[0m[1m[38;5;12massociated items in this implementation[0m
+[0m[1m[38;5;12m...[0m
+[0m [0m[0m[1m[38;5;12m85[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn with_config([0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m273[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub async fn save_recent_events(&self) -> Result<(), String> {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m                  [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: struct `OpportunityResponse` is never constructed[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/opportunities/commands.rs:16:12[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m16[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub struct OpportunityResponse {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: struct `FeedbackRecord` is never constructed[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/opportunities/feedback.rs:16:12[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m16[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub struct FeedbackRecord {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: method `is_paused` is never used[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/pause/mod.rs:61:12[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m18[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl PauseManager {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m-----------------[0m[0m [0m[0m[1m[38;5;12mmethod in this implementation[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m61[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn is_paused(&self) -> bool {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: associated function `get_database_path` is never used[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/persistence/database.rs:39:8[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m14[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl DatabaseManager {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m--------------------[0m[0m [0m[0m[1m[38;5;12massociated function in this implementation[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m39[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    fn get_database_path() -> Result<PathBuf, String> {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m        [0m[0m[1m[33m^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: methods `get_system_prompt` and `format_message` are never used[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/personality/mod.rs:22:12[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m21[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl Personality {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m----------------[0m[0m [0m[0m[1m[38;5;12mmethods in this implementation[0m
+[0m[1m[38;5;12m22[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn get_system_prompt(&self) -> &'static str {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m57[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn format_message(&self, content: &str) -> String {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: methods `get_system_prompt` and `format_message` are never used[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/personality/mod.rs:107:12[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m [0m[0m[1m[38;5;12m91[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl PersonalityManager {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m-----------------------[0m[0m [0m[0m[1m[38;5;12mmethods in this implementation[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m107[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn get_system_prompt(&self) -> &'static str {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m111[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn format_message(&self, content: &str) -> String {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: method `update_context` is never used[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/pills/mod.rs:29:12[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m22[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl PillsManager {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m-----------------[0m[0m [0m[0m[1m[38;5;12mmethod in this implementation[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m29[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn update_context(&mut self, context: crate::context::Context) {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: method `get_ignored_count` is never used[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/triggers/manager.rs:355:12[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m [0m[0m[1m[38;5;12m37[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl TriggerManager {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m-------------------[0m[0m [0m[0m[1m[38;5;12mmethod in this implementation[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m355[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn get_ignored_count(&self, app_name: &str) -> usize {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: method `can_bypass_cooldown` is never used[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/triggers/state_machine.rs:315:12[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m [0m[0m[1m[38;5;12m79[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl TriggerStateMachine {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m------------------------[0m[0m [0m[0m[1m[38;5;12mmethod in this implementation[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m315[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn can_bypass_cooldown(&self) -> bool {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: field `file_hash` is never read[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/validator/mod.rs:28:5[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m25[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mstruct CachedValidation {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m        [0m[0m[1m[38;5;12m----------------[0m[0m [0m[0m[1m[38;5;12mfield in this struct[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m28[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    file_hash: String,[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m     [0m[0m[1m[33m^^^^^^^^^[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m   [0m[0m[1m[38;5;12m= [0m[0m[1mnote[0m[0m: `CachedValidation` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis[0m
+
+[0m[1m[33mwarning[0m[0m[1m: methods `is_valid`, `is_skipped`, and `should_learn` are never used[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/validator/mod.rs:401:12[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m400[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl ValidationResult {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m---------------------[0m[0m [0m[0m[1m[38;5;12mmethods in this implementation[0m
+[0m[1m[38;5;12m401[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn is_valid(&self) -> bool {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m405[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn is_skipped(&self) -> bool {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m409[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn should_learn(&self) -> bool {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: associated functions `from_extension` and `from_path` are never used[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/validator/mod.rs:426:12[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m425[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl ArtefactType {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m-----------------[0m[0m [0m[0m[1m[38;5;12massociated functions in this implementation[0m
+[0m[1m[38;5;12m426[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn from_extension(ext: &str) -> Self {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m438[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn from_path(path: &Path) -> Self {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: trait `ValidatorCore` is never used[0m
+[0m [0m[0m[1m[38;5;12m--> [0m[0msrc/validator/core.rs:5:11[0m
+[0m  [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m5[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub trait ValidatorCore {[0m
+[0m  [0m[0m[1m[38;5;12m|[0m[0m           [0m[0m[1m[33m^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: struct `ValidationResult` is never constructed[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/validator/core.rs:11:12[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m11[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub struct ValidationResult {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: enum `ValidationStatus` is never used[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/validator/core.rs:19:10[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m19[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mpub enum ValidationStatus {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m          [0m[0m[1m[33m^^^^^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: associated items `valid`, `invalid`, `error`, `skipped`, `is_valid`, and `should_learn` are never used[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/validator/core.rs:27:12[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m26[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl ValidationResult {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m---------------------[0m[0m [0m[0m[1m[38;5;12massociated items in this implementation[0m
+[0m[1m[38;5;12m27[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn valid() -> Self {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m36[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn invalid(message: String) -> Self {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m45[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn error(message: String) -> Self {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m54[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn skipped(reason: String) -> Self {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m63[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn is_valid(&self) -> bool {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m67[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn should_learn(&self) -> bool {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: methods `record_cache_miss`, `record_timeout`, `get_success_rate`, `get_cache_hit_rate`, and `reset` are never used[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/validator/stats.rs:91:12[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m [0m[0m[1m[38;5;12m35[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl ValidationStats {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m--------------------[0m[0m [0m[0m[1m[38;5;12mmethods in this implementation[0m
+[0m[1m[38;5;12m...[0m
+[0m [0m[0m[1m[38;5;12m91[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn record_cache_miss(&mut self) {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m [0m[0m[1m[38;5;12m95[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn record_timeout(&mut self) {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m [0m[0m[1m[38;5;12m99[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn get_success_rate(&self) -> f64 {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m106[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn get_cache_hit_rate(&self) -> f64 {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^^^[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m114[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn reset(&mut self) {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^[0m
+
+[0m[1m[33mwarning[0m[0m[1m: method `get_success_rate` is never used[0m
+[0m   [0m[0m[1m[38;5;12m--> [0m[0msrc/validator/stats.rs:133:12[0m
+[0m    [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m119[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0mimpl TypeStats {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m--------------[0m[0m [0m[0m[1m[38;5;12mmethod in this implementation[0m
+[0m[1m[38;5;12m...[0m
+[0m[1m[38;5;12m133[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    pub fn get_success_rate(&self) -> f64 {[0m
+[0m    [0m[0m[1m[38;5;12m|[0m[0m            [0m[0m[1m[33m^^^^^^^^^^^^^^^^[0m
+
+[1m[33mwarning[0m[1m:[0m `shadowlearn` (lib) generated 72 warnings (run `cargo fix --lib -p shadowlearn` to apply 20 suggestions)
+[1m[32m    Finished[0m ]8;;https://doc.rust-lang.org/cargo/reference/profiles.html#default-profiles\`dev` profile [unoptimized + debuginfo]]8;;\ target(s) in 0.57s
+[1m[32m     Running[0m `target/debug/shadowlearn`
+[2m2025-10-28T11:44:01.362226Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m 🚀 Starting ShadowLearn...
+[2m2025-10-28T11:44:01.362508Z[0m [32m INFO[0m [2mshadowlearn_lib::features[0m[2m:[0m 🚩 Feature flags initialized:
+[2m2025-10-28T11:44:01.362535Z[0m [32m INFO[0m [2mshadowlearn_lib::features[0m[2m:[0m   ├─ Idle Detection: true
+[2m2025-10-28T11:44:01.362557Z[0m [32m INFO[0m [2mshadowlearn_lib::features[0m[2m:[0m   ├─ Screenshot: false
+[2m2025-10-28T11:44:01.362562Z[0m [32m INFO[0m [2mshadowlearn_lib::features[0m[2m:[0m   ├─ Smart Triggers: true
+[2m2025-10-28T11:44:01.362566Z[0m [32m INFO[0m [2mshadowlearn_lib::features[0m[2m:[0m   ├─ Telemetry: true
+[2m2025-10-28T11:44:01.362570Z[0m [32m INFO[0m [2mshadowlearn_lib::features[0m[2m:[0m   └─ Intent Gate: true
+[2m2025-10-28T11:44:01.364316Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ Trigger manager initialized
+[2m2025-10-28T11:44:01.364345Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ State machine initialized
+[2m2025-10-28T11:44:01.364387Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ LLM chat client initialized
+[2m2025-10-28T11:44:01.364958Z[0m [33m WARN[0m [2mshadowlearn_lib::snooze[0m[2m:[0m Failed to parse snooze state, using default: unknown variant `snoozed_until`, expected `Ok` or `Err` at line 2 column 17
+[2m2025-10-28T11:44:01.364988Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ Snooze manager initialized
+[2m2025-10-28T11:44:01.364993Z[0m [32m INFO[0m [2mshadowlearn_lib::persistence[0m[2m:[0m 🗄️ Initializing PersistenceManager...
+[2m2025-10-28T11:44:01.365019Z[0m [32m INFO[0m [2mshadowlearn_lib::persistence::database[0m[2m:[0m 🗄️ Initializing in-memory database
+[2m2025-10-28T11:44:01.368158Z[0m [32m INFO[0m [2mshadowlearn_lib::persistence::database[0m[2m:[0m ✅ Database initialized successfully
+[2m2025-10-28T11:44:01.368187Z[0m [32m INFO[0m [2mshadowlearn_lib::persistence[0m[2m:[0m ✅ PersistenceManager initialized successfully
+[2m2025-10-28T11:44:01.368193Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ Persistence manager initialized
+[2m2025-10-28T11:44:01.368218Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ Personalization manager initialized
+[2m2025-10-28T11:44:01.368255Z[0m [32m INFO[0m [2mshadowlearn_lib::config::manager[0m[2m:[0m ✅ ConfigManager initialized: "/Users/syloh/Library/Application Support/ShadowLearn/config.json"
+[2m2025-10-28T11:44:01.368274Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ Config manager initialized
+[2m2025-10-28T11:44:01.368278Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ Pause manager initialized
+[2m2025-10-28T11:44:01.368291Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ Streak manager initialized
+[2m2025-10-28T11:44:01.368306Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ Personality manager initialized
+[2m2025-10-28T11:44:01.368360Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ Digest manager initialized
+[2m2025-10-28T11:44:01.368367Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ Pills manager initialized
+[2m2025-10-28T11:44:01.396634Z[0m [32m INFO[0m [2mshadowlearn_lib::screenshot::capturer[0m[2m:[0m 📺 Initialized 1 screen(s)
+[2m2025-10-28T11:44:01.396650Z[0m [32m INFO[0m [2mshadowlearn_lib::screenshot[0m[2m:[0m ✅ ScreenshotCapturer initialized
+[2m2025-10-28T11:44:01.396676Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ Features enabled: 4/4
+[2m2025-10-28T11:44:01.590715Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m 🔍 Checking available windows...
+[2m2025-10-28T11:44:01.590741Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ Found chat window, showing...
+[2m2025-10-28T11:44:01.591911Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m 📍 Chat window positioned and visible
+[2m2025-10-28T11:44:01.591937Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ Found context window, showing...
+[2m2025-10-28T11:44:01.592828Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m 📍 Context window positioned and visible
+[2m2025-10-28T11:44:01.593105Z[0m [32m INFO[0m [2mshadowlearn_lib[0m[2m:[0m ✅ Setup complete – trigger loop launched
+[2m2025-10-28T11:44:01.593186Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m 🔄 Starting trigger loop...
+[2m2025-10-28T11:44:21.596439Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 🟢 Idle activé (hystérésis): 13.7s
+[2m2025-10-28T11:44:23.598572Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T11:44:23.598747Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::state_machine[0m[2m:[0m State transition: Inactivité détectée (16s) dans 
+[2m2025-10-28T11:44:23.598843Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 15.8s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:44:23.598953Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 1)
+[2m2025-10-28T11:44:23.599300Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::state_machine[0m[2m:[0m State transition: Opportunité trouvée : Cursor (confiance 60%)
+[2m2025-10-28T11:44:23.599321Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::state_machine[0m[2m:[0m State transition: Suggestion affichée à l'utilisateur
+[2m2025-10-28T11:46:15.600687Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 🔴 Idle désactivé (hystérésis): 2.9s
+[2m2025-10-28T11:46:25.598107Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 🟢 Idle activé (hystérésis): 12.9s
+[2m2025-10-28T11:46:27.599822Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T11:46:27.599867Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 14.9s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:46:27.599889Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 2)
+[2m2025-10-28T11:47:13.598223Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T11:47:13.598255Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 30.6s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:47:13.598264Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 3)
+[2m2025-10-28T11:47:59.603722Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T11:47:59.603822Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 76.6s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:47:59.603862Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 4)
+[2m2025-10-28T11:48:59.604027Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 🔴 Idle désactivé (hystérésis): 2.5s
+[2m2025-10-28T11:49:09.602544Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 🟢 Idle activé (hystérésis): 12.5s
+[2m2025-10-28T11:49:11.601573Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T11:49:11.601627Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 14.5s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:49:11.601644Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 5)
+[2m2025-10-28T11:49:34.315793Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: salut
+[2m2025-10-28T11:49:34.315812Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T11:49:34.315830Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T11:49:38.068236Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T11:49:38.068319Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T11:49:38.068326Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=3752, ok=true
+[2m2025-10-28T11:49:46.204647Z[0m [32m INFO[0m [2mshadowlearn_lib::opportunities::feedback[0m[2m:[0m 👍👎 Recording message feedback: id=1761652178069, helpful=true
+[2m2025-10-28T11:49:46.204692Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Recording feedback: item=1761652178069, helpful=true
+[2m2025-10-28T11:49:46.204698Z[0m [32m INFO[0m [2mshadowlearn_lib::learning::feedback[0m[2m:[0m [FEEDBACK] Recording Positive feedback for suggestion 1761652178069
+[2m2025-10-28T11:49:46.204703Z[0m [32m INFO[0m [2mshadowlearn_lib::learning::feedback[0m[2m:[0m [FEEDBACK] Updated trust to 0.50 for suggestion 1761652178069
+[2m2025-10-28T11:49:46.204708Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Trust update from feedback (logged only)
+[2m2025-10-28T11:49:46.204712Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Adjusting confidence weights: helpful=true
+[2m2025-10-28T11:49:46.204717Z[0m [32m INFO[0m [2mshadowlearn_lib::opportunities::feedback[0m[2m:[0m ✅ Positive feedback recorded
+[2m2025-10-28T11:50:01.603440Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T11:50:01.603515Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 14.3s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:50:01.603540Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 6)
+[2m2025-10-28T11:50:05.552493Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: bien et toi
+[2m2025-10-28T11:50:05.552510Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T11:50:05.552514Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T11:50:06.105423Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T11:50:06.105466Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T11:50:06.105473Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=552, ok=true
+[2m2025-10-28T11:50:07.858776Z[0m [32m INFO[0m [2mshadowlearn_lib::opportunities::feedback[0m[2m:[0m 👍👎 Recording message feedback: id=1761652206106, helpful=false
+[2m2025-10-28T11:50:07.858802Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Recording feedback: item=1761652206106, helpful=false
+[2m2025-10-28T11:50:07.858808Z[0m [32m INFO[0m [2mshadowlearn_lib::learning::feedback[0m[2m:[0m [FEEDBACK] Recording Negative feedback for suggestion 1761652206106
+[2m2025-10-28T11:50:07.858812Z[0m [32m INFO[0m [2mshadowlearn_lib::learning::feedback[0m[2m:[0m [FEEDBACK] Updated trust to 0.50 for suggestion 1761652206106
+[2m2025-10-28T11:50:07.858817Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Trust update from feedback (logged only)
+[2m2025-10-28T11:50:07.858820Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Adjusting confidence weights: helpful=false
+[2m2025-10-28T11:50:28.267439Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Concise
+[2m2025-10-28T11:50:37.644963Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: non je te demande si ca va
+[2m2025-10-28T11:50:37.644981Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T11:50:37.644985Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T11:50:39.953609Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T11:50:39.953648Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T11:50:39.953654Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=2308, ok=true
+[2m2025-10-28T11:50:42.565591Z[0m [32m INFO[0m [2mshadowlearn_lib::opportunities::feedback[0m[2m:[0m 👍👎 Recording message feedback: id=1761652239954, helpful=false
+[2m2025-10-28T11:50:42.565616Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Recording feedback: item=1761652239954, helpful=false
+[2m2025-10-28T11:50:42.565622Z[0m [32m INFO[0m [2mshadowlearn_lib::learning::feedback[0m[2m:[0m [FEEDBACK] Recording Negative feedback for suggestion 1761652239954
+[2m2025-10-28T11:50:42.565632Z[0m [32m INFO[0m [2mshadowlearn_lib::learning::feedback[0m[2m:[0m [FEEDBACK] Updated trust to 0.50 for suggestion 1761652239954
+[2m2025-10-28T11:50:42.565638Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Trust update from feedback (logged only)
+[2m2025-10-28T11:50:42.565642Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Adjusting confidence weights: helpful=false
+[2m2025-10-28T11:50:49.216710Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Casual
+[2m2025-10-28T11:50:49.925728Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Motivational
+[2m2025-10-28T11:50:51.761572Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: ok
+[2m2025-10-28T11:50:51.761590Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T11:50:51.761596Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T11:50:53.613243Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T11:50:53.613291Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T11:50:53.613296Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=1851, ok=true
+[2m2025-10-28T11:50:54.909148Z[0m [32m INFO[0m [2mshadowlearn_lib::opportunities::feedback[0m[2m:[0m 👍👎 Recording message feedback: id=1761652253614, helpful=false
+[2m2025-10-28T11:50:54.909171Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Recording feedback: item=1761652253614, helpful=false
+[2m2025-10-28T11:50:54.909176Z[0m [32m INFO[0m [2mshadowlearn_lib::learning::feedback[0m[2m:[0m [FEEDBACK] Recording Negative feedback for suggestion 1761652253614
+[2m2025-10-28T11:50:54.909180Z[0m [32m INFO[0m [2mshadowlearn_lib::learning::feedback[0m[2m:[0m [FEEDBACK] Updated trust to 0.50 for suggestion 1761652253614
+[2m2025-10-28T11:50:54.909185Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Trust update from feedback (logged only)
+[2m2025-10-28T11:50:54.909188Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Adjusting confidence weights: helpful=false
+[2m2025-10-28T11:50:59.542212Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Friendly
+[2m2025-10-28T11:51:05.436215Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: tu comprends mon besoin ?
+[2m2025-10-28T11:51:05.436232Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T11:51:05.436236Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T11:51:07.898754Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T11:51:07.898790Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T11:51:07.898796Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=2462, ok=true
+[2m2025-10-28T11:51:10.665942Z[0m [32m INFO[0m [2mshadowlearn_lib::opportunities::feedback[0m[2m:[0m 👍👎 Recording message feedback: id=1761652267900, helpful=false
+[2m2025-10-28T11:51:10.665964Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Recording feedback: item=1761652267900, helpful=false
+[2m2025-10-28T11:51:10.665970Z[0m [32m INFO[0m [2mshadowlearn_lib::learning::feedback[0m[2m:[0m [FEEDBACK] Recording Negative feedback for suggestion 1761652267900
+[2m2025-10-28T11:51:10.665974Z[0m [32m INFO[0m [2mshadowlearn_lib::learning::feedback[0m[2m:[0m [FEEDBACK] Updated trust to 0.50 for suggestion 1761652267900
+[2m2025-10-28T11:51:10.665980Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Trust update from feedback (logged only)
+[2m2025-10-28T11:51:10.665985Z[0m [32m INFO[0m [2mshadowlearn_lib::learning[0m[2m:[0m [LEARNING] Adjusting confidence weights: helpful=false
+[2m2025-10-28T11:51:17.607365Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 🔴 Idle désactivé (hystérésis): 2.9s
+[2m2025-10-28T11:51:27.606737Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 🟢 Idle activé (hystérésis): 12.9s
+[2m2025-10-28T11:51:29.607630Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T11:51:29.607702Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 14.9s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:51:29.607723Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 7)
+[2m2025-10-28T11:52:15.607386Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T11:52:15.607473Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 60.9s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:52:15.607508Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 8)
+[2m2025-10-28T11:53:01.608432Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T11:53:01.608476Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 106.9s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:53:01.608492Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 9)
+[2m2025-10-28T11:53:47.606306Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Google Chrome'
+[2m2025-10-28T11:53:47.606418Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Google Chrome' (idle: 24.8s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:53:47.606467Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Google Chrome' (total: 10)
+[2m2025-10-28T11:53:47.606979Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T11:54:33.606515Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T11:54:33.606639Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 25.1s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:54:33.606696Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 11)
+[2m2025-10-28T11:54:33.606904Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T11:55:19.593108Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T11:55:19.593202Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 16.0s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:55:19.593223Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 12)
+[2m2025-10-28T11:55:19.593413Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T11:56:05.574901Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T11:56:05.574980Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 62.0s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:56:05.575004Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 13)
+[2m2025-10-28T11:56:05.575107Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T11:57:03.573672Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T11:57:03.573763Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 15.5s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:57:03.573802Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 14)
+[2m2025-10-28T11:57:03.573959Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T11:57:49.573928Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T11:57:49.573953Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 18.5s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:57:49.573963Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 15)
+[2m2025-10-28T11:57:49.573992Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T11:58:35.575299Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Google Chrome'
+[2m2025-10-28T11:58:35.575389Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Google Chrome' (idle: 64.5s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T11:58:35.575425Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Google Chrome' (total: 16)
+[2m2025-10-28T11:58:35.575598Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:04:55.577979Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 🔴 Idle désactivé (hystérésis): 1.4s
+[2m2025-10-28T12:05:07.577279Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 🟢 Idle activé (hystérésis): 13.4s
+[2m2025-10-28T12:05:09.577058Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T12:05:09.577096Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 15.4s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:05:09.577109Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 17)
+[2m2025-10-28T12:05:09.577152Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:05:55.577214Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Google Chrome'
+[2m2025-10-28T12:05:55.577301Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Google Chrome' (idle: 61.4s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:05:55.577336Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Google Chrome' (total: 18)
+[2m2025-10-28T12:05:55.577445Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:06:41.576489Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T12:06:41.576549Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 30.4s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:06:41.576566Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 19)
+[2m2025-10-28T12:06:41.576623Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:07:29.113617Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: Bonjour
+[2m2025-10-28T12:07:29.113637Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T12:07:29.113641Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T12:07:32.715297Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T12:07:32.715346Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T12:07:32.715351Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=3601, ok=true
+[2m2025-10-28T12:07:37.527034Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Professional
+[2m2025-10-28T12:07:40.230965Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: Bonjour
+[2m2025-10-28T12:07:40.230980Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T12:07:40.230984Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T12:07:40.712315Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T12:07:40.712350Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T12:07:40.712355Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=481, ok=true
+[2m2025-10-28T12:07:49.949793Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: Bonjour 
+[2m2025-10-28T12:07:49.949815Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T12:07:49.949820Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T12:07:50.607510Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T12:07:50.607556Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T12:07:50.607563Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=657, ok=true
+[2m2025-10-28T12:07:56.544515Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Concise
+[2m2025-10-28T12:08:00.980228Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: Bonjour
+[2m2025-10-28T12:08:00.980266Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T12:08:00.980272Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T12:08:01.715161Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T12:08:01.715198Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T12:08:01.715203Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=734, ok=true
+[2m2025-10-28T12:08:05.381272Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: Bonjour
+[2m2025-10-28T12:08:05.381290Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T12:08:05.381305Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T12:08:05.859802Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T12:08:05.859839Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T12:08:05.859844Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=478, ok=true
+[2m2025-10-28T12:08:07.779170Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Casual
+[2m2025-10-28T12:08:10.206913Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: Bonjour
+[2m2025-10-28T12:08:10.206929Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T12:08:10.206938Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T12:08:10.746620Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T12:08:10.746657Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T12:08:10.746662Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=539, ok=true
+[2m2025-10-28T12:08:12.511638Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Motivational
+[2m2025-10-28T12:08:19.197096Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: Bonjour 
+[2m2025-10-28T12:08:19.197114Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T12:08:19.197117Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T12:08:19.765598Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T12:08:19.765638Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T12:08:19.765644Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=568, ok=true
+[2m2025-10-28T12:08:23.578073Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 🔴 Idle désactivé (hystérésis): 2.1s
+[2m2025-10-28T12:08:27.622929Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Concise
+[2m2025-10-28T12:08:28.957470Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Motivational
+[2m2025-10-28T12:08:30.090698Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Casual
+[2m2025-10-28T12:08:31.407475Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Concise
+[2m2025-10-28T12:08:32.457330Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Casual
+[2m2025-10-28T12:08:33.723812Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Casual
+[2m2025-10-28T12:08:35.181489Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Casual
+[2m2025-10-28T12:08:37.114706Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Concise
+[2m2025-10-28T12:08:38.873940Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Professional
+[2m2025-10-28T12:08:54.703512Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: pense tu que j’ai fais des fautes d'orotgrpage
+[2m2025-10-28T12:08:54.703531Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T12:08:54.703535Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T12:08:58.572066Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T12:08:58.572118Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T12:08:58.572125Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=3868, ok=true
+[2m2025-10-28T12:09:22.805104Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: pense tu que j’ai fais des fautes d’ortographe dans cette phrase 
+[2m2025-10-28T12:09:22.805151Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T12:09:22.805158Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T12:09:27.104325Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T12:09:27.104367Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T12:09:27.104373Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=4299, ok=true
+[2m2025-10-28T12:09:33.832874Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Friendly
+[2m2025-10-28T12:09:39.838362Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: pense tu que j’ai fais des fautes d’ortographe dans cette phrase
+[2m2025-10-28T12:09:39.838382Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T12:09:39.838386Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T12:09:42.279478Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T12:09:42.279524Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T12:09:42.279530Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=2441, ok=true
+[2m2025-10-28T12:09:46.899543Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Concise
+[2m2025-10-28T12:09:47.458032Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Casual
+[2m2025-10-28T12:09:48.937292Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: pense tu que j’ai fais des fautes d’ortographe dans cette phrase
+[2m2025-10-28T12:09:48.937312Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T12:09:48.937316Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T12:09:53.758470Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T12:09:53.758508Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T12:09:53.758513Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=4821, ok=true
+[2m2025-10-28T12:09:58.675746Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Motivational
+[2m2025-10-28T12:10:01.439260Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: pense tu que j’ai fais des fautes d’ortographe dans cette phrase
+[2m2025-10-28T12:10:01.439307Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T12:10:01.439318Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T12:10:10.487148Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T12:10:10.487194Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T12:10:10.487200Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=9047, ok=true
+[2m2025-10-28T12:10:33.579880Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 🟢 Idle activé (hystérésis): 13.8s
+[2m2025-10-28T12:10:35.579199Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T12:10:35.580011Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 15.8s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:10:35.580026Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 20)
+[2m2025-10-28T12:10:35.581365Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:11:19.455985Z[0m [32m INFO[0m [2mshadowlearn_lib::personality[0m[2m:[0m Personality changed to: Friendly
+[2m2025-10-28T12:11:21.460211Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: pense tu que j’ai fais des fautes d’ortographe dans cette phrase
+[2m2025-10-28T12:11:21.460228Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T12:11:21.460374Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T12:11:26.211373Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T12:11:26.211716Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T12:11:26.211737Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=4751, ok=true
+[2m2025-10-28T12:11:29.094334Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 💬 Chat request: pense tu que j’ai fais des fautes d’ortographe dans cette phrase
+[2m2025-10-28T12:11:29.094391Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Building ChatRequest...
+[2m2025-10-28T12:11:29.094439Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m Calling LLM client...
+[2m2025-10-28T12:11:36.055279Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::llm_client[0m[2m:[0m ✅ Used model: llama3
+[2m2025-10-28T12:11:36.055322Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m LLM response received
+[2m2025-10-28T12:11:36.055327Z[0m [32m INFO[0m [2mshadowlearn_lib::chat::commands[0m[2m:[0m 📊 Chat metrics: provider=ollama, used_fallback=false, ttfr_ms=6960, ok=true
+[2m2025-10-28T12:11:39.579944Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 🔴 Idle désactivé (hystérésis): 1.5s
+[2m2025-10-28T12:11:51.580134Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 🟢 Idle activé (hystérésis): 13.5s
+[2m2025-10-28T12:11:53.578440Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T12:11:53.578514Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 15.5s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:11:53.578568Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 21)
+[2m2025-10-28T12:11:53.578636Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:12:41.578505Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T12:12:41.578530Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 15.4s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:12:41.578540Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 22)
+[2m2025-10-28T12:12:41.578573Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:13:27.580961Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Google Chrome'
+[2m2025-10-28T12:13:27.581090Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Google Chrome' (idle: 61.4s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:13:27.581118Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Google Chrome' (total: 23)
+[2m2025-10-28T12:13:27.581198Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:14:13.581365Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T12:14:13.581681Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 30.3s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:14:13.581733Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 24)
+[2m2025-10-28T12:14:13.581876Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:14:59.580665Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T12:14:59.580711Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 76.3s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:14:59.580720Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 25)
+[2m2025-10-28T12:14:59.580789Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:15:45.580146Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T12:15:45.580171Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 18.4s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:15:45.580179Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 26)
+[2m2025-10-28T12:15:45.580210Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:16:31.581467Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Google Chrome'
+[2m2025-10-28T12:16:31.581540Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Google Chrome' (idle: 64.4s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:16:31.581568Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Google Chrome' (total: 27)
+[2m2025-10-28T12:16:31.581869Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:17:17.582964Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Google Chrome'
+[2m2025-10-28T12:17:17.583083Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Google Chrome' (idle: 110.4s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:17:17.583149Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Google Chrome' (total: 28)
+[2m2025-10-28T12:17:17.583248Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:18:03.583522Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Google Chrome'
+[2m2025-10-28T12:18:03.583636Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Google Chrome' (idle: 156.4s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:18:03.583697Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Google Chrome' (total: 29)
+[2m2025-10-28T12:18:03.583891Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:18:49.582073Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T12:18:49.582119Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 202.4s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:18:49.582135Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 30)
+[2m2025-10-28T12:18:49.582197Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:19:35.583837Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Google Chrome'
+[2m2025-10-28T12:19:35.583926Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Google Chrome' (idle: 248.4s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:19:35.583968Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Google Chrome' (total: 31)
+[2m2025-10-28T12:19:35.584117Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:20:21.597704Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T12:20:21.597783Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 294.4s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:20:21.597814Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 32)
+[2m2025-10-28T12:20:21.597935Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:21:07.601614Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T12:21:07.601685Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 340.4s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:21:07.601705Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 33)
+[2m2025-10-28T12:21:07.601814Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours
+[2m2025-10-28T12:21:53.604871Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m ✅ Trigger ALLOW for app 'Cursor'
+[2m2025-10-28T12:21:53.604943Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::trigger_loop[0m[2m:[0m ✅ Trigger FIRED for app 'Cursor' (idle: 386.4s, reason: idle_ok+cooldown_ok+allowlist_ok)
+[2m2025-10-28T12:21:53.604964Z[0m [32m INFO[0m [2mshadowlearn_lib::triggers::manager[0m[2m:[0m 📊 Trigger recorded for 'Cursor' (total: 34)
+[2m2025-10-28T12:21:53.605053Z[0m [32m INFO[0m [2mshadowlearn_lib::ml::personalization[0m[2m:[0m ✅ Usage patterns updated: 2 favorite apps, 0 productive hours

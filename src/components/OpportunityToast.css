@@ -1,0 +1,26 @@
+/* Styles for OpportunityToast */
+
+/* Glass effect utilities (if not using Tailwind) */
+.glass {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Hover lift effect */
+.hover-lift {
+  transition: transform 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.hover-lift:active {
+  transform: translateY(0);
+}
+
+
+
+
+

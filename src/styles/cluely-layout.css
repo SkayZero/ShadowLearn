@@ -1,0 +1,108 @@
+/* ============================================
+   CLUELY LAYOUT SYSTEM
+   Placements fixes et coordonnées
+   ============================================ */
+
+/* Safe areas */
+.cluely-safe-top {
+  padding-top: var(--safe-area);
+}
+
+.cluely-safe-bottom {
+  padding-bottom: var(--safe-area);
+}
+
+.cluely-safe-left {
+  padding-left: var(--safe-area);
+}
+
+.cluely-safe-right {
+  padding-right: var(--safe-area);
+}
+
+.cluely-safe-all {
+  padding: var(--safe-area);
+}
+
+/* === LAYOUT FIXES (Comme Cluely) === */
+
+/* Bubble - Bottom Right (24px from edge) */
+.cluely-bubble-placement {
+  position: fixed;
+  bottom: var(--safe-area);
+  right: var(--safe-area);
+  z-index: var(--z-bubble);
+  width: var(--bubble-size);
+  height: var(--bubble-size);
+}
+
+/* Toast - Au-dessus de la bulle (+64px) */
+.cluely-toast-placement {
+  position: fixed;
+  bottom: calc(var(--safe-area) + var(--bubble-size) + var(--space-16));
+  right: var(--safe-area);
+  z-index: var(--z-toasts);
+  min-width: var(--toast-min-width);
+  max-width: var(--toast-max-width);
+  width: auto;
+}
+
+/* Dock - Snap bottom-right par défaut */
+.cluely-dock-placement {
+  position: fixed;
+  bottom: var(--safe-area);
+  right: var(--safe-area);
+  z-index: var(--z-dock);
+  width: var(--dock-width);
+  height: var(--dock-height);
+}
+
+/* Pills/Quick-actions - Colonne entre bulle et dock */
+.cluely-pills-placement {
+  position: fixed;
+  bottom: calc(var(--safe-area) + var(--bubble-size) + var(--space-12));
+  right: var(--safe-area);
+  z-index: var(--z-pills);
+  width: var(--pills-width);
+}
+
+/* Onboarding - Full screen overlay */
+.cluely-onboarding-placement {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-onboarding);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === STACK VERTICAL === */
+
+.cluely-stack > * + * {
+  margin-top: var(--stack-gap);
+}
+
+.cluely-stack-horizontal > * + * {
+  margin-left: var(--stack-gap);
+}
+
+/* === RESPONSIVE BREAKPOINTS === */
+
+@media (max-width: 768px) {
+  :root {
+    --dock-width: calc(100vw - (var(--safe-area) * 2));
+    --dock-height: 60vh;
+    --toast-max-width: calc(100vw - (var(--safe-area) * 2));
+  }
+
+  .cluely-dock-placement,
+  .cluely-toast-placement,
+  .cluely-pills-placement {
+    left: var(--safe-area);
+    right: var(--safe-area);
+  }
+}
+
+
+
+

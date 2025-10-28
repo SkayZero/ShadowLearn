@@ -1,0 +1,588 @@
+/* ============================================
+   SHADOWLEARN - ISLAND GLASSMORPHISM
+   Multi-Window Architecture
+   ============================================ */
+
+/* Import Cluely Design Tokens */
+@import './cluely-design-tokens.css';
+@import './cluely-layout.css';
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent !important;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
+    Inter, sans-serif;
+}
+
+/* ============================================
+   ISLAND CONTAINER
+   ============================================ */
+
+.sl-island {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  /* Use Cluely glass tokens - Toujours transparent */
+  background: var(--glass-bg) !important;
+  backdrop-filter: var(--glass-backdrop) !important;
+  -webkit-backdrop-filter: var(--glass-backdrop) !important;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--glass-shadow);
+
+  overflow: hidden;
+}
+
+/* ============================================
+   HEADER - Draggable Region
+   ============================================ */
+
+.sl-header {
+  padding: 16px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.95); /* Toujours visible */
+
+  /* Toujours transparent même quand focus */
+  background: var(--glass-emerald-tint) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  
+  /* Always draggable - cursor changes to move on hover */
+  cursor: move;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+  
+  /* Ensure drag is always active */
+  pointer-events: auto;
+}
+
+/* Force ALL children of header to be draggable */
+.sl-header *,
+.sl-header span,
+.sl-header div,
+.sl-header .sl-header-title,
+.sl-header .sl-header-content {
+  -webkit-app-region: drag;
+  cursor: move;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
+/* Visual feedback when hovering over draggable area */
+.sl-header:hover {
+  background: rgba(15, 23, 42, 0.3);
+  transition: background 0.2s ease;
+}
+
+/* Header right side (snooze + close) */
+.sl-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  -webkit-app-region: no-drag;
+  pointer-events: auto;
+}
+
+/* Override for buttons - they should NOT be draggable */
+.sl-header button,
+.sl-header .sl-header-close,
+.snooze-container,
+.snooze-container * {
+   -webkit-app-region: no-drag;
+  cursor: pointer;
+  user-select: auto;
+  -webkit-user-select: auto;
+  pointer-events: auto;
+  position: relative;
+  z-index: 10;
+}
+
+.sl-header-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.sl-header-title {
+  flex: 1;
+}
+
+.sl-header-minimize {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 16px;
+  padding: 0;
+  transition: all 0.2s;
+  
+  /* Completely disable drag for minimize button */
+  -webkit-app-region: no-drag !important;
+  user-select: auto !important;
+  -webkit-user-select: auto !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 1000 !important;
+  
+  /* Ensure it's clickable */
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+}
+
+.sl-header-minimize:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.sl-header-minimize:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.sl-header-close {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 16px;
+  padding: 0;
+  transition: all 0.2s;
+  
+  /* Completely disable drag for close button */
+  -webkit-app-region: no-drag !important;
+  user-select: auto !important;
+  -webkit-user-select: auto !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 1000 !important;
+  
+  /* Ensure it's clickable */
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+}
+
+.sl-header-close:hover {
+  background: rgba(244, 67, 54, 0.8);
+  border-color: rgba(244, 67, 54, 0.9);
+}
+
+.sl-header-close:active {
+  transform: scale(0.95);
+}
+
+/* ============================================
+   BODY - Scrollable Content with Extended Drag
+   ============================================ */
+
+.sl-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 32px 24px 12px 24px; /* Top and sides padding for drag areas */
+  
+  /* Extended drag area - top 20px of body */
+  position: relative;
+}
+
+.sl-body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  z-index: 1;
+  cursor: move;
+  -webkit-app-region: drag;
+  pointer-events: auto;
+}
+
+/* Side drag areas for easier dragging */
+.sl-body::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 12px;
+  z-index: 1;
+  cursor: move;
+  -webkit-app-region: drag;
+  pointer-events: auto;
+}
+
+/* ============================================
+   INPUT AREA
+   ============================================ */
+
+.sl-input {
+  padding: 12px;
+  background: rgba(26, 61, 110, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.input-field {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px 14px;
+  color: #ffffff;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+  line-height: 1.5;
+  
+  /* Prevent drag on input fields */
+  -webkit-app-region: no-drag;
+  pointer-events: auto;
+}
+
+.input-field:focus {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.input-field::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ============================================
+   MESSAGES
+   ============================================ */
+
+.messages-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.message-user {
+  background: rgba(26, 61, 110, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 10px 14px;
+  margin-left: auto;
+  max-width: 75%;
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.message-assistant {
+  background: rgba(81, 130, 108, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 10px 14px;
+  max-width: 75%;
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.message-timestamp {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 4px;
+}
+
+/* ============================================
+   CONTEXT CARDS
+   ============================================ */
+
+.context-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.context-card h3 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.context-card p {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+}
+
+.context-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.context-value {
+  font-size: 13px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.sl-button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 16px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sl-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.sl-button:active {
+  transform: scale(0.98);
+}
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+
+.text-muted {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: #4caf50;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 8px #4caf50;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.9);
+  }
+}
+
+/* J18: Personalization Button */
+.personalization-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 8px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+  -webkit-app-region: no-drag;
+}
+
+.personalization-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* J21.5: Settings Button */
+.settings-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 8px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+  -webkit-app-region: no-drag;
+}
+
+.settings-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* J23: Artifact Button */
+.artifact-btn {
+  background: rgba(102, 126, 234, 0.2);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 8px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+  -webkit-app-region: no-drag;
+}
+
+.artifact-btn:hover {
+  background: rgba(102, 126, 234, 0.3);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* J25: Test Bubble Button */
+.test-bubble-btn {
+  background: rgba(16, 185, 129, 0.2);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 8px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+  -webkit-app-region: no-drag;
+}
+
+.test-bubble-btn:hover {
+  background: rgba(16, 185, 129, 0.3);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Window Controls */
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  -webkit-app-region: no-drag;
+}
+
+.window-show-btn,
+.window-minimize-btn,
+.window-hide-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 14px;
+  padding: 0;
+  transition: all 0.2s;
+  -webkit-app-region: no-drag !important;
+  user-select: auto !important;
+  -webkit-user-select: auto !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 1000 !important;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+}
+
+.window-show-btn:hover,
+.window-minimize-btn:hover,
+.window-hide-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.window-show-btn:active,
+.window-minimize-btn:active,
+.window-hide-btn:active {
+  transform: scale(0.95);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.window-show-btn {
+  background: rgba(76, 175, 80, 0.3);
+  border-color: rgba(76, 175, 80, 0.5);
+}
+
+.window-show-btn:hover {
+  background: rgba(76, 175, 80, 0.5);
+  border-color: rgba(76, 175, 80, 0.7);
+}
+

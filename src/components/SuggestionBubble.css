@@ -1,0 +1,266 @@
+.suggestion-bubble {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 384px;
+  max-width: calc(100vw - 48px);
+  background: rgba(15, 23, 42, 0.3);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  z-index: 100000;
+  -webkit-app-region: no-drag;
+}
+
+/* Header */
+.suggestion-bubble-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.suggestion-bubble-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.suggestion-icon {
+  font-size: 2em;
+}
+
+.suggestion-title-text {
+  font-weight: 600;
+  font-size: 1.1em;
+  color: white;
+}
+
+.suggestion-subtitle {
+  font-size: 0.85em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.suggestion-close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: white;
+  cursor: pointer;
+  font-size: 1.2em;
+  transition: all 0.2s ease;
+}
+
+.suggestion-close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Content */
+.suggestion-bubble-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.suggestion-context {
+  font-size: 0.9em;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  .suggestion-context {
+    color: rgba(255, 255, 255, 0.6);
+  }
+}
+
+.suggestion-app-name {
+  font-weight: 600;
+}
+
+/* Buttons */
+.suggestion-download-btn,
+.suggestion-copy-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 14px 24px;
+  color: white;
+  font-weight: 600;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.suggestion-copy-btn {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.8);
+}
+
+@media (prefers-color-scheme: dark) {
+  .suggestion-copy-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+.suggestion-download-btn:hover,
+.suggestion-copy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+/* Explanation */
+.suggestion-explanation {
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  .suggestion-explanation {
+    background: rgba(255, 255, 255, 0.02);
+  }
+}
+
+.suggestion-explanation-toggle {
+  width: 100%;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.9em;
+  color: rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .suggestion-explanation-toggle {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.suggestion-explanation-toggle:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .suggestion-explanation-toggle:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.suggestion-explanation-content {
+  overflow: hidden;
+}
+
+.suggestion-code-preview {
+  margin: 0;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.85em;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  max-height: 300px;
+  overflow-y: auto;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+@media (prefers-color-scheme: dark) {
+  .suggestion-code-preview {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* Feedback */
+.suggestion-feedback {
+  display: flex;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .suggestion-feedback {
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.suggestion-helpful-btn,
+.suggestion-skip-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-weight: 500;
+  cursor: pointer;
+  border: 2px solid;
+  transition: all 0.2s ease;
+}
+
+.suggestion-helpful-btn {
+  border-color: #10b981;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.suggestion-helpful-btn:hover {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: #059669;
+  color: #059669;
+}
+
+.suggestion-skip-btn {
+  border-color: rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.7);
+  background: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  .suggestion-skip-btn {
+    border-color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+.suggestion-skip-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .suggestion-skip-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .suggestion-bubble {
+    width: calc(100vw - 32px);
+    right: 16px;
+    bottom: 16px;
+  }
+}
+

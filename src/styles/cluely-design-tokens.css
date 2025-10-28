@@ -1,0 +1,107 @@
+/* ============================================
+   CLUELY DESIGN TOKENS
+   Source de vérité unique pour le style
+   ============================================ */
+
+:root {
+  /* === RADIUS CANONIQUES === */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+
+  /* === ELEVATION (Shadows) === */
+  --elev-0: none;
+  --elev-1: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --elev-2: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --elev-3: 0 12px 48px rgba(0, 0, 0, 0.18);
+  --elev-4: 0 20px 60px rgba(0, 0, 0, 0.25);
+
+  /* === BACKGROUND GLASS (Cluely) === */
+  /* Nuage/aérien avec émeraude très léger */
+  --glass-bg: rgba(135, 206, 235, 0.15);
+  --glass-backdrop: blur(40px) saturate(200%);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  
+  /* Nuance émeraude pour certains éléments */
+  --glass-emerald-tint: rgba(16, 185, 129, 0.08);
+
+  /* === TEXT COLORS === */
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.5);
+
+  /* === ACCENT COLORS === */
+  /* Nuage/ciel avec émeraude subtile */
+  --accent-primary: #87CEEB; /* Sky blue */
+  --accent-primary-hover: #6BB4E8;
+  --accent-emerald: rgba(16, 185, 129, 0.6); /* Emerald subtil */
+  --accent-success: #10b981;
+  --accent-warning: #f59e0b;
+  --accent-error: #ef4444;
+
+  /* === SPACING CANONIQUE === */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  
+  /* Safe area margin */
+  --safe-area: 24px;
+  
+  /* Stack vertical spacing */
+  --stack-gap: 12px;
+
+  /* === TAILLES CANONIQUES === */
+  --bubble-size: 56px;
+  --dock-width: 420px;
+  --dock-height: 640px;
+  --toast-min-width: 320px;
+  --toast-max-width: 380px;
+  --toast-height: auto;
+  --pills-width: 280px;
+
+  /* === Z-INDEX LAYERS === */
+  --z-onboarding: 60;
+  --z-dock: 50;
+  --z-toasts: 45;
+  --z-pills: 45;
+  --z-bubble: 40;
+  --z-overlay: 35;
+
+  /* === TRANSITIONS === */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Spring animations (Framer Motion style) */
+  --spring-stiff: 300;
+  --spring-damping: 30;
+}
+
+/* === UTILITY CLASSES === */
+
+.cluely-glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.cluely-elev-0 { box-shadow: var(--elev-0); }
+.cluely-elev-1 { box-shadow: var(--elev-1); }
+.cluely-elev-2 { box-shadow: var(--elev-2); }
+.cluely-elev-3 { box-shadow: var(--elev-3); }
+.cluely-elev-4 { box-shadow: var(--elev-4); }
+
+.cluely-radius-sm { border-radius: var(--radius-sm); }
+.cluely-radius-md { border-radius: var(--radius-md); }
+.cluely-radius-lg { border-radius: var(--radius-lg); }
+.cluely-radius-xl { border-radius: var(--radius-xl); }
+.cluely-radius-2xl { border-radius: var(--radius-2xl); }
+
