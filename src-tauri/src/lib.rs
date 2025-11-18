@@ -1178,7 +1178,9 @@ pub async fn run() {
             monitor::commands::start_screen_monitor,
             monitor::commands::stop_screen_monitor,
             monitor::commands::get_monitor_status,
-            monitor::commands::reset_monitor_detector
+            monitor::commands::reset_monitor_detector,
+            monitor::commands::reset_monitor_cache,
+            monitor::commands::get_monitor_cache_stats
         ])
         .setup(|app| {
             info!("🔍 Checking available windows...");

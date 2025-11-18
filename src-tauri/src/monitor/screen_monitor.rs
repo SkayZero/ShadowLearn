@@ -1,6 +1,7 @@
 use super::change_detector::ChangeDetector;
 use super::vision_client::ClaudeVisionClient;
 use super::ocr_client::LocalOCR;
+use super::smart_cache::SmartCache;
 use crate::screenshot::ScreenshotCapturer;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -49,6 +50,7 @@ pub struct ScreenMonitor {
     capturer: Arc<Mutex<Option<ScreenshotCapturer>>>,
     vision_client: Arc<Mutex<Option<ClaudeVisionClient>>>,
     ocr_client: Arc<Mutex<Option<LocalOCR>>>,
+    smart_cache: Arc<Mutex<SmartCache>>,
     is_running: Arc<Mutex<bool>>,
 }
 
@@ -83,6 +85,11 @@ impl ScreenMonitor {
             capturer: Arc::new(Mutex::new(None)),
             vision_client: Arc::new(Mutex::new(vision_client)),
             ocr_client: Arc::new(Mutex::new(ocr_client)),
+            smart_cache: Arc::new(Mutex::new(SmartCache::new(
+                config.interval_secs,
+                2,  // min interval: 2s
+                30, // max interval: 30s
+            ))),
             is_running: Arc::new(Mutex::new(false)),
             config,
         }
@@ -108,13 +115,17 @@ impl ScreenMonitor {
         let capturer = self.capturer.clone();
         let vision_client = self.vision_client.clone();
         let ocr_client = self.ocr_client.clone();
+        let smart_cache = self.smart_cache.clone();
         let is_running = self.is_running.clone();
 
         tokio::spawn(async move {
-            let mut interval = tokio::time::interval(Duration::from_secs(config.interval_secs));
-
             loop {
-                interval.tick().await;
+                // Sleep avec intervalle adaptatif
+                let sleep_duration = {
+                    let cache = smart_cache.lock().await;
+                    cache.adaptive_interval()
+                };
+                tokio::time::sleep(sleep_duration).await;
 
                 // Check si on doit continuer
                 if !*is_running.lock().await {
@@ -126,13 +137,14 @@ impl ScreenMonitor {
                     continue;
                 }
 
-                // Capture + détection
-                match Self::capture_and_check(
+                // Capture + détection avec smart cache
+                match Self::capture_and_check_adaptive(
                     &app,
                     &capturer,
                     &change_detector,
                     &vision_client,
                     &ocr_client,
+                    &smart_cache,
                 ).await {
                     Ok(Some(change)) => {
                         info!("📸 Screen change detected, emitting event");
@@ -142,7 +154,7 @@ impl ScreenMonitor {
                         }
                     }
                     Ok(None) => {
-                        // Pas de changement
+                        // Pas de changement ou cache a décidé de skip
                     }
                     Err(e) => {
                         error!("❌ Screen capture/check failed: {}", e);
@@ -159,7 +171,124 @@ impl ScreenMonitor {
         info!("🛑 Screen monitor stop requested");
     }
 
+    /// Capture l'écran et vérifie avec smart cache + détection de changement
+    async fn capture_and_check_adaptive(
+        app: &AppHandle,
+        capturer: &Arc<Mutex<Option<ScreenshotCapturer>>>,
+        change_detector: &Arc<Mutex<ChangeDetector>>,
+        vision_client: &Arc<Mutex<Option<ClaudeVisionClient>>>,
+        ocr_client: &Arc<Mutex<Option<LocalOCR>>>,
+        smart_cache: &Arc<Mutex<SmartCache>>,
+    ) -> Result<Option<ScreenChange>, String> {
+        // Initialiser le capturer si nécessaire
+        {
+            let mut capturer_guard = capturer.lock().await;
+            if capturer_guard.is_none() {
+                *capturer_guard = Some(
+                    ScreenshotCapturer::new()
+                        .map_err(|e| format!("Failed to init capturer: {}", e))?,
+                );
+            }
+        }
+
+        // Capture via le Tauri command existant
+        let capture_result = crate::screenshot::capture_screenshot(app.clone())
+            .await
+            .map_err(|e| format!("Capture failed: {}", e))?;
+
+        let image_path = std::path::PathBuf::from(&capture_result.path);
+
+        // Vérifier si changement significatif ET obtenir le hash
+        let (has_change, current_hash) = {
+            let mut detector = change_detector.lock().await;
+            detector.has_significant_change(&image_path)?
+        };
+
+        // Vérifier avec le smart cache si on doit analyser
+        let should_analyze = {
+            let mut cache = smart_cache.lock().await;
+            cache.should_analyze(current_hash)
+        };
+
+        if !should_analyze {
+            // Cache dit de skip (écran identique récent)
+            return Ok(None);
+        }
+
+        if !has_change {
+            // Pas de changement significatif selon le seuil de similarité
+            return Ok(None);
+        }
+
+        // Changement détecté ET cache approuve ! Analyser avec OCR local OU Claude Vision
+        let analysis = {
+            // Priorité à l'OCR local (rapide, gratuit, privacy-first)
+            let ocr = ocr_client.lock().await;
+            if let Some(ref local_ocr) = *ocr {
+                match local_ocr.analyze(&image_path) {
+                    Ok(ocr_result) => {
+                        info!("✅ Local OCR: {} (confidence: {:.2})",
+                              ocr_result.text, ocr_result.confidence);
+
+                        // Générer une suggestion basée sur les patterns détectés
+                        let suggestion = Self::generate_ocr_suggestion(&ocr_result);
+                        Some(suggestion)
+                    }
+                    Err(e) => {
+                        warn!("⚠️ Local OCR failed: {}", e);
+
+                        // Fallback vers Claude Vision si disponible
+                        let vision = vision_client.lock().await;
+                        if let Some(ref claude) = *vision {
+                            match claude.suggest_action(&capture_result.data).await {
+                                Ok(suggestion) => {
+                                    info!("✅ Claude Vision (fallback): {}", suggestion);
+                                    Some(suggestion)
+                                }
+                                Err(e) => {
+                                    warn!("⚠️ Vision analysis also failed: {}", e);
+                                    None
+                                }
+                            }
+                        } else {
+                            None
+                        }
+                    }
+                }
+            } else {
+                // Pas d'OCR local, essayer Claude Vision
+                let vision = vision_client.lock().await;
+                if let Some(ref claude) = *vision {
+                    match claude.suggest_action(&capture_result.data).await {
+                        Ok(suggestion) => {
+                            info!("✅ Claude Vision suggestion: {}", suggestion);
+                            Some(suggestion)
+                        }
+                        Err(e) => {
+                            warn!("⚠️ Vision analysis failed: {}", e);
+                            None
+                        }
+                    }
+                } else {
+                    None
+                }
+            }
+        };
+
+        Ok(Some(ScreenChange {
+            timestamp: std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_secs(),
+            image_path: capture_result.path,
+            image_base64: capture_result.data,
+            analysis,
+        }))
+    }
+
     /// Capture l'écran et vérifie si un changement significatif s'est produit
+    /// (Version legacy sans smart cache, gardée pour compatibilité)
+    #[allow(dead_code)]
     async fn capture_and_check(
         app: &AppHandle,
         capturer: &Arc<Mutex<Option<ScreenshotCapturer>>>,
@@ -186,7 +315,7 @@ impl ScreenMonitor {
         let image_path = std::path::PathBuf::from(&capture_result.path);
 
         // Vérifier si changement significatif
-        let has_change = {
+        let (has_change, _current_hash) = {
             let mut detector = change_detector.lock().await;
             detector.has_significant_change(&image_path)?
         };
@@ -265,6 +394,18 @@ impl ScreenMonitor {
     pub async fn reset_detector(&self) {
         let mut detector = self.change_detector.lock().await;
         detector.reset();
+    }
+
+    /// Reset le smart cache
+    pub async fn reset_cache(&self) {
+        let mut cache = self.smart_cache.lock().await;
+        cache.reset();
+    }
+
+    /// Obtenir les stats du smart cache
+    pub async fn cache_stats(&self) -> super::smart_cache::CacheStats {
+        let cache = self.smart_cache.lock().await;
+        cache.stats()
     }
 
     /// Check si le monitor tourne

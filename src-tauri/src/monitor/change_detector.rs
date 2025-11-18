@@ -17,7 +17,8 @@ impl ChangeDetector {
     }
 
     /// Détecte si un changement significatif s'est produit
-    pub fn has_significant_change(&mut self, image_path: &PathBuf) -> Result<bool, String> {
+    /// Retourne (has_change, current_hash) pour permettre l'utilisation avec SmartCache
+    pub fn has_significant_change(&mut self, image_path: &PathBuf) -> Result<(bool, u64), String> {
         let current_hash = self.calculate_perceptual_hash(image_path)?;
 
         let is_different = if let Some(last) = self.last_hash {
@@ -37,7 +38,7 @@ impl ChangeDetector {
             self.last_hash = Some(current_hash);
         }
 
-        Ok(is_different)
+        Ok((is_different, current_hash))
     }
 
     /// Calcule un hash perceptuel simple (average hash)

@@ -45,3 +45,23 @@ pub async fn reset_monitor_detector(
     mon.reset_detector().await;
     Ok(())
 }
+
+/// Reset the smart cache
+#[tauri::command]
+pub async fn reset_monitor_cache(
+    monitor: tauri::State<'_, Arc<Mutex<ScreenMonitor>>>,
+) -> Result<(), String> {
+    info!("🔄 reset_monitor_cache command called");
+    let mon = monitor.lock().await;
+    mon.reset_cache().await;
+    Ok(())
+}
+
+/// Get smart cache statistics
+#[tauri::command]
+pub async fn get_monitor_cache_stats(
+    monitor: tauri::State<'_, Arc<Mutex<ScreenMonitor>>>,
+) -> Result<super::smart_cache::CacheStats, String> {
+    let mon = monitor.lock().await;
+    Ok(mon.cache_stats().await)
+}
