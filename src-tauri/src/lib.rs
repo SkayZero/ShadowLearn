@@ -20,6 +20,7 @@ mod health;
 mod intent;
 mod learning;
 mod ml;
+mod monitor; // Screen Monitoring avec détection de changements
 mod opportunities; // Clueless: One-Tap Toast
 mod pause; // Clueless Phase 3: Pause Mode
 mod persistence;
@@ -980,6 +981,11 @@ pub async fn run() {
         );
     }
 
+    // Initialize screen monitor
+    let monitor_config = monitor::MonitorConfig::default();
+    let screen_monitor = Arc::new(Mutex::new(monitor::ScreenMonitor::new(monitor_config)));
+    info!("✅ Screen monitor initialized");
+
     // Log feature state
     let state = feature_flags.get_state();
     info!("✅ Features enabled: {}/{}", state.enabled_count(), 4);
@@ -1048,6 +1054,7 @@ pub async fn run() {
         .manage(personality_manager)
         .manage(digest_manager) // Clueless: Daily Digest
         .manage(pills_manager) // Clueless: Smart Pills
+        .manage(screen_monitor) // Screen Monitor
         .invoke_handler(tauri::generate_handler![
             toggle_window,
             broadcast_event,
@@ -1166,7 +1173,12 @@ pub async fn run() {
             // J5: Config & Privacy commands
             config::manager::get_config,
             config::manager::update_config,
-            config::manager::get_config_path
+            config::manager::get_config_path,
+            // Screen Monitor commands
+            monitor::commands::start_screen_monitor,
+            monitor::commands::stop_screen_monitor,
+            monitor::commands::get_monitor_status,
+            monitor::commands::reset_monitor_detector
         ])
         .setup(|app| {
             info!("🔍 Checking available windows...");
