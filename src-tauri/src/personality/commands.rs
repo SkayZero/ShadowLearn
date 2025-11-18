@@ -19,11 +19,13 @@ pub async fn set_personality(
     personality_manager: State<'_, Arc<Mutex<PersonalityManager>>>,
 ) -> Result<(), String> {
     let p = match personality.to_lowercase().as_str() {
-        "friendly" => Personality::Friendly,
-        "professional" => Personality::Professional,
-        "concise" => Personality::Concise,
-        "casual" => Personality::Casual,
-        "motivational" => Personality::Motivational,
+        "aerya" => Personality::Aerya,
+        "aura" => Personality::Aura,
+        "spark" => Personality::Spark,
+        "nova" => Personality::Nova,
+        "kai" => Personality::Kai,
+        "echo" => Personality::Echo,
+        "void" => Personality::Void,
         _ => return Err(format!("Invalid personality: {}", personality)),
     };
     

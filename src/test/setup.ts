@@ -52,3 +52,5 @@ global.performance.measure = vi.fn();
 export { mockInvoke, mockListen, mockEmit };
 
 
+
+

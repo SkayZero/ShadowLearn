@@ -418,3 +418,5 @@ grep "pause_detected" audit_logs.txt    # Retourne vide ?
 
 **Après stabilisation** → GO Phase 1 (Fix & Validate)
 
+
+

@@ -234,3 +234,5 @@ Si OpportunityToast OK → **Priority 2** : TriggerBubble + StreakTracker
 [Espace pour notes additionnelles pendant les tests]
 
 
+
+

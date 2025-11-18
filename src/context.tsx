@@ -5,6 +5,7 @@ import HeaderDraggable from './components/HeaderDraggable';
 import WindowManager from './components/WindowManager';
 import { AmbientLED } from './components/AmbientLED';
 import { ContextPreviewCard } from './components/ContextPreviewCard';
+import { ThemeProvider } from './contexts/ThemeContext';
 import useWindowLifecycle from './hooks/useWindowLifecycle';
 import useDesktopFocus from './hooks/useDesktopFocus';
 import { useContextCapture } from './hooks/useContextCapture';
@@ -76,8 +77,9 @@ function ContextWindow() {
   }, [capture]);
 
   return (
-    <WindowManager>
-      <div className="sl-island">
+    <ThemeProvider>
+      <WindowManager>
+        <div className="sl-island">
         <HeaderDraggable 
           title="ShadowLearn — Contexte"
           showMinimize={true}
@@ -203,7 +205,8 @@ function ContextWindow() {
           </div>
         </div>
       </div>
-    </WindowManager>
+      </WindowManager>
+    </ThemeProvider>
   );
 }
 

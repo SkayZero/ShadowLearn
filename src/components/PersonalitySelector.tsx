@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { invoke } from "@tauri-apps/api/core";
-
-export type Personality = "friendly" | "professional" | "concise" | "casual" | "motivational";
+import { useTheme } from "../contexts/ThemeContext";
+import { Personality, THEMES } from "../lib/themes";
 
 interface PersonalityOption {
   id: Personality;
@@ -14,39 +13,53 @@ interface PersonalityOption {
 
 const PERSONALITIES: PersonalityOption[] = [
   {
-    id: "friendly",
-    name: "Ami sympathique",
-    icon: "😊",
-    description: "Chaleureux et encourageant",
-    example: "Super ! Je vois que tu travailles sur ce bug. Je peux t'aider à le résoudre ensemble ?",
+    id: "aerya",
+    name: "AERYA",
+    icon: "🌊",
+    description: "Assistant équilibré, bienveillant",
+    example: "Je suis là pour t'accompagner. Ensemble, trouvons la meilleure solution.",
   },
   {
-    id: "professional",
-    name: "Professionnel",
-    icon: "👔",
-    description: "Formel et précis",
-    example: "J'ai identifié une erreur dans le code. Je recommande d'ajouter une validation des entrées.",
+    id: "aura",
+    name: "AURA",
+    icon: "🔮",
+    description: "Sage calme, méditatif",
+    example: "Prends un moment pour respirer. Observons ensemble ce défi avec clarté et sérénité.",
   },
   {
-    id: "concise",
-    name: "Minimaliste",
+    id: "spark",
+    name: "SPARK",
     icon: "⚡",
-    description: "Direct et court",
-    example: "Bug ligne 42. Fix: ajouter null check.",
+    description: "Énergique, motivant",
+    example: "Allez ! On fonce ! Ce bug n'a aucune chance face à ton talent ! 🚀",
   },
   {
-    id: "casual",
-    name: "Décontracté",
-    icon: "🤙",
-    description: "Relax et cool",
-    example: "Yo ! J'ai vu un petit souci dans ton code. On check ça vite fait ?",
+    id: "nova",
+    name: "NOVA",
+    icon: "✨",
+    description: "Visionnaire, poétique",
+    example: "Chaque ligne de code est une étoile dans ta constellation. Créons quelque chose de beau.",
   },
   {
-    id: "motivational",
-    name: "Coach",
-    icon: "💪",
-    description: "Motivant et positif",
-    example: "Tu es sur la bonne voie ! Corrigeons ce petit détail et tu seras au top ! 🚀",
+    id: "kai",
+    name: "KAI",
+    icon: "⚙️",
+    description: "Pratique, mentor tech",
+    example: "Erreur détectée ligne 42. Stack trace analysé. Solution optimale : refactoring.",
+  },
+  {
+    id: "echo",
+    name: "ECHO",
+    icon: "🎨",
+    description: "Artiste rêveur",
+    example: "Ton code est une toile. Laisse-moi t'aider à y ajouter les touches finales.",
+  },
+  {
+    id: "void",
+    name: "VOID",
+    icon: "⬛",
+    description: "Minimaliste, silencieux",
+    example: "Bug. Fix. Done.",
   },
 ];
 
@@ -59,36 +72,18 @@ export function PersonalitySelector({
   compact = false,
   onPersonalityChange,
 }: PersonalitySelectorProps) {
-  const [selectedPersonality, setSelectedPersonality] = useState<Personality>("friendly");
+  const { personality: selectedPersonality, setPersonality } = useTheme();
   const [showExample, setShowExample] = useState(false);
 
-  useEffect(() => {
-    // Load saved personality from backend
-    loadPersonality();
-  }, []);
-
-  const loadPersonality = async () => {
-    try {
-      const personality = await invoke<string>("get_personality");
-      setSelectedPersonality(personality as Personality);
-    } catch (error) {
-      console.error("Failed to load personality:", error);
-    }
-  };
-
   const handlePersonalityChange = async (personality: Personality) => {
-    setSelectedPersonality(personality);
     setShowExample(true);
     
-    // Save to backend
     try {
-      await invoke("set_personality", { personality });
-      console.log("Personality changed to:", personality);
+      await setPersonality(personality);
+      onPersonalityChange?.(personality);
     } catch (error) {
-      console.error("Failed to save personality:", error);
+      console.error("Failed to change personality:", error);
     }
-
-    onPersonalityChange?.(personality);
 
     // Hide example after 3s
     setTimeout(() => setShowExample(false), 3000);
@@ -163,12 +158,12 @@ export function PersonalitySelector({
               padding: "12px 16px",
               background:
                 selectedPersonality === personality.id
-                  ? "rgba(135, 206, 235, 0.2)"
+                  ? "var(--theme-glass-bg)"
                   : "rgba(255, 255, 255, 0.05)",
               border: "1px solid",
               borderColor:
                 selectedPersonality === personality.id
-                  ? "var(--accent-primary)"
+                  ? "var(--theme-accent)"
                   : "rgba(255, 255, 255, 0.1)",
               borderRadius: "8px",
               cursor: "pointer",
@@ -201,7 +196,7 @@ export function PersonalitySelector({
               </div>
             </div>
             {selectedPersonality === personality.id && (
-              <div style={{ color: "var(--accent-primary)", fontSize: "18px" }}>✓</div>
+              <div style={{ color: "var(--theme-accent)", fontSize: "18px" }}>✓</div>
             )}
           </motion.button>
         ))}

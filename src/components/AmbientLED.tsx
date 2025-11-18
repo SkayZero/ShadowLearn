@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { useEvent, EVENTS, type FlowStateData } from "../lib";
+import { useTheme } from "../contexts/ThemeContext";
 
 export interface AmbientLEDProps {
   className?: string;
@@ -14,6 +15,7 @@ export interface AmbientLEDProps {
 }
 
 export function AmbientLED({ className = "", size = 12 }: AmbientLEDProps) {
+  const { theme } = useTheme();
   const [flowState, setFlowState] = useState<FlowStateData>({
     flow_state: "normal",
     confidence: 0.5,
@@ -50,11 +52,8 @@ export function AmbientLED({ className = "", size = 12 }: AmbientLEDProps) {
     blocked: 1, // Fast pulse = blocked
   }[flowState.flow_state];
 
-  const colors = {
-    deep: "#10b981", // Emerald - deep focus
-    normal: "#87CEEB", // Sky blue - normal flow (Cluely style)
-    blocked: "#f59e0b", // Amber - stuck/blocked
-  }[flowState.flow_state];
+  // Color based on flow state + theme personality
+  const color = theme.led[flowState.flow_state];
 
   return (
     <motion.div
@@ -68,15 +67,17 @@ export function AmbientLED({ className = "", size = 12 }: AmbientLEDProps) {
         ease: "easeInOut",
       }}
       className={className}
+      data-testid="ambient-led"
       style={{
         width: size,
         height: size,
         borderRadius: '50%',
-        backgroundColor: colors,
-        boxShadow: `0 0 ${size * 2}px ${colors}`,
-        border: `1px solid ${colors}`,
+        backgroundColor: color,
+        boxShadow: `0 0 ${size * 2}px ${color}`,
+        border: `1px solid ${color}`,
+        transition: `background-color ${theme.transitionSpeed}ms ease-in-out, box-shadow ${theme.transitionSpeed}ms ease-in-out`,
       }}
-      title={`Flow: ${flowState.flow_state} (${Math.round(flowState.confidence * 100)}%)`}
+      title={`${theme.name} - Flow: ${flowState.flow_state} (${Math.round(flowState.confidence * 100)}%)`}
     />
   );
 }

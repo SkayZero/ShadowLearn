@@ -15,6 +15,7 @@ import { StreakTracker } from './components/StreakTracker';
 import { PersonalitySelector } from './components/PersonalitySelector';
 import { PauseMode } from './components/PauseMode';
 import { LayoutProvider } from './contexts/LayoutContext';
+import { ThemeProvider } from './contexts/ThemeContext';
 import useWindowLifecycle from './hooks/useWindowLifecycle';
 import useDesktopFocus from './hooks/useDesktopFocus';
 import useActivityDetection from './hooks/useActivityDetection';
@@ -181,9 +182,10 @@ function ChatWindow() {
   };
 
   return (
-    <LayoutProvider>
-      <WindowManager>
-        <div className="sl-island">
+    <ThemeProvider>
+      <LayoutProvider>
+        <WindowManager>
+          <div className="sl-island">
         <HeaderDraggable 
           title="ShadowLearn"
           showMinimize={true}
@@ -451,8 +453,9 @@ function ChatWindow() {
         isOpen={isDigestOpen}
         onClose={() => setIsDigestOpen(false)}
       />
-      </WindowManager>
-    </LayoutProvider>
+        </WindowManager>
+      </LayoutProvider>
+    </ThemeProvider>
   );
 }
 

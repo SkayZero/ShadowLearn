@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { useEvent, EVENTS, shadowStore, type ContextPreview, SOFT_SPRING } from "../lib";
+import { useTheme } from "../contexts/ThemeContext";
 
 export interface ContextPreviewCardProps {
   visible: boolean;
@@ -14,6 +15,7 @@ export interface ContextPreviewCardProps {
 }
 
 export function ContextPreviewCard({ visible, onClose }: ContextPreviewCardProps) {
+  const { theme } = useTheme();
   const [context, setContext] = useState<ContextPreview | null>(
     shadowStore.getContext()
   );
@@ -53,24 +55,32 @@ export function ContextPreviewCard({ visible, onClose }: ContextPreviewCardProps
           transition={SOFT_SPRING}
           className="absolute bottom-full right-0 mb-3 w-80 z-50"
         >
-          {/* CLUELY DESIGN - Ultra transparent glass card */}
+          {/* Glass morphism card matching theme */}
           <div
             className="rounded-2xl p-4 shadow-2xl"
             style={{
-              background: "rgba(15, 23, 42, 0.3)",
-              backdropFilter: "blur(40px) saturate(200%)",
-              border: "1px solid rgba(255, 255, 255, 0.05)",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
+              background: theme.glass.bg,
+              backdropFilter: "blur(40px) saturate(180%)",
+              WebkitBackdropFilter: "blur(40px) saturate(180%)",
+              border: `1px solid ${theme.glass.border}`,
+              boxShadow: theme.glass.shadow,
+              transition: `all ${theme.transitionSpeed}ms ease`,
             }}
           >
             <div className="flex items-center justify-between mb-3">
-              <h4 className="font-semibold text-white text-sm">
+              <h4
+                className="font-semibold text-sm"
+                style={{ color: theme.text.primary }}
+              >
                 Contexte actuel
               </h4>
               {onClose && (
                 <button
                   onClick={onClose}
-                  className="text-gray-400 hover:text-gray-200 transition-colors text-xs"
+                  className="transition-colors text-xs"
+                  style={{ color: theme.text.muted }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = theme.text.secondary}
+                  onMouseLeave={(e) => e.currentTarget.style.color = theme.text.muted}
                 >
                   ✕
                 </button>
@@ -78,13 +88,25 @@ export function ContextPreviewCard({ visible, onClose }: ContextPreviewCardProps
             </div>
 
             {/* Current app */}
-            <div className="flex items-center gap-3 mb-3 p-3 rounded-xl" style={{ background: "rgba(255, 255, 255, 0.1)" }}>
+            <div
+              className="flex items-center gap-3 mb-3 p-3 rounded-xl"
+              style={{
+                background: `${theme.accent}15`,
+                border: `1px solid ${theme.glass.border}`,
+              }}
+            >
               <span className="text-2xl">💻</span>
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-sm text-white">
+                <div
+                  className="font-medium text-sm"
+                  style={{ color: theme.text.primary }}
+                >
                   {context.app_name}
                 </div>
-                <div className="text-xs text-gray-300 truncate">
+                <div
+                  className="text-xs truncate"
+                  style={{ color: theme.text.secondary }}
+                >
                   {context.window_title}
                 </div>
               </div>
@@ -93,8 +115,11 @@ export function ContextPreviewCard({ visible, onClose }: ContextPreviewCardProps
             {/* Work duration */}
             {context.session_duration_minutes > 0 && (
               <div className="flex items-center justify-between text-sm mb-3 px-3">
-                <span className="text-gray-300">Session en cours</span>
-                <span className="font-medium text-white">
+                <span style={{ color: theme.text.secondary }}>Session en cours</span>
+                <span
+                  className="font-medium"
+                  style={{ color: theme.accent }}
+                >
                   {context.session_duration_minutes} min
                 </span>
               </div>

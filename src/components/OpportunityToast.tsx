@@ -16,6 +16,7 @@ import {
 } from "../lib";
 import soundManager from "../lib/soundManager";
 import { useLayoutPosition } from "../contexts/LayoutContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 interface OpportunityToastProps {
   onOpenDock?: () => void;
@@ -24,9 +25,10 @@ interface OpportunityToastProps {
 
 export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) {
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
+  const { theme } = useTheme();
   
   // Register in layout system - Priority 2 (below QuickActions)
-  const position = useLayoutPosition('opportunity-toast', 'bottom-right', 2, 180, 384);
+  const position = useLayoutPosition('opportunity-toast', 'bottom-right', 2, 200, 384);
   
   // Debug: Log state changes
   useEffect(() => {
@@ -121,18 +123,24 @@ export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) 
             zIndex: 9999,
           }}
         >
-          {/* CLUELY DESIGN - Ultra transparent glass toast */}
+          {/* Same style as QuickActions */}
           <div
-            className="rounded-2xl p-4 shadow-xl"
             style={{
-              background: "rgba(15, 23, 42, 0.3)",
-              backdropFilter: "blur(40px) saturate(200%)",
-              border: "1px solid rgba(255, 255, 255, 0.05)",
-              boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px",
+              padding: "16px",
+              background: "var(--glass-bg)",
+              backdropFilter: "var(--glass-backdrop)",
+              WebkitBackdropFilter: "var(--glass-backdrop)",
+              border: `1px solid ${theme.glass.border}`,
+              borderRadius: "var(--radius-xl)",
+              boxShadow: theme.glass.shadow,
+              transition: `all ${theme.transitionSpeed}ms ease`,
             }}
           >
             {/* Header */}
-            <div className="flex items-start gap-3 mb-3">
+            <div style={{ display: "flex", alignItems: "start", gap: "12px" }}>
               <motion.div
                 animate={{
                   rotate: [0, 10, -10, 10, 0],
@@ -142,55 +150,115 @@ export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) 
                   duration: 0.5,
                   ease: "easeInOut",
                 }}
-                className="text-2xl"
+                style={{ fontSize: "24px" }}
               >
                 💡
               </motion.div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-white text-sm">
+              <div style={{ flex: 1 }}>
+                <div
+                  style={{
+                    fontSize: "13px",
+                    fontWeight: "600",
+                    color: "var(--text-primary)",
+                    marginBottom: "4px",
+                  }}
+                >
                   J'ai une idée
-                </h3>
-                <p className="text-xs text-gray-300 mt-0.5 line-clamp-2">
+                </div>
+                <div
+                  style={{
+                    fontSize: "11px",
+                    color: "var(--text-muted)",
+                    lineHeight: "1.4",
+                  }}
+                >
                   {opportunity.preview}
-                </p>
+                </div>
               </div>
             </div>
 
             {/* Confidence indicator */}
-            <div className="mb-3">
-              <div className="flex items-center justify-between text-xs text-gray-300 mb-1">
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  fontSize: "11px",
+                  color: "var(--text-muted)",
+                  marginBottom: "4px",
+                }}
+              >
                 <span>Confiance</span>
                 <span>{Math.round(opportunity.confidence * 100)}%</span>
               </div>
-              <div className="h-1 bg-gray-700 rounded-full overflow-hidden">
+              <div
+                style={{
+                  height: "4px",
+                  background: "rgba(255, 255, 255, 0.1)",
+                  borderRadius: "2px",
+                  overflow: "hidden",
+                }}
+              >
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${opportunity.confidence * 100}%` }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="h-full bg-gradient-to-r from-emerald-500 to-sky-500"
+                  style={{
+                    height: "100%",
+                    background: `linear-gradient(90deg, ${theme.accent}, ${theme.accentLight})`,
+                    borderRadius: "2px",
+                  }}
                 />
               </div>
             </div>
 
             {/* Actions */}
-            <div className="flex gap-2">
+            <div style={{ display: "flex", gap: "8px" }}>
               <button
                 onClick={handleView}
-                className="flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-all transform hover:scale-105 active:scale-95"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = theme.accent;
+                  e.currentTarget.style.transform = "scale(1.02)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = `${theme.accent}cc`;
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
                 style={{
-                  background: "rgba(59, 130, 246, 0.8)",
+                  flex: 1,
+                  padding: "8px 12px",
+                  background: `${theme.accent}cc`,
                   color: "white",
+                  border: "none",
+                  borderRadius: "var(--radius-lg)",
+                  fontSize: "12px",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
                 }}
               >
                 Voir →
               </button>
               <button
                 onClick={handleDismiss}
-                className="px-4 py-2 rounded-lg text-sm transition-all"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.15)";
+                  e.currentTarget.style.transform = "scale(1.02)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "rgba(255, 255, 255, 0.08)";
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
                 style={{
-                  background: "rgba(255, 255, 255, 0.1)",
-                  color: "rgba(255, 255, 255, 0.8)",
-                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  padding: "8px 12px",
+                  background: "rgba(255, 255, 255, 0.08)",
+                  color: "var(--text-secondary)",
+                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  borderRadius: "var(--radius-lg)",
+                  fontSize: "12px",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
                 }}
               >
                 Ignorer

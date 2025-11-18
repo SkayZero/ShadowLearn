@@ -15,10 +15,11 @@
   --color-bg-card: rgba(241, 245, 249, 0.6);
   --color-bg-input: rgba(248, 250, 252, 0.8);
   
-  /* Glass effect - White with subtle gray */
-  --glass-bg: rgba(255, 255, 255, 0.95);
-  --glass-border: rgba(226, 232, 240, 0.8);
-  --glass-shadow: 0 10px 40px rgba(15, 23, 42, 0.1);
+  /* Glass effect - Ultra subtle with blur */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --glass-backdrop: blur(40px) saturate(180%);
   
   /* Text - Dark on light */
   --color-text-primary: #0f172a;
