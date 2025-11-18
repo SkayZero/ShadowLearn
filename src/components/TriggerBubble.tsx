@@ -1,7 +1,6 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Context } from '../hooks/useTrigger';
-import './TriggerBubble.css';
+import { BaseBubble, BubbleButton } from './BaseBubble';
 
 interface TriggerBubbleProps {
   context: Context | null;
@@ -16,102 +15,81 @@ export const TriggerBubble: React.FC<TriggerBubbleProps> = ({
   onHide,
   onUserInteraction,
 }) => {
-  if (!context) {
-    return null;
-  }
-
-  const handleInteraction = () => {
-    onUserInteraction();
-  };
-
-  const handleDismiss = () => {
-    onHide();
-  };
-
-  if (!isVisible) return null;
+  if (!context) return null;
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        transition={{ duration: 0.2 }}
-        className="trigger-bubble"
-        style={{
-          position: 'fixed',
-          bottom: '100px',
-          right: '24px',
-          width: '400px',
-          zIndex: 50,
-        }}
-      >
-      <div className="trigger-bubble-header">
-        <div className="trigger-bubble-title">
-          💡 Besoin d'aide ?
-        </div>
-        <button 
-          className="trigger-bubble-close"
-          onClick={handleDismiss}
-          title="Fermer"
-        >
-          ×
-        </button>
-      </div>
-
-      <div className="trigger-bubble-content">
-        <div className="trigger-context-section">
-          <h3>📱 Application active</h3>
-          <div className="context-item">
+    <BaseBubble
+      isVisible={isVisible}
+      title="Besoin d'aide ?"
+      icon="💡"
+      onClose={onHide}
+      actions={
+        <>
+          <BubbleButton onClick={onHide} variant="secondary">
+            ❌ Plus tard
+          </BubbleButton>
+          <BubbleButton onClick={onUserInteraction} variant="primary">
+            ✅ Afficher une suggestion
+          </BubbleButton>
+        </>
+      }
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        {/* Application active */}
+        <div>
+          <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px', color: '#666' }}>
+            📱 Application active
+          </h3>
+          <div style={{ fontSize: '14px' }}>
             <strong>{context.app.name}</strong>
             {context.app.window_title && (
-              <div className="context-subtitle">{context.app.window_title}</div>
+              <div style={{ fontSize: '12px', color: '#999', marginTop: '4px' }}>
+                {context.app.window_title}
+              </div>
             )}
           </div>
         </div>
 
+        {/* Clipboard récent */}
         {context.clipboard && (
-          <div className="trigger-context-section">
-            <h3>📋 Clipboard récent</h3>
-            <div className="context-item clipboard-content">
-              {context.clipboard.length > 100 
+          <div>
+            <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px', color: '#666' }}>
+              📋 Clipboard récent
+            </h3>
+            <div
+              style={{
+                fontSize: '13px',
+                background: 'rgba(0, 0, 0, 0.03)',
+                padding: '8px',
+                borderRadius: '6px',
+                fontFamily: 'monospace',
+                maxHeight: '100px',
+                overflow: 'auto',
+              }}
+            >
+              {context.clipboard.length > 100
                 ? `${context.clipboard.substring(0, 100)}...`
-                : context.clipboard
-              }
+                : context.clipboard}
             </div>
           </div>
         )}
 
-        <div className="trigger-context-section">
-          <h3>⏱️ Temps d'inactivité</h3>
-          <div className="context-item">
-            {Math.round(context.idle_seconds)} secondes
-          </div>
+        {/* Temps d'inactivité */}
+        <div>
+          <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px', color: '#666' }}>
+            ⏱️ Temps d'inactivité
+          </h3>
+          <div style={{ fontSize: '14px' }}>{Math.round(context.idle_seconds)} secondes</div>
         </div>
 
-        <div className="trigger-context-section">
-          <h3>⚡ Performance</h3>
-          <div className="context-item">
-            Capture: {context.capture_duration_ms}ms
-          </div>
+        {/* Performance */}
+        <div>
+          <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px', color: '#666' }}>
+            ⚡ Performance
+          </h3>
+          <div style={{ fontSize: '14px' }}>Capture: {context.capture_duration_ms}ms</div>
         </div>
       </div>
-
-        <div className="trigger-bubble-actions">
-        <button 
-          className="trigger-action-btn primary"
-          onClick={handleInteraction}
-        >
-          ✅ Afficher une suggestion
-        </button>
-        <button 
-          className="trigger-action-btn secondary"
-          onClick={handleDismiss}
-        >
-          ❌ Plus tard
-        </button>
-      </div>
-      </motion.div>
-    </AnimatePresence>
+    </BaseBubble>
   );
 };
