@@ -2,7 +2,7 @@ use std::sync::Arc;
 use tauri::{AppHandle, Emitter, Manager, PhysicalPosition};
 use tauri_plugin_window_state::StateFlags;
 use tokio::sync::Mutex;
-use tracing::{info, warn};
+use tracing::{error, info, warn};
 
 mod adaptive;
 mod chat;
@@ -21,6 +21,7 @@ mod intent;
 mod learning;
 mod ml;
 mod monitor; // Screen Monitoring avec détection de changements
+mod shortcuts; // Global keyboard shortcuts
 mod opportunities; // Clueless: One-Tap Toast
 mod pause; // Clueless Phase 3: Pause Mode
 mod persistence;
@@ -986,6 +987,11 @@ pub async fn run() {
     let screen_monitor = Arc::new(Mutex::new(monitor::ScreenMonitor::new(monitor_config)));
     info!("✅ Screen monitor initialized");
 
+    // Initialize shortcut manager
+    let shortcut_config = shortcuts::manager::ShortcutConfig::default();
+    let shortcut_manager = Arc::new(Mutex::new(shortcuts::ShortcutManager::new(shortcut_config)));
+    info!("✅ Shortcut manager initialized");
+
     // Log feature state
     let state = feature_flags.get_state();
     info!("✅ Features enabled: {}/{}", state.enabled_count(), 4);
@@ -997,6 +1003,7 @@ pub async fn run() {
                 .with_state_flags(StateFlags::all())
                 .build(),
         )
+        .plugin(tauri_plugin_global_shortcut::init())
         .setup(|app| {
             // Setup ESC=hide for existing windows
             if let Some(main_window) = app.get_webview_window("main") {
@@ -1013,6 +1020,20 @@ pub async fn run() {
                     }
                 });
             }
+
+            // Register global shortcuts
+            let shortcut_mgr = app.state::<Arc<Mutex<shortcuts::ShortcutManager>>>();
+            let shortcut_mgr_clone = shortcut_mgr.inner().clone();
+            let app_handle = app.handle().clone();
+            tauri::async_runtime::spawn(async move {
+                let manager = shortcut_mgr_clone.lock().await;
+                if let Err(e) = manager.register_all(&app_handle).await {
+                    error!("❌ Failed to register shortcuts: {}", e);
+                } else {
+                    info!("✅ All global shortcuts registered");
+                }
+            });
+
             Ok(())
         })
         .on_window_event(|window, event| {
@@ -1055,6 +1076,7 @@ pub async fn run() {
         .manage(digest_manager) // Clueless: Daily Digest
         .manage(pills_manager) // Clueless: Smart Pills
         .manage(screen_monitor) // Screen Monitor
+        .manage(shortcut_manager) // Global Shortcuts
         .invoke_handler(tauri::generate_handler![
             toggle_window,
             broadcast_event,
@@ -1180,7 +1202,11 @@ pub async fn run() {
             monitor::commands::get_monitor_status,
             monitor::commands::reset_monitor_detector,
             monitor::commands::reset_monitor_cache,
-            monitor::commands::get_monitor_cache_stats
+            monitor::commands::get_monitor_cache_stats,
+            // Keyboard Shortcuts commands
+            shortcuts::commands::get_shortcuts_config,
+            shortcuts::commands::list_shortcuts,
+            shortcuts::commands::trigger_shortcut_action
         ])
         .setup(|app| {
             info!("🔍 Checking available windows...");
