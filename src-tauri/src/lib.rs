@@ -10,6 +10,7 @@ mod commands; // Clueless: Slash Commands
 mod config; // J5
 mod crypto;
 mod permissions;
+mod privacy; // Privacy zones for screen monitoring
 mod artefact;
 mod clustering;
 mod context;
@@ -992,6 +993,11 @@ pub async fn run() {
     let shortcut_manager = Arc::new(Mutex::new(shortcuts::ShortcutManager::new(shortcut_config)));
     info!("✅ Shortcut manager initialized");
 
+    // Initialize privacy zone manager
+    let privacy_config = privacy::PrivacyZonesConfig::default();
+    let privacy_manager = Arc::new(Mutex::new(privacy::PrivacyZoneManager::new(privacy_config)));
+    info!("✅ Privacy zone manager initialized");
+
     // Log feature state
     let state = feature_flags.get_state();
     info!("✅ Features enabled: {}/{}", state.enabled_count(), 4);
@@ -1077,6 +1083,7 @@ pub async fn run() {
         .manage(pills_manager) // Clueless: Smart Pills
         .manage(screen_monitor) // Screen Monitor
         .manage(shortcut_manager) // Global Shortcuts
+        .manage(privacy_manager) // Privacy Zones
         .invoke_handler(tauri::generate_handler![
             toggle_window,
             broadcast_event,
@@ -1206,7 +1213,13 @@ pub async fn run() {
             // Keyboard Shortcuts commands
             shortcuts::commands::get_shortcuts_config,
             shortcuts::commands::list_shortcuts,
-            shortcuts::commands::trigger_shortcut_action
+            shortcuts::commands::trigger_shortcut_action,
+            // Privacy Zones commands
+            privacy::commands::get_privacy_zones_config,
+            privacy::commands::add_privacy_zone,
+            privacy::commands::remove_privacy_zone,
+            privacy::commands::set_privacy_zones_enabled,
+            privacy::commands::is_app_protected
         ])
         .setup(|app| {
             info!("🔍 Checking available windows...");
