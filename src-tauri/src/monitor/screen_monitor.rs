@@ -1,5 +1,6 @@
 use super::change_detector::ChangeDetector;
 use super::vision_client::ClaudeVisionClient;
+use super::ocr_client::LocalOCR;
 use crate::screenshot::ScreenshotCapturer;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -14,8 +15,10 @@ pub struct MonitorConfig {
     pub interval_secs: u64,
     /// Seuil de similarité (0.0 = différent, 1.0 = identique)
     pub similarity_threshold: f32,
-    /// Activer l'analyse par Claude Vision
+    /// Activer l'analyse par Claude Vision (cloud API)
     pub use_vision: bool,
+    /// Activer l'OCR local (pattern detection rapide, gratuit, privacy-first)
+    pub use_local_ocr: bool,
     /// Activer le monitoring
     pub enabled: bool,
 }
@@ -25,7 +28,8 @@ impl Default for MonitorConfig {
         Self {
             interval_secs: 5,
             similarity_threshold: 0.85,
-            use_vision: false, // Désactivé par défaut (peut être activé avec ANTHROPIC_API_KEY)
+            use_vision: false, // Cloud API - désactivé par défaut
+            use_local_ocr: true, // OCR local - activé par défaut (gratuit et rapide)
             enabled: true,
         }
     }
@@ -44,6 +48,7 @@ pub struct ScreenMonitor {
     change_detector: Arc<Mutex<ChangeDetector>>,
     capturer: Arc<Mutex<Option<ScreenshotCapturer>>>,
     vision_client: Arc<Mutex<Option<ClaudeVisionClient>>>,
+    ocr_client: Arc<Mutex<Option<LocalOCR>>>,
     is_running: Arc<Mutex<bool>>,
 }
 
@@ -65,10 +70,19 @@ impl ScreenMonitor {
             None
         };
 
+        // Init local OCR if enabled
+        let ocr_client = if config.use_local_ocr {
+            info!("✅ Local OCR client initialized (pattern detection)");
+            Some(LocalOCR::new())
+        } else {
+            None
+        };
+
         Self {
             change_detector: Arc::new(Mutex::new(ChangeDetector::new(config.similarity_threshold))),
             capturer: Arc::new(Mutex::new(None)),
             vision_client: Arc::new(Mutex::new(vision_client)),
+            ocr_client: Arc::new(Mutex::new(ocr_client)),
             is_running: Arc::new(Mutex::new(false)),
             config,
         }
@@ -93,6 +107,7 @@ impl ScreenMonitor {
         let change_detector = self.change_detector.clone();
         let capturer = self.capturer.clone();
         let vision_client = self.vision_client.clone();
+        let ocr_client = self.ocr_client.clone();
         let is_running = self.is_running.clone();
 
         tokio::spawn(async move {
@@ -117,6 +132,7 @@ impl ScreenMonitor {
                     &capturer,
                     &change_detector,
                     &vision_client,
+                    &ocr_client,
                 ).await {
                     Ok(Some(change)) => {
                         info!("📸 Screen change detected, emitting event");
@@ -149,6 +165,7 @@ impl ScreenMonitor {
         capturer: &Arc<Mutex<Option<ScreenshotCapturer>>>,
         change_detector: &Arc<Mutex<ChangeDetector>>,
         vision_client: &Arc<Mutex<Option<ClaudeVisionClient>>>,
+        ocr_client: &Arc<Mutex<Option<LocalOCR>>>,
     ) -> Result<Option<ScreenChange>, String> {
         // Initialiser le capturer si nécessaire
         {
@@ -178,22 +195,58 @@ impl ScreenMonitor {
             return Ok(None);
         }
 
-        // Changement détecté ! Analyser avec Claude Vision si disponible
+        // Changement détecté ! Analyser avec OCR local OU Claude Vision
         let analysis = {
-            let client = vision_client.lock().await;
-            if let Some(ref vision) = *client {
-                match vision.suggest_action(&capture_result.data).await {
-                    Ok(suggestion) => {
-                        info!("✅ Claude Vision suggestion: {}", suggestion);
+            // Priorité à l'OCR local (rapide, gratuit, privacy-first)
+            let ocr = ocr_client.lock().await;
+            if let Some(ref local_ocr) = *ocr {
+                match local_ocr.analyze(&image_path) {
+                    Ok(ocr_result) => {
+                        info!("✅ Local OCR: {} (confidence: {:.2})",
+                              ocr_result.text, ocr_result.confidence);
+
+                        // Générer une suggestion basée sur les patterns détectés
+                        let suggestion = Self::generate_ocr_suggestion(&ocr_result);
                         Some(suggestion)
                     }
                     Err(e) => {
-                        warn!("⚠️ Vision analysis failed: {}", e);
-                        None
+                        warn!("⚠️ Local OCR failed: {}", e);
+
+                        // Fallback vers Claude Vision si disponible
+                        let vision = vision_client.lock().await;
+                        if let Some(ref claude) = *vision {
+                            match claude.suggest_action(&capture_result.data).await {
+                                Ok(suggestion) => {
+                                    info!("✅ Claude Vision (fallback): {}", suggestion);
+                                    Some(suggestion)
+                                }
+                                Err(e) => {
+                                    warn!("⚠️ Vision analysis also failed: {}", e);
+                                    None
+                                }
+                            }
+                        } else {
+                            None
+                        }
                     }
                 }
             } else {
-                None
+                // Pas d'OCR local, essayer Claude Vision
+                let vision = vision_client.lock().await;
+                if let Some(ref claude) = *vision {
+                    match claude.suggest_action(&capture_result.data).await {
+                        Ok(suggestion) => {
+                            info!("✅ Claude Vision suggestion: {}", suggestion);
+                            Some(suggestion)
+                        }
+                        Err(e) => {
+                            warn!("⚠️ Vision analysis failed: {}", e);
+                            None
+                        }
+                    }
+                } else {
+                    None
+                }
             }
         };
 
@@ -217,6 +270,67 @@ impl ScreenMonitor {
     /// Check si le monitor tourne
     pub async fn is_running(&self) -> bool {
         *self.is_running.lock().await
+    }
+
+    /// Génère une suggestion intelligente basée sur le résultat OCR
+    fn generate_ocr_suggestion(ocr_result: &crate::monitor::OCRResult) -> String {
+        use crate::monitor::DetectedPattern;
+
+        let mut suggestions = Vec::new();
+
+        for pattern in &ocr_result.detected_patterns {
+            match pattern {
+                DetectedPattern::CodeEditor { language, has_errors } => {
+                    if *has_errors {
+                        let lang = language.as_deref().unwrap_or("code");
+                        suggestions.push(format!(
+                            "Erreur détectée dans ton {} ! Je peux t'aider à la corriger ?",
+                            lang
+                        ));
+                    } else {
+                        suggestions.push(
+                            "Tu codes ? Je peux suggérer des améliorations ou générer des tests.".to_string()
+                        );
+                    }
+                }
+                DetectedPattern::Terminal { has_errors, error_type } => {
+                    if *has_errors {
+                        let err = error_type.as_deref().unwrap_or("erreur");
+                        suggestions.push(format!(
+                            "Commande échouée ({}) - besoin d'aide pour débugger ?",
+                            err
+                        ));
+                    } else {
+                        suggestions.push(
+                            "Terminal actif - je peux suggérer des commandes optimisées.".to_string()
+                        );
+                    }
+                }
+                DetectedPattern::Browser { has_stack_trace } => {
+                    if *has_stack_trace {
+                        suggestions.push(
+                            "Stack trace détecté ! Je peux analyser l'erreur et proposer une solution.".to_string()
+                        );
+                    } else {
+                        suggestions.push(
+                            "Navigation web - je peux résumer la page ou extraire du contenu.".to_string()
+                        );
+                    }
+                }
+                DetectedPattern::IDE { name } => {
+                    suggestions.push(format!(
+                        "Tu utilises {} - besoin d'aide avec ton workflow ?",
+                        name
+                    ));
+                }
+            }
+        }
+
+        if suggestions.is_empty() {
+            format!("Activité détectée : {}. Besoin d'aide ?", ocr_result.text)
+        } else {
+            suggestions.join(" ")
+        }
     }
 }
 
