@@ -107,7 +107,7 @@ impl RepetitionDetector {
     /// Count how many times a sequence appears in history
     fn count_sequence_occurrences(&mut self, sequence: &[ActionSignature]) -> usize {
         let mut count = 0;
-        let mut timestamps = Vec::new();
+        let timestamps = Vec::new();
 
         if self.action_history.len() < sequence.len() {
             return 0;
