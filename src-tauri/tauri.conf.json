@@ -19,11 +19,13 @@
         "width": 1200,
         "height": 800,
         "resizable": true,
-        "decorations": true,
-        "transparent": false,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": false,
         "center": true,
         "visible": true,
-        "skipTaskbar": false
+        "skipTaskbar": false,
+        "shadow": true
       },
       {
         "label": "chat",
