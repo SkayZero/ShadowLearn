@@ -6,6 +6,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Personality, Theme, THEMES, getTheme, getThemeCSSVariables } from '../lib/themes';
 import { invoke } from '@tauri-apps/api/core';
+import { listen, emit } from '@tauri-apps/api/event';
 
 interface ThemeContextValue {
   personality: Personality;
@@ -22,6 +23,21 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   // Load personality from backend on mount
   useEffect(() => {
     loadPersonality();
+
+    // Listen for theme changes from other windows
+    const unlisten = listen<string>('theme-changed', (event) => {
+      const newPersonality = event.payload as Personality;
+      console.log(`🎨 Theme changed event received: ${newPersonality}`);
+
+      if (THEMES[newPersonality]) {
+        setPersonalityState(newPersonality);
+        setTheme(THEMES[newPersonality]);
+      }
+    });
+
+    return () => {
+      unlisten.then(fn => fn());
+    };
   }, []);
 
   // Apply CSS variables when theme changes
@@ -29,31 +45,35 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const root = document.documentElement;
     const body = document.body;
     const cssVars = getThemeCSSVariables(theme);
-    
+
     // Apply theme-specific variables
     Object.entries(cssVars).forEach(([key, value]) => {
       root.style.setProperty(key, value);
     });
-    
+
     // Update global glass variables to match theme
     root.style.setProperty('--glass-bg', theme.glass.bg);
     root.style.setProperty('--glass-border', theme.glass.border);
     root.style.setProperty('--glass-shadow', theme.glass.shadow);
     root.style.setProperty('--glass-backdrop', 'blur(40px) saturate(180%)');
-    
+
     // Update text colors
     root.style.setProperty('--text-primary', theme.text.primary);
     root.style.setProperty('--text-secondary', theme.text.secondary);
     root.style.setProperty('--text-muted', theme.text.muted);
-    
+
     // Update accent colors
     root.style.setProperty('--accent-primary', theme.accent);
     root.style.setProperty('--accent-light', theme.accentLight);
-    
-    // Apply gradient background to body
-    body.style.background = `linear-gradient(135deg, ${theme.gradient[0]} 0%, ${theme.gradient[1]} 100%)`;
+
+    // IMPORTANT: Do NOT apply gradient to body for transparent windows
+    // Glassmorphic windows need transparent background
+    // Only set font and transition
     body.style.fontFamily = theme.font;
     body.style.transition = `background ${theme.transitionSpeed}ms ease-in-out`;
+
+    // Keep body transparent for glassmorphic effect
+    body.style.background = 'transparent';
   }, [theme]);
 
   const loadPersonality = async () => {
@@ -75,12 +95,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     try {
       // Save to backend
       await invoke('set_personality', { personality: newPersonality });
-      
-      // Update state
+
+      // Update state locally
       setPersonalityState(newPersonality);
       setTheme(getTheme(newPersonality));
-      
-      console.log(`✨ Theme changed to: ${newPersonality}`);
+
+      // Broadcast theme change to all other windows
+      await emit('theme-changed', newPersonality);
+
+      console.log(`✨ Theme changed to: ${newPersonality} (broadcasted to all windows)`);
     } catch (error) {
       console.error('Failed to save personality:', error);
       throw error;
