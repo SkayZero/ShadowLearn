@@ -44,6 +44,11 @@ body,
   border-radius: var(--radius-2xl);
   box-shadow: var(--glass-shadow);
 
+  /* Force GPU hardware composition to prevent backdrop-filter flicker */
+  will-change: backdrop-filter;
+  transform: translateZ(0);
+  isolation: isolate;
+
   overflow: hidden;
 }
 
