@@ -145,8 +145,11 @@ impl PatternLearner {
     fn promote_to_pattern(&mut self, sequence: Vec<ActionSignature>, occurrences: usize) {
         let pattern_id = self.generate_pattern_id(&sequence);
 
-        // Check if pattern already exists
+        // Pre-calculate values before any borrows
         let confidence = self.calculate_confidence(occurrences);
+        let avg_duration = self.calculate_avg_duration(&sequence);
+
+        // Check if pattern already exists
         if let Some(existing) = self.discovered_patterns.get_mut(&pattern_id) {
             existing.occurrences = occurrences;
             existing.last_seen = Utc::now();
@@ -160,10 +163,10 @@ impl PatternLearner {
             name: self.generate_pattern_name(&sequence),
             sequence: sequence.clone(),
             occurrences,
-            confidence: self.calculate_confidence(occurrences),
+            confidence,
             last_seen: Utc::now(),
             created_at: Utc::now(),
-            avg_duration_secs: self.calculate_avg_duration(&sequence),
+            avg_duration_secs: avg_duration,
             tags: self.extract_tags(&sequence),
         };
 
@@ -217,7 +220,7 @@ impl PatternLearner {
     }
 
     /// Calculate average duration for a sequence
-    fn calculate_avg_duration(&self, sequence: &[ActionSignature]) -> f64 {
+    fn calculate_avg_duration(&mut self, sequence: &[ActionSignature]) -> f64 {
         // Look for all occurrences in history and calculate avg time
         let mut durations = Vec::new();
 

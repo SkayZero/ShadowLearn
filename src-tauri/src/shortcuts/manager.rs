@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::Arc;
 use tauri::{AppHandle, Emitter, Manager};
-use tauri_plugin_global_shortcut::{Code, Modifiers, ShortcutState, GlobalShortcutExt};
+use tauri_plugin_global_shortcut::{Code, Modifiers, Shortcut, ShortcutState, GlobalShortcutExt};
 use tokio::sync::Mutex;
 use tracing::{error, info, warn};
 
@@ -101,7 +101,7 @@ impl ShortcutManager {
         shortcut: &str,
         action: ShortcutAction,
     ) -> Result<(), String> {
-        let shortcut_parsed = shortcut
+        let shortcut_parsed: Shortcut = shortcut
             .parse()
             .map_err(|e| format!("Invalid shortcut '{}': {:?}", shortcut, e))?;
 
@@ -136,7 +136,7 @@ impl ShortcutManager {
         let registry = self.registered_shortcuts.lock().await;
 
         for shortcut in registry.keys() {
-            let shortcut_parsed = shortcut
+            let shortcut_parsed: Shortcut = shortcut
                 .parse()
                 .map_err(|e| format!("Invalid shortcut '{}': {:?}", shortcut, e))?;
 

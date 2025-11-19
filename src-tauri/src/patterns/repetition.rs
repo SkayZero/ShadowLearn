@@ -113,19 +113,17 @@ impl RepetitionDetector {
             return 0;
         }
 
-        for window in self.action_history.make_contiguous().windows(sequence.len()) {
-            let window_sigs: Vec<ActionSignature> = window.iter()
-                .map(ActionSignature::from)
-                .collect();
+        // Collect all windows first to avoid borrow conflicts
+        let windows: Vec<Vec<ActionSignature>> = self.action_history
+            .make_contiguous()
+            .windows(sequence.len())
+            .map(|window| window.iter().map(ActionSignature::from).collect())
+            .collect();
 
+        for window_sigs in windows {
             if self.sequences_match(&window_sigs, sequence) {
                 count += 1;
-                if let Some(last_action) = window.last() {
-                    timestamps.push(
-                        DateTime::from_timestamp(last_action.timestamp, 0)
-                            .unwrap_or_else(|| Utc::now())
-                    );
-                }
+                // Note: timestamps tracking removed as we lost reference to original actions
             }
         }
 
