@@ -18,6 +18,7 @@ mod digest; // Clueless: Daily Digest
 mod features;
 mod flow; // Clueless: Flow State Detection
 mod focus; // Killer Feature: Focus Mode
+mod learn; // Killer Feature: Learn by Doing
 mod productivity; // Phase 3: Productivity Dashboard & Weekly Insights
 mod health;
 mod intent;
@@ -1007,6 +1008,10 @@ pub async fn run() {
     let focus_manager = Arc::new(Mutex::new(focus::FocusManager::new()));
     info!("✅ Focus manager initialized");
 
+    // Initialize learn manager (Killer Feature)
+    let learn_manager = Arc::new(Mutex::new(learn::LearnManager::new(100))); // Store 100 workflows
+    info!("✅ Learn manager initialized");
+
     // Initialize screenshot capturer
     if let Err(e) = screenshot::init_capturer() {
         info!(
@@ -1132,6 +1137,7 @@ pub async fn run() {
         .manage(plugin_manager) // Phase 4: Plugin System
         .manage(replay_manager) // Killer Feature: Shadow Replay
         .manage(focus_manager) // Killer Feature: Focus Mode
+        .manage(learn_manager) // Killer Feature: Learn by Doing
         .manage(screen_monitor) // Screen Monitor
         .manage(shortcut_manager) // Global Shortcuts
         .manage(privacy_manager) // Privacy Zones
@@ -1316,7 +1322,16 @@ pub async fn run() {
             focus::should_block_notification,
             focus::should_block_trigger,
             focus::end_focus_session,
-            focus::get_recent_focus_sessions
+            focus::get_recent_focus_sessions,
+            // Killer Feature: Learn by Doing commands
+            learn::start_workflow_recording,
+            learn::stop_workflow_recording,
+            learn::add_workflow_comment,
+            learn::generate_workflow_tutorial,
+            learn::get_recording_state,
+            learn::get_all_workflows,
+            learn::get_all_tutorials,
+            learn::export_tutorial_as_markdown
         ])
         .setup(|app| {
             info!("🔍 Checking available windows...");
