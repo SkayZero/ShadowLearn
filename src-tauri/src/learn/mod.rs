@@ -73,7 +73,7 @@ pub struct TutorialStep {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RecordingState {
-    pub is_recording: boolean,
+    pub is_recording: bool,
     pub current_workflow_id: Option<String>,
     pub actions_recorded: usize,
     pub recording_duration_seconds: u32,
