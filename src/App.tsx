@@ -41,7 +41,12 @@ export default function App() {
   // Show Learn by Doing view
   if (showLearnByDoing) {
     return (
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+      <div style={{
+        minHeight: '100vh',
+        backgroundColor: '#f3f4f6',
+        width: '100%',
+        overflow: 'auto',
+      }}>
         <button
           onClick={() => setShowLearnByDoing(false)}
           style={{
@@ -67,7 +72,13 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#f3f4f6',
+      width: '100%',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
       {/* Trigger Bubble - Point d'entrée principal */}
       <TriggerBubble
         context={triggerContext}

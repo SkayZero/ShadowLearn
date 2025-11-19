@@ -1,0 +1,11 @@
+/* Dashboard-specific overrides */
+html, body {
+  overflow: visible !important;
+  background: #f3f4f6 !important;
+}
+
+#root {
+  display: block !important;
+  background: #f3f4f6 !important;
+  min-height: 100vh;
+}
