@@ -1,3 +1,6 @@
+// Allow deprecated warnings from generic-array 0.x used by aes_gcm
+#![allow(deprecated)]
+
 use aes_gcm::{
     aead::{Aead, KeyInit, OsRng},
     Aes256Gcm, Key, Nonce,
