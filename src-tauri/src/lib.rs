@@ -32,6 +32,7 @@ mod personality; // Clueless Phase 3: Personalities
 mod pills; // Clueless: Smart Pills / Micro Suggestions
 mod plugins; // Phase 4: Plugin System
 mod recovery;
+mod replay; // Killer Feature: Shadow Replay
 mod streaks; // Clueless Phase 3: Streaks
 mod screenshot;
 mod snooze;
@@ -997,6 +998,10 @@ pub async fn run() {
         }
     };
 
+    // Initialize replay manager (Killer Feature)
+    let replay_manager = Arc::new(Mutex::new(replay::ReplayManager::new(10000))); // Store last 10k events
+    info!("✅ Replay manager initialized");
+
     // Initialize screenshot capturer
     if let Err(e) = screenshot::init_capturer() {
         info!(
@@ -1120,6 +1125,7 @@ pub async fn run() {
         .manage(pills_manager) // Clueless: Smart Pills
         .manage(productivity_manager) // Phase 3: Productivity Dashboard
         .manage(plugin_manager) // Phase 4: Plugin System
+        .manage(replay_manager) // Killer Feature: Shadow Replay
         .manage(screen_monitor) // Screen Monitor
         .manage(shortcut_manager) // Global Shortcuts
         .manage(privacy_manager) // Privacy Zones
@@ -1282,7 +1288,19 @@ pub async fn run() {
             plugins::uninstall_plugin,
             plugins::reload_plugins,
             plugins::get_plugin_stats,
-            plugins::execute_plugin_hook
+            plugins::execute_plugin_hook,
+            // Killer Feature: Shadow Replay commands
+            replay::get_replay_events,
+            replay::get_replay_sessions,
+            replay::get_replay_stats,
+            replay::start_replay_playback,
+            replay::stop_replay_playback,
+            replay::set_replay_speed,
+            replay::get_next_replay_event,
+            replay::get_playback_state,
+            replay::seek_replay_to,
+            replay::record_replay_suggestion,
+            replay::record_replay_flow_session
         ])
         .setup(|app| {
             info!("🔍 Checking available windows...");
