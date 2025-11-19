@@ -30,6 +30,7 @@ mod patterns; // Phase 2.1: Pattern Recognition ML
 mod persistence;
 mod personality; // Clueless Phase 3: Personalities
 mod pills; // Clueless: Smart Pills / Micro Suggestions
+mod plugins; // Phase 4: Plugin System
 mod recovery;
 mod streaks; // Clueless Phase 3: Streaks
 mod screenshot;
@@ -981,6 +982,21 @@ pub async fn run() {
     let productivity_manager = Arc::new(Mutex::new(productivity::ProductivityManager::new()));
     info!("✅ Productivity manager initialized");
 
+    // Initialize plugin manager (Phase 4)
+    let plugin_manager = match plugins::PluginManager::new() {
+        Ok(mut manager) => {
+            match manager.load_all_plugins() {
+                Ok(count) => info!("✅ Plugin manager initialized with {} plugins", count),
+                Err(e) => warn!("⚠️ Failed to load plugins: {}", e),
+            }
+            Arc::new(Mutex::new(manager))
+        }
+        Err(e) => {
+            warn!("⚠️ Plugin manager initialization failed: {}", e);
+            Arc::new(Mutex::new(plugins::PluginManager::new().unwrap_or_else(|_| panic!("Failed to create plugin manager"))))
+        }
+    };
+
     // Initialize screenshot capturer
     if let Err(e) = screenshot::init_capturer() {
         info!(
@@ -1103,6 +1119,7 @@ pub async fn run() {
         .manage(digest_manager) // Clueless: Daily Digest
         .manage(pills_manager) // Clueless: Smart Pills
         .manage(productivity_manager) // Phase 3: Productivity Dashboard
+        .manage(plugin_manager) // Phase 4: Plugin System
         .manage(screen_monitor) // Screen Monitor
         .manage(shortcut_manager) // Global Shortcuts
         .manage(privacy_manager) // Privacy Zones
@@ -1256,7 +1273,16 @@ pub async fn run() {
             // Phase 3: Productivity Dashboard commands
             productivity::get_productivity_metrics,
             productivity::record_productivity_event,
-            productivity::record_flow_session_event
+            productivity::record_flow_session_event,
+            // Phase 4: Plugin System commands
+            plugins::get_all_plugins,
+            plugins::get_plugin_info,
+            plugins::enable_plugin,
+            plugins::disable_plugin,
+            plugins::uninstall_plugin,
+            plugins::reload_plugins,
+            plugins::get_plugin_stats,
+            plugins::execute_plugin_hook
         ])
         .setup(|app| {
             info!("🔍 Checking available windows...");
