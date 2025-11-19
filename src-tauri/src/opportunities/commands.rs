@@ -33,7 +33,7 @@ pub async fn record_opportunity_response(
         opportunity_id, accepted
     );
 
-    let timestamp = chrono::Utc::now().timestamp();
+    let _timestamp = chrono::Utc::now().timestamp();
 
     // Record feedback in learning system
     {

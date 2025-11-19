@@ -849,7 +849,7 @@ async fn generate_artifact(
 ) -> Result<crate::artefact::GeneratedArtifact, String> {
     // TODO: Get learning system from app state
     // For now, return a placeholder
-    use crate::artefact::{ArtefactGenerator, GeneratedArtifact};
+    use crate::artefact::ArtefactGenerator;
     use crate::validator::ArtefactType;
     
     let artefact_type_enum = match artefact_type.as_str() {
@@ -1342,7 +1342,7 @@ pub async fn run() {
                 let _ = chat.show();
                 let _ = chat.set_focus();
                 if let Ok(Some(monitor)) = chat.current_monitor() {
-                    let size = monitor.size();
+                    let _size = monitor.size();
                     let _ = chat.set_position(PhysicalPosition::new(
                         size.width as i32 - 440,
                         (size.height as i32 / 2) - 280,
@@ -1359,7 +1359,7 @@ pub async fn run() {
                 let _ = context.show();
                 let _ = context.set_focus();
                 if let Ok(Some(monitor)) = context.current_monitor() {
-                    let size = monitor.size();
+                    let _size = monitor.size();
                     let _ = context.set_position(PhysicalPosition::new(20, 100));
                     info!("📍 Context window positioned and visible");
                 }

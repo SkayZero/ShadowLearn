@@ -7,7 +7,7 @@ use super::learning::{ActionSignature, UserAction, ActionType};
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, VecDeque};
 use chrono::{DateTime, Utc, Duration};
-use tracing::{info, debug};
+use tracing::info;
 
 /// Minimum repetitions to flag a task as repetitive
 const MIN_REPETITIONS: usize = 3;

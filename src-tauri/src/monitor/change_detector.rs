@@ -1,4 +1,3 @@
-use image::RgbImage;
 use std::path::PathBuf;
 use tracing::{debug, info};
 

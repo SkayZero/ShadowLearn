@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use std::time::Duration;
 
 /// Configuration globale de ShadowLearn
 #[derive(Debug, Clone, Serialize, Deserialize)]

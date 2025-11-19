@@ -3,13 +3,13 @@
  * Records and replays user activity timeline
  */
 
-use chrono::{DateTime, Utc, Duration};
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::collections::VecDeque;
 use std::sync::Arc;
 use tauri::State;
 use tokio::sync::Mutex;
-use tracing::{info, warn};
+use tracing::info;
 
 pub mod storage;
 pub mod player;

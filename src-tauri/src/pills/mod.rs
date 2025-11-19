@@ -68,7 +68,7 @@ impl PillsManager {
 
 #[tauri::command]
 pub async fn get_micro_suggestions(
-    pills_manager: State<'_, Arc<Mutex<PillsManager>>>,
+    _pills_manager: State<'_, Arc<Mutex<PillsManager>>>,
 ) -> Result<Vec<MicroSuggestion>, String> {
     let manager = pills_manager.lock().await;
     Ok(manager.generate_suggestions())
@@ -77,7 +77,7 @@ pub async fn get_micro_suggestions(
 #[tauri::command]
 pub async fn dismiss_pill(
     pill_id: String,
-    pills_manager: State<'_, Arc<Mutex<PillsManager>>>,
+    _pills_manager: State<'_, Arc<Mutex<PillsManager>>>,
 ) -> Result<(), String> {
     tracing::info!("Pill dismissed: {}", pill_id);
     // Could store dismissed pills if needed

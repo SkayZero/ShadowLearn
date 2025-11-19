@@ -3,12 +3,12 @@
  * Persistent storage for learned patterns and predictions
  */
 
-use super::learning::{WorkflowPattern, PatternStats};
-use super::repetition::{RepetitiveTask, RepetitionStats};
+use super::learning::WorkflowPattern;
+use super::repetition::RepetitiveTask;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use std::fs;
-use tracing::{info, error, debug};
+use tracing::info;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct PatternDatabase {

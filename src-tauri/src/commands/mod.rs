@@ -5,5 +5,4 @@
 
 pub mod slash;
 
-pub use slash::execute_slash_command;
 

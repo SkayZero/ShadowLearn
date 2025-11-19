@@ -1,4 +1,4 @@
-use super::{MonitorConfig, ScreenMonitor};
+use super::ScreenMonitor;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 use tracing::info;

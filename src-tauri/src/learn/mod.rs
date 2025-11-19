@@ -3,13 +3,13 @@
  * Records workflows and generates tutorials automatically
  */
 
-use chrono::{DateTime, Utc};
+use chrono::Utc;
 use serde::{Deserialize, Serialize};
 use std::collections::VecDeque;
 use std::sync::Arc;
 use tauri::State;
 use tokio::sync::Mutex;
-use tracing::{info, warn};
+use tracing::info;
 
 pub mod exporter;
 

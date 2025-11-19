@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 use tokio::time::timeout;
-use tracing::{error, info, warn};
+use tracing::{error, info};
 
 #[derive(Debug, Clone, Serialize)]
 struct VisionMessage {

@@ -1,6 +1,6 @@
 use super::errors::{PermissionStatus, ScreenshotError};
 use image::codecs::jpeg::JpegEncoder;
-use image::{DynamicImage, ImageBuffer, RgbImage};
+use image::RgbImage;
 use screenshots::Screen;
 use std::io::Cursor;
 use std::path::PathBuf;

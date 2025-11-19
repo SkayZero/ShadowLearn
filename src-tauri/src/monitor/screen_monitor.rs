@@ -5,7 +5,6 @@ use super::smart_cache::SmartCache;
 use crate::screenshot::ScreenshotCapturer;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
-use std::time::Duration;
 use tauri::{AppHandle, Emitter};
 use tokio::sync::Mutex;
 use tracing::{error, info, warn};

@@ -9,7 +9,3 @@ pub mod repetition;
 pub mod storage;
 pub mod commands;
 
-pub use learning::PatternLearner;
-pub use prediction::ActionPredictor;
-pub use repetition::RepetitionDetector;
-pub use storage::PatternStorage;

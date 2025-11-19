@@ -16,7 +16,7 @@ pub mod loader;
 pub mod runtime;
 pub mod types;
 
-pub use types::{Plugin, PluginConfig, PluginHook, PluginManifest, PluginMetadata};
+pub use types::{Plugin, PluginManifest};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PluginInfo {

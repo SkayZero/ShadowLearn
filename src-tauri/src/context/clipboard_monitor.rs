@@ -1,7 +1,7 @@
 use super::errors::ClipboardError;
 use arboard::Clipboard;
 use std::time::Instant;
-use tracing::{debug, warn};
+use tracing::debug;
 
 const MAX_CLIPBOARD_LENGTH: usize = 10_000; // 10KB
 

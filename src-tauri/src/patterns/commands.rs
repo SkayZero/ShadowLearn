@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 use tauri::State;
 use std::sync::Arc;
 use tokio::sync::Mutex;
-use tracing::{info, error};
+use tracing::info;
 
 /// Global pattern recognition manager
 pub struct PatternManager {
@@ -26,7 +26,7 @@ impl PatternManager {
         let storage = PatternStorage::new(app_dir)?;
 
         // Try to load existing patterns
-        let mut learner = PatternLearner::new();
+        let learner = PatternLearner::new();
         let mut predictor = ActionPredictor::new();
 
         if let Ok(patterns) = storage.load_patterns() {
@@ -46,7 +46,7 @@ impl PatternManager {
     pub async fn record_action(&self, action: UserAction) {
         // Record in learner
         {
-            let mut learner = self.learner.lock().await;
+            let learner = self.learner.lock().await;
             learner.record_action(action.clone());
 
             // Update predictor with new patterns
@@ -194,7 +194,7 @@ pub async fn clear_pattern_storage(
 ) -> Result<(), String> {
     // Clear in-memory state
     {
-        let mut learner = manager.learner.lock().await;
+        let learner = manager.learner.lock().await;
         *learner = PatternLearner::new();
     }
     {
