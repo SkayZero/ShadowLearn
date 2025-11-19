@@ -51,7 +51,7 @@ impl StreakManager {
         let mut current_streak = 0;
         let mut longest_streak = 0;
         let mut temp_streak = 0;
-        let _total_days = 0;
+        let mut total_days = 0;
         let mut last_activity = today;
         let mut streak_broken = false;
 

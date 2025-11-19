@@ -1342,7 +1342,7 @@ pub async fn run() {
                 let _ = chat.show();
                 let _ = chat.set_focus();
                 if let Ok(Some(monitor)) = chat.current_monitor() {
-                    let _size = monitor.size();
+                    let size = monitor.size();
                     let _ = chat.set_position(PhysicalPosition::new(
                         size.width as i32 - 440,
                         (size.height as i32 / 2) - 280,

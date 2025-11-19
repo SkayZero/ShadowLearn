@@ -8,7 +8,7 @@ use super::repetition::RepetitiveTask;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use std::fs;
-use tracing::info;
+use tracing::{info, debug};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct PatternDatabase {

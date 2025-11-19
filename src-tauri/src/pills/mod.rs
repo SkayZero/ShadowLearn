@@ -68,7 +68,7 @@ impl PillsManager {
 
 #[tauri::command]
 pub async fn get_micro_suggestions(
-    _pills_manager: State<'_, Arc<Mutex<PillsManager>>>,
+    pills_manager: State<'_, Arc<Mutex<PillsManager>>>,
 ) -> Result<Vec<MicroSuggestion>, String> {
     let manager = pills_manager.lock().await;
     Ok(manager.generate_suggestions())

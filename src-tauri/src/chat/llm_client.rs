@@ -122,7 +122,7 @@ impl LLMChatClient {
             .await
             {
                 Ok(Ok(response)) => {
-                    let _ttfr = start.elapsed().as_millis() as u64;
+                    let ttfr = start.elapsed().as_millis() as u64;
                     self.record_success(false, ttfr).await;
                     return Ok(ChatResponse {
                         content: response,
@@ -152,7 +152,7 @@ impl LLMChatClient {
         .await
         {
             Ok(Ok(response)) => {
-                let _ttfr = start.elapsed().as_millis() as u64;
+                let ttfr = start.elapsed().as_millis() as u64;
                 self.record_success(true, ttfr).await;
                 info!("✅ Fallback successful");
                 Ok(ChatResponse {

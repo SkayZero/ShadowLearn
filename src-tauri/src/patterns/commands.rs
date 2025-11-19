@@ -46,7 +46,7 @@ impl PatternManager {
     pub async fn record_action(&self, action: UserAction) {
         // Record in learner
         {
-            let learner = self.learner.lock().await;
+            let mut learner = self.learner.lock().await;
             learner.record_action(action.clone());
 
             // Update predictor with new patterns
@@ -194,7 +194,7 @@ pub async fn clear_pattern_storage(
 ) -> Result<(), String> {
     // Clear in-memory state
     {
-        let learner = manager.learner.lock().await;
+        let mut learner = manager.learner.lock().await;
         *learner = PatternLearner::new();
     }
     {
