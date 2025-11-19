@@ -113,7 +113,7 @@ impl RepetitionDetector {
             return 0;
         }
 
-        for window in self.action_history.windows(sequence.len()) {
+        for window in self.action_history.make_contiguous().windows(sequence.len()) {
             let window_sigs: Vec<ActionSignature> = window.iter()
                 .map(ActionSignature::from)
                 .collect();
@@ -153,11 +153,13 @@ impl RepetitionDetector {
         let task_id = self.generate_task_id(&actions);
 
         // Check if already exists
+        let avg_interval = self.calculate_avg_interval(&actions);
+        let time_wasted = self.calculate_time_wasted(&actions, repetitions);
         if let Some(existing) = self.detected_tasks.get_mut(&task_id) {
             existing.repetitions = repetitions;
             existing.last_occurrence = Utc::now();
-            existing.avg_interval_mins = self.calculate_avg_interval(&actions);
-            existing.time_wasted_mins = self.calculate_time_wasted(&actions, repetitions);
+            existing.avg_interval_mins = avg_interval;
+            existing.time_wasted_mins = time_wasted;
             return;
         }
 

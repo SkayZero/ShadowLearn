@@ -17,7 +17,7 @@ const MIN_PATTERN_LENGTH: usize = 2;
 /// Minimum occurrences to confirm a pattern
 const MIN_PATTERN_OCCURRENCES: usize = 3;
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct UserAction {
     pub app_name: String,
     pub action_type: ActionType,
@@ -146,10 +146,11 @@ impl PatternLearner {
         let pattern_id = self.generate_pattern_id(&sequence);
 
         // Check if pattern already exists
+        let confidence = self.calculate_confidence(occurrences);
         if let Some(existing) = self.discovered_patterns.get_mut(&pattern_id) {
             existing.occurrences = occurrences;
             existing.last_seen = Utc::now();
-            existing.confidence = self.calculate_confidence(occurrences);
+            existing.confidence = confidence;
             return;
         }
 
@@ -220,7 +221,7 @@ impl PatternLearner {
         // Look for all occurrences in history and calculate avg time
         let mut durations = Vec::new();
 
-        for window in self.event_history.windows(sequence.len()) {
+        for window in self.event_history.make_contiguous().windows(sequence.len()) {
             let window_sigs: Vec<ActionSignature> = window.iter()
                 .map(ActionSignature::from)
                 .collect();
