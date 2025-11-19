@@ -17,6 +17,7 @@ mod context;
 mod digest; // Clueless: Daily Digest
 mod features;
 mod flow; // Clueless: Flow State Detection
+mod focus; // Killer Feature: Focus Mode
 mod productivity; // Phase 3: Productivity Dashboard & Weekly Insights
 mod health;
 mod intent;
@@ -1002,6 +1003,10 @@ pub async fn run() {
     let replay_manager = Arc::new(Mutex::new(replay::ReplayManager::new(10000))); // Store last 10k events
     info!("✅ Replay manager initialized");
 
+    // Initialize focus manager (Killer Feature)
+    let focus_manager = Arc::new(Mutex::new(focus::FocusManager::new()));
+    info!("✅ Focus manager initialized");
+
     // Initialize screenshot capturer
     if let Err(e) = screenshot::init_capturer() {
         info!(
@@ -1126,6 +1131,7 @@ pub async fn run() {
         .manage(productivity_manager) // Phase 3: Productivity Dashboard
         .manage(plugin_manager) // Phase 4: Plugin System
         .manage(replay_manager) // Killer Feature: Shadow Replay
+        .manage(focus_manager) // Killer Feature: Focus Mode
         .manage(screen_monitor) // Screen Monitor
         .manage(shortcut_manager) // Global Shortcuts
         .manage(privacy_manager) // Privacy Zones
@@ -1300,7 +1306,17 @@ pub async fn run() {
             replay::get_playback_state,
             replay::seek_replay_to,
             replay::record_replay_suggestion,
-            replay::record_replay_flow_session
+            replay::record_replay_flow_session,
+            // Killer Feature: Focus Mode commands
+            focus::get_focus_state,
+            focus::get_focus_stats,
+            focus::get_focus_config,
+            focus::update_focus_config,
+            focus::detect_focus_mode,
+            focus::should_block_notification,
+            focus::should_block_trigger,
+            focus::end_focus_session,
+            focus::get_recent_focus_sessions
         ])
         .setup(|app| {
             info!("🔍 Checking available windows...");
