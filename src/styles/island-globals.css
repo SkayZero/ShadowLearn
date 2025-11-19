@@ -36,18 +36,27 @@ body,
   display: flex;
   flex-direction: column;
 
-  /* Use Cluely glass tokens - Toujours transparent */
+  /* Use Cluely glass tokens with macOS fix */
   background: var(--glass-bg) !important;
+
+  /* CRITICAL FIX for macOS backdrop-filter flicker */
+  /* Issue: https://github.com/tauri-apps/tauri/issues/12804 */
+  /* WebKit on macOS requires a semi-transparent background for backdrop-filter to work */
+  background-color: rgba(0, 0, 0, 0.15) !important;
+
   backdrop-filter: var(--glass-backdrop) !important;
   -webkit-backdrop-filter: var(--glass-backdrop) !important;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-2xl);
   box-shadow: var(--glass-shadow);
 
-  /* Force GPU hardware composition to prevent backdrop-filter flicker */
-  will-change: backdrop-filter;
-  transform: translateZ(0);
-  isolation: isolate;
+  /* Force GPU hardware composition */
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+
+  /* Contain rendering to prevent compositor issues */
+  contain: layout style paint;
 
   overflow: hidden;
 }
