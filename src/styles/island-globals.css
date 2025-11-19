@@ -36,14 +36,10 @@ body,
   display: flex;
   flex-direction: column;
 
-  /* Use Cluely glass tokens with macOS fix */
-  background: var(--glass-bg) !important;
-
-  /* CRITICAL FIX for macOS backdrop-filter flicker */
+  /* Use Cluely glass tokens - NOW with proper opacity for macOS */
+  /* Fix: Increased theme opacity from 0.08 to 0.18 for backdrop-filter stability */
   /* Issue: https://github.com/tauri-apps/tauri/issues/12804 */
-  /* WebKit on macOS requires a semi-transparent background for backdrop-filter to work */
-  background-color: rgba(0, 0, 0, 0.15) !important;
-
+  background: var(--glass-bg) !important;
   backdrop-filter: var(--glass-backdrop) !important;
   -webkit-backdrop-filter: var(--glass-backdrop) !important;
   border: 1px solid var(--glass-border);
