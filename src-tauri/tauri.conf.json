@@ -13,6 +13,19 @@
     "macOSPrivateApi": true,
     "windows": [
       {
+        "label": "main",
+        "title": "ShadowLearn — Dashboard",
+        "url": "index.html",
+        "width": 1200,
+        "height": 800,
+        "resizable": true,
+        "decorations": true,
+        "transparent": false,
+        "center": true,
+        "visible": true,
+        "skipTaskbar": false
+      },
+      {
         "label": "chat",
         "title": "ShadowLearn — Chat",
         "url": "chat.html",
@@ -54,6 +67,19 @@
     "security": {
       "csp": null,
       "capabilities": [
+        {
+          "identifier": "main-window",
+          "windows": ["main"],
+          "permissions": [
+            "core:window:allow-hide",
+            "core:window:allow-show",
+            "core:window:allow-set-focus",
+            "core:window:allow-minimize",
+            "core:window:allow-close",
+            "core:event:allow-listen",
+            "core:event:default"
+          ]
+        },
         {
           "identifier": "draggable-window",
           "windows": ["chat", "context"],
