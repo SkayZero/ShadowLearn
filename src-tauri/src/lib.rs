@@ -25,6 +25,7 @@ mod monitor; // Screen Monitoring avec détection de changements
 mod shortcuts; // Global keyboard shortcuts
 mod opportunities; // Clueless: One-Tap Toast
 mod pause; // Clueless Phase 3: Pause Mode
+mod patterns; // Phase 2.1: Pattern Recognition ML
 mod persistence;
 mod personality; // Clueless Phase 3: Personalities
 mod pills; // Clueless: Smart Pills / Micro Suggestions
@@ -998,6 +999,21 @@ pub async fn run() {
     let privacy_manager = Arc::new(Mutex::new(privacy::PrivacyZoneManager::new(privacy_config)));
     info!("✅ Privacy zone manager initialized");
 
+    // Initialize pattern recognition manager (Phase 2.1)
+    let app_dir = std::env::current_dir()
+        .unwrap_or_else(|_| std::path::PathBuf::from("."))
+        .join("shadowlearn_data");
+    let pattern_manager = match patterns::commands::PatternManager::new(app_dir) {
+        Ok(manager) => {
+            info!("✅ Pattern recognition manager initialized");
+            Arc::new(manager)
+        }
+        Err(e) => {
+            error!("❌ Failed to initialize pattern manager: {}", e);
+            panic!("Cannot start without pattern manager");
+        }
+    };
+
     // Log feature state
     let state = feature_flags.get_state();
     info!("✅ Features enabled: {}/{}", state.enabled_count(), 4);
@@ -1084,6 +1100,7 @@ pub async fn run() {
         .manage(screen_monitor) // Screen Monitor
         .manage(shortcut_manager) // Global Shortcuts
         .manage(privacy_manager) // Privacy Zones
+        .manage(pattern_manager) // Phase 2.1: Pattern Recognition ML
         .invoke_handler(tauri::generate_handler![
             toggle_window,
             broadcast_event,
@@ -1174,6 +1191,16 @@ pub async fn run() {
             pills::dismiss_pill,
             // Clueless: Slash Commands
             commands::slash::execute_slash_command,
+            // Phase 2.1: Pattern Recognition ML commands
+            patterns::commands::record_user_action,
+            patterns::commands::get_next_action_prediction,
+            patterns::commands::get_learned_patterns,
+            patterns::commands::get_patterns_by_tag,
+            patterns::commands::get_all_repetitive_tasks,
+            patterns::commands::get_high_priority_repetitive_tasks,
+            patterns::commands::get_pattern_system_stats,
+            patterns::commands::save_patterns_to_disk,
+            patterns::commands::clear_pattern_storage,
             // J18: Personnalisation ML commands
             record_ml_event,
             get_usage_patterns,

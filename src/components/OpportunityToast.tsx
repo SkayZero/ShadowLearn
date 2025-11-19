@@ -47,8 +47,9 @@ export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) 
       return;
     }
 
-    // Only show high-confidence opportunities
-    if (opp.confidence > 0.7) {
+    // Only show medium+ confidence opportunities (0.5+)
+    // Backend sends 0.6 for short idle, 0.8 for long idle
+    if (opp.confidence >= 0.5) {
       console.log('[OpportunityToast] ✅ Showing toast for:', opp.id);
       setOpportunity(opp);
       
