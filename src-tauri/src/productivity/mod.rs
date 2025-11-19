@@ -3,7 +3,7 @@
  * Tracks comprehensive productivity metrics, trends, and insights
  */
 
-use chrono::{DateTime, Utc, Datelike, Duration};
+use chrono::{DateTime, Utc, Datelike, Duration, Timelike};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::Arc;

@@ -1,6 +1,7 @@
 use super::manager::{ShortcutAction, ShortcutConfig, ShortcutManager};
 use std::collections::HashMap;
 use std::sync::Arc;
+use tauri::Emitter;
 use tokio::sync::Mutex;
 use tracing::info;
 

@@ -183,7 +183,7 @@ async fn record_bubble_dismissed(
 }
 
 #[tauri::command]
-async fn record_user_action(
+async fn record_trigger_action(
     trigger_manager: tauri::State<'_, Arc<Mutex<TriggerManager>>>,
 ) -> Result<(), String> {
     trigger_manager.lock().await.record_action();
@@ -1061,7 +1061,7 @@ pub async fn run() {
                 .with_state_flags(StateFlags::all())
                 .build(),
         )
-        .plugin(tauri_plugin_global_shortcut::init())
+        .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .setup(|app| {
             // Setup ESC=hide for existing windows
             if let Some(main_window) = app.get_webview_window("main") {
@@ -1156,7 +1156,7 @@ pub async fn run() {
             check_should_trigger,
             record_trigger_fired,
             record_bubble_dismissed,
-            record_user_action,
+            record_trigger_action,
             get_trigger_stats,
             add_to_allowlist,
             remove_from_allowlist,

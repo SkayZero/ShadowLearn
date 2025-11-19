@@ -12,7 +12,7 @@ use tracing::{info, warn};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FocusState {
-    pub is_in_focus: bool;
+    pub is_in_focus: bool,
     pub focus_start_time: Option<i64>,
     pub focus_duration_minutes: u32,
     pub notifications_blocked: u32,
@@ -144,7 +144,7 @@ impl FocusManager {
     }
 
     fn calculate_focus_score(&self, is_focus_app: bool) -> f32 {
-        let mut score = 0.0;
+        let mut score: f32 = 0.0;
 
         // Base score from focus app
         if is_focus_app {
