@@ -17,6 +17,7 @@ mod context;
 mod digest; // Clueless: Daily Digest
 mod features;
 mod flow; // Clueless: Flow State Detection
+mod productivity; // Phase 3: Productivity Dashboard & Weekly Insights
 mod health;
 mod intent;
 mod learning;
@@ -976,6 +977,10 @@ pub async fn run() {
     let pills_manager = Arc::new(Mutex::new(pills::PillsManager::new()));
     info!("✅ Pills manager initialized");
 
+    // Initialize productivity manager (Phase 3)
+    let productivity_manager = Arc::new(Mutex::new(productivity::ProductivityManager::new()));
+    info!("✅ Productivity manager initialized");
+
     // Initialize screenshot capturer
     if let Err(e) = screenshot::init_capturer() {
         info!(
@@ -1097,6 +1102,7 @@ pub async fn run() {
         .manage(personality_manager)
         .manage(digest_manager) // Clueless: Daily Digest
         .manage(pills_manager) // Clueless: Smart Pills
+        .manage(productivity_manager) // Phase 3: Productivity Dashboard
         .manage(screen_monitor) // Screen Monitor
         .manage(shortcut_manager) // Global Shortcuts
         .manage(privacy_manager) // Privacy Zones
@@ -1246,7 +1252,11 @@ pub async fn run() {
             privacy::commands::add_privacy_zone,
             privacy::commands::remove_privacy_zone,
             privacy::commands::set_privacy_zones_enabled,
-            privacy::commands::is_app_protected
+            privacy::commands::is_app_protected,
+            // Phase 3: Productivity Dashboard commands
+            productivity::get_productivity_metrics,
+            productivity::record_productivity_event,
+            productivity::record_flow_session_event
         ])
         .setup(|app| {
             info!("🔍 Checking available windows...");
