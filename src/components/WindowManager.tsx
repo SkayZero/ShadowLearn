@@ -1,12 +1,16 @@
 import { useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { getCurrentWindow } from '@tauri-apps/api/window';
+import { usePlatform } from '../hooks/usePlatform';
 
 interface WindowManagerProps {
   children: React.ReactNode;
 }
 
 const WindowManager: React.FC<WindowManagerProps> = ({ children }) => {
+  // Detect platform and add CSS class to body
+  usePlatform();
+
   useEffect(() => {
     const handleFocus = async () => {
       try {

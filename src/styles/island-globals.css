@@ -36,20 +36,27 @@ body,
   display: flex;
   flex-direction: column;
 
-  /* Option A: Semi-transparent without backdrop-filter (macOS stable) */
-  /* backdrop-filter causes flicker on macOS transparent windows */
-  /* Using increased opacity instead for readability */
+  /* Glassmorphism with platform-conditional backdrop-filter */
   background: var(--glass-bg) !important;
-  /* backdrop-filter: REMOVED - causes macOS flicker */
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-2xl);
   box-shadow: var(--glass-shadow);
+
+  /* Enable backdrop-filter by default (Windows/Linux) */
+  backdrop-filter: var(--glass-backdrop) !important;
+  -webkit-backdrop-filter: var(--glass-backdrop) !important;
 
   /* Keep GPU optimization for smooth rendering */
   transform: translate3d(0, 0, 0);
   will-change: transform;
 
   overflow: hidden;
+}
+
+/* macOS: Disable backdrop-filter to prevent flicker */
+.platform-macos .sl-island {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 /* ============================================
@@ -63,8 +70,9 @@ body,
   color: rgba(255, 255, 255, 0.95); /* Toujours visible */
 
   /* Toujours transparent même quand focus */
-  background: rgba(16, 185, 129, 0.15) !important;
-  /* backdrop-filter: REMOVED - Option A (macOS stable) */
+  background: var(--glass-emerald-tint) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 
   display: flex;
@@ -99,6 +107,13 @@ body,
 .sl-header:hover {
   background: rgba(15, 23, 42, 0.3);
   transition: background 0.2s ease;
+}
+
+/* macOS: Disable header backdrop-filter */
+.platform-macos .sl-header {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(16, 185, 129, 0.25) !important;
 }
 
 /* Header right side (snooze + close) */
