@@ -53,7 +53,7 @@ export const THEMES: Record<Personality, Theme> = {
     name: "AERYA",
     description: "Assistant équilibré, bienveillant",
     icon: "🌊",
-    
+
     background: "#0a1520",
     gradient: ["#1a2f3f", "#1a3f3a"],
     accent: "#6ee7b7",
@@ -63,9 +63,9 @@ export const THEMES: Record<Personality, Theme> = {
       secondary: "#ccfbf1",
       muted: "#99f6e4",
     },
-    
+
     glass: {
-      bg: "rgba(110, 231, 183, 0.75)",  // High opacity for readability
+      bg: "rgba(110, 231, 183, 0.6)",  // Moderate opacity with native blur
       border: "rgba(110, 231, 183, 0.25)",
       shadow: "0 8px 32px rgba(110, 231, 183, 0.15)",
     },
@@ -87,7 +87,7 @@ export const THEMES: Record<Personality, Theme> = {
     name: "AURA",
     description: "Sage calme, méditatif",
     icon: "🔮",
-    
+
     background: "#0f0c1a",
     gradient: ["#1a1530", "#1a1a2e"],
     accent: "#c4b5fd",
@@ -97,9 +97,9 @@ export const THEMES: Record<Personality, Theme> = {
       secondary: "#e9d5ff",
       muted: "#c4b5fd",
     },
-    
+
     glass: {
-      bg: "rgba(196, 181, 253, 0.75)",  // High opacity
+      bg: "rgba(196, 181, 253, 0.6)",  // Moderate opacity with native blur
       border: "rgba(196, 181, 253, 0.25)",
       shadow: "0 8px 32px rgba(196, 181, 253, 0.15)",
     },
@@ -121,7 +121,7 @@ export const THEMES: Record<Personality, Theme> = {
     name: "SPARK",
     description: "Énergique, motivant",
     icon: "⚡",
-    
+
     background: "#1a1512",
     gradient: ["#2a2015", "#2a1810"],
     accent: "#fbbf24",
@@ -131,9 +131,9 @@ export const THEMES: Record<Personality, Theme> = {
       secondary: "#fef3c7",
       muted: "#fde68a",
     },
-    
+
     glass: {
-      bg: "rgba(251, 191, 36, 0.75)",  // High opacity
+      bg: "rgba(251, 191, 36, 0.6)",  // Moderate opacity with native blur
       border: "rgba(251, 191, 36, 0.25)",
       shadow: "0 8px 32px rgba(251, 191, 36, 0.15)",
     },
@@ -155,7 +155,7 @@ export const THEMES: Record<Personality, Theme> = {
     name: "NOVA",
     description: "Visionnaire, poétique",
     icon: "✨",
-    
+
     background: "#0a1520",
     gradient: ["#1a2535", "#1a2f3f"],
     accent: "#7dd3fc",
@@ -165,9 +165,9 @@ export const THEMES: Record<Personality, Theme> = {
       secondary: "#bae6fd",
       muted: "#7dd3fc",
     },
-    
+
     glass: {
-      bg: "rgba(125, 211, 252, 0.75)",  // High opacity
+      bg: "rgba(125, 211, 252, 0.6)",  // Moderate opacity with native blur
       border: "rgba(125, 211, 252, 0.25)",
       shadow: "0 8px 32px rgba(125, 211, 252, 0.15)",
     },
@@ -189,7 +189,7 @@ export const THEMES: Record<Personality, Theme> = {
     name: "KAI",
     description: "Pratique, mentor tech",
     icon: "⚙️",
-    
+
     background: "#0a1512",
     gradient: ["#1a2520", "#1a2f28"],
     accent: "#6ee7b7",
@@ -199,9 +199,9 @@ export const THEMES: Record<Personality, Theme> = {
       secondary: "#a7f3d0",
       muted: "#6ee7b7",
     },
-    
+
     glass: {
-      bg: "rgba(110, 231, 183, 0.75)",  // High opacity for readability
+      bg: "rgba(110, 231, 183, 0.6)",  // Moderate opacity with native blur
       border: "rgba(110, 231, 183, 0.25)",
       shadow: "0 8px 32px rgba(110, 231, 183, 0.15)",
     },
@@ -223,7 +223,7 @@ export const THEMES: Record<Personality, Theme> = {
     name: "ECHO",
     description: "Artiste rêveur",
     icon: "🎨",
-    
+
     background: "#1a0a1a",
     gradient: ["#2a1530", "#2a1a2e"],
     accent: "#f9a8d4",
@@ -233,9 +233,9 @@ export const THEMES: Record<Personality, Theme> = {
       secondary: "#f9a8d4",
       muted: "#f472b6",
     },
-    
+
     glass: {
-      bg: "rgba(249, 168, 212, 0.75)",  // High opacity
+      bg: "rgba(249, 168, 212, 0.6)",  // Moderate opacity with native blur
       border: "rgba(249, 168, 212, 0.25)",
       shadow: "0 8px 32px rgba(249, 168, 212, 0.15)",
     },
@@ -257,7 +257,7 @@ export const THEMES: Record<Personality, Theme> = {
     name: "VOID",
     description: "Minimaliste, silencieux",
     icon: "⬛",
-    
+
     background: "#0a0a0a",
     gradient: ["#121212", "#1a1a1a"],
     accent: "#e5e5e5",
@@ -267,9 +267,9 @@ export const THEMES: Record<Personality, Theme> = {
       secondary: "#e5e5e5",
       muted: "#a3a3a3",
     },
-    
+
     glass: {
-      bg: "rgba(255, 255, 255, 0.75)",  // High opacity
+      bg: "rgba(255, 255, 255, 0.6)",  // Moderate opacity with native blur
       border: "rgba(255, 255, 255, 0.15)",
       shadow: "0 8px 32px rgba(0, 0, 0, 0.5)",
     },

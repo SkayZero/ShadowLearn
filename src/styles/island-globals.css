@@ -36,7 +36,10 @@ body,
   display: flex;
   flex-direction: column;
 
-  /* Glassmorphism with platform-conditional backdrop-filter */
+  /* Glassmorphism with platform-conditional blur
+   * macOS: Uses native NSVisualEffectView (window-vibrancy plugin)
+   * Windows/Linux: Uses CSS backdrop-filter
+   */
   background: var(--glass-bg) !important;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-2xl);
@@ -53,7 +56,10 @@ body,
   overflow: hidden;
 }
 
-/* macOS: Disable backdrop-filter to prevent flicker */
+/* macOS: Disable CSS backdrop-filter (uses native vibrancy instead)
+ * Native vibrancy is applied via window-vibrancy Rust plugin
+ * This prevents the WebKit backdrop-filter flicker bug
+ */
 .platform-macos .sl-island {
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
