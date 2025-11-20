@@ -79,15 +79,36 @@ async fn toggle_window(app: AppHandle, label: String) -> Result<(), String> {
 
 #[tauri::command]
 async fn ensure_chat_visible(app: AppHandle) -> Result<(), String> {
+    info!("🔍 ensure_chat_visible called");
     if let Some(window) = app.get_webview_window("chat") {
-        // Force window to stay visible and focused
-        window.show().map_err(|e| e.to_string())?;
-        window.set_focus().map_err(|e| e.to_string())?;
-        window.set_always_on_top(true).map_err(|e| e.to_string())?;
+        info!("📍 Chat window found, checking visibility...");
+        let is_visible = window.is_visible().unwrap_or(false);
+        info!("👁️ Chat window visibility before: {}", is_visible);
+
+        // Force window to stay visible and focused (without always_on_top)
+        window.show().map_err(|e| {
+            error!("❌ Failed to show window: {}", e);
+            e.to_string()
+        })?;
+        info!("✅ Window.show() succeeded");
+
+        window.set_focus().map_err(|e| {
+            error!("❌ Failed to set focus: {}", e);
+            e.to_string()
+        })?;
+        info!("✅ Window.set_focus() succeeded");
+
+        // Unminimize if minimized
+        window.unminimize().ok();
+        info!("✅ Window.unminimize() called");
+
+        let is_visible_after = window.is_visible().unwrap_or(false);
+        info!("👁️ Chat window visibility after: {}", is_visible_after);
+
         info!("💬 Chat window ensured visible and focused");
         Ok(())
     } else {
-        warn!("⚠️ Chat window not found");
+        error!("⚠️ Chat window not found in app");
         Err("Chat window not found".to_string())
     }
 }

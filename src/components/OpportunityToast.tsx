@@ -109,6 +109,8 @@ export default function OpportunityToast({ onOpenDock, onOpenChat }: Opportunity
   const handleView = async () => {
     if (!opportunity) return;
 
+    console.log('[OpportunityToast] 🎬 handleView started for opportunity:', opportunity.id);
+
     // Pin the notification (stop auto-dismiss)
     setIsPinned(true);
     if (timeoutId) {
@@ -119,24 +121,31 @@ export default function OpportunityToast({ onOpenDock, onOpenChat }: Opportunity
 
     try {
       // Ensure chat window stays visible and focused (backend command)
+      console.log('[OpportunityToast] 🔧 Calling ensure_chat_visible...');
       await invoke("ensure_chat_visible");
+      console.log('[OpportunityToast] ✅ ensure_chat_visible succeeded');
 
       // Record user accepted
+      console.log('[OpportunityToast] 📝 Recording opportunity response...');
       await invoke("record_opportunity_response", {
         opportunityId: opportunity.id,
         accepted: true,
       });
+      console.log('[OpportunityToast] ✅ Response recorded');
 
       // Open chat with opportunity details
-      console.log('[OpportunityToast] 💬 Opening opportunity in chat');
+      console.log('[OpportunityToast] 💬 Calling onOpenChat...');
       onOpenChat?.(opportunity);
+      console.log('[OpportunityToast] ✅ onOpenChat called');
 
       // Hide toast after opening chat
+      console.log('[OpportunityToast] 👋 Hiding toast...');
       setOpportunity(null);
       setIsPinned(false);
       soundManager.play('toast-out');
+      console.log('[OpportunityToast] ✅ handleView completed successfully');
     } catch (e) {
-      console.error("Failed to record opportunity response:", e);
+      console.error("[OpportunityToast] ❌ Error in handleView:", e);
     }
   };
 
