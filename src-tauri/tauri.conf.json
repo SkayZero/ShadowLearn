@@ -82,6 +82,26 @@
         "visibleOnAllWorkspaces": true,
         "acceptFirstMouse": true,
         "focus": true
+      },
+      {
+        "label": "hud",
+        "title": "ShadowLearn — HUD",
+        "url": "hud.html",
+        "width": 70,
+        "height": 70,
+        "resizable": false,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "shadow": false,
+        "center": false,
+        "visible": true,
+        "skipTaskbar": true,
+        "visibleOnAllWorkspaces": true,
+        "acceptFirstMouse": true,
+        "focus": false,
+        "x": 20,
+        "y": 20
       }
     ],
     "security": {
@@ -124,6 +144,17 @@
             "core:window:allow-set-focus",
             "core:window:allow-close",
             "core:event:allow-listen",
+            "core:event:default"
+          ]
+        },
+        {
+          "identifier": "hud-window",
+          "windows": ["hud"],
+          "permissions": [
+            "core:window:allow-set-position",
+            "core:window:allow-set-always-on-top",
+            "core:event:allow-listen",
+            "core:event:allow-emit",
             "core:event:default"
           ]
         }

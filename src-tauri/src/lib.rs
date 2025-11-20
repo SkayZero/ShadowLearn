@@ -1128,6 +1128,27 @@ pub async fn run() {
                 }
             });
 
+            // Setup HUD click listener to show Spotlight
+            let app_handle_for_hud = app.handle().clone();
+            app.listen("hud:click", move |_event| {
+                info!("🔍 HUD clicked - showing Spotlight");
+                if let Some(spotlight_window) = app_handle_for_hud.get_webview_window("spotlight") {
+                    if let Err(e) = spotlight_window.show() {
+                        error!("Failed to show spotlight: {}", e);
+                    }
+                    if let Err(e) = spotlight_window.set_focus() {
+                        error!("Failed to focus spotlight: {}", e);
+                    }
+                    // Emit event to tell Spotlight frontend to show content
+                    if let Err(e) = app_handle_for_hud.emit("spotlight:show", ()) {
+                        error!("Failed to emit spotlight:show: {}", e);
+                    }
+                } else {
+                    error!("Spotlight window not found");
+                }
+            });
+            info!("✅ HUD click listener registered");
+
             Ok(())
         })
         .on_window_event(|window, event| {
