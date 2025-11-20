@@ -48,20 +48,6 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
         });
       }
 
-      // Action: Stats/Digest
-      if (onOpenDigest) {
-        contextActions.push({
-          id: "view-stats",
-          label: "Voir mes stats",
-          icon: "📊",
-          description: "Digest du jour",
-          action: async () => {
-            console.log("Opening digest");
-            onOpenDigest();
-          },
-        });
-      }
-
       // Si du texte est sélectionné
       if (context?.selectedText) {
         contextActions.push({
@@ -99,35 +85,6 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
             console.log("Translating:", context.selectedText);
             await invoke("chat_with_ai", {
               message: `/traduire ${context.selectedText}`,
-            });
-          },
-        });
-      }
-
-      // Si dans un IDE (VSCode, Cursor, etc.)
-      if (context?.app?.includes("Code") || context?.app?.includes("Cursor")) {
-        contextActions.push({
-          id: "debug",
-          label: "Débugger",
-          icon: "🐛",
-          description: "Analyser l'erreur",
-          action: async () => {
-            console.log("Debugging code");
-            await invoke("chat_with_ai", {
-              message: "/debug",
-            });
-          },
-        });
-
-        contextActions.push({
-          id: "improve",
-          label: "Améliorer",
-          icon: "✨",
-          description: "Suggérer des améliorations",
-          action: async () => {
-            console.log("Improving code");
-            await invoke("chat_with_ai", {
-              message: "/améliorer",
             });
           },
         });

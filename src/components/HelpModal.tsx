@@ -41,6 +41,15 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
     },
   ];
 
+  const slashCommands = [
+    { icon: '❓', command: '/help', description: 'Afficher l\'aide générale' },
+    { icon: '📝', command: '/resume', description: 'Résumer le texte sélectionné' },
+    { icon: '🔍', command: '/explain', description: 'Expliquer un concept' },
+    { icon: '🐛', command: '/debug', description: 'Analyser une erreur' },
+    { icon: '✨', command: '/improve', description: 'Suggérer des améliorations' },
+    { icon: '🌐', command: '/translate', description: 'Traduire du texte' },
+  ];
+
   return (
     <AnimatePresence>
       <motion.div
@@ -168,7 +177,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
           </div>
 
           {/* FAQ Section */}
-          <div>
+          <div style={{ marginBottom: '24px' }}>
             <h3
               style={{
                 fontSize: '16px',
@@ -206,6 +215,59 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
             </div>
           </div>
 
+          {/* Slash Commands Section */}
+          <div>
+            <h3
+              style={{
+                fontSize: '16px',
+                fontWeight: '600',
+                color: theme.accent,
+                marginBottom: '12px',
+              }}
+            >
+              ⚡ Commandes disponibles
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {slashCommands.map((cmd, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '8px 12px',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    borderRadius: '8px',
+                  }}
+                >
+                  <span style={{ fontSize: '18px' }}>{cmd.icon}</span>
+                  <div style={{ flex: 1 }}>
+                    <div
+                      style={{
+                        fontSize: '13px',
+                        color: theme.text.secondary,
+                      }}
+                    >
+                      {cmd.description}
+                    </div>
+                  </div>
+                  <code
+                    style={{
+                      fontSize: '12px',
+                      color: theme.accent,
+                      background: 'rgba(135, 206, 235, 0.1)',
+                      padding: '2px 8px',
+                      borderRadius: '4px',
+                      fontFamily: 'monospace',
+                    }}
+                  >
+                    {cmd.command}
+                  </code>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {/* Footer */}
           <div
             style={{
@@ -222,7 +284,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
                 color: theme.text.secondary,
               }}
             >
-              Besoin de plus d'aide ? Écris "/help" dans le chat pour plus de commandes.
+              💡 Tape simplement la commande dans le chat pour l'utiliser !
             </div>
           </div>
         </motion.div>
