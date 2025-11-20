@@ -54,28 +54,30 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     });
 
     // Update global glass variables to match theme
-    // macOS: Use higher opacity without backdrop-filter to prevent flicker
+    // macOS: Use theme's gradient colors without backdrop-filter to prevent flicker
     // Other platforms: Use lower opacity with backdrop-filter for glassmorphism
     if (platform === 'macos') {
-      // macOS: No backdrop-filter, warm → cold temperature gradient
-      const color = theme.glass.bg.match(/rgba?\(([^)]+)\)/)?.[1] || '110, 231, 183, 0.92';
-      const [r, g, b] = color.split(',').map(v => parseInt(v.trim()));
+      // macOS: No backdrop-filter, use theme's gradient colors with high opacity
+      // Each theme has its own gradient: [color1, color2]
+      const [gradientStart, gradientEnd] = theme.gradient;
 
-      // Create warm → cold gradient (shift warm color towards warmer tones, cold towards cooler)
-      const warmR = Math.min(255, Math.floor(r * 1.1)); // Warm: more red
-      const warmG = Math.min(255, Math.floor(g * 1.05)); // Warm: slightly more green
-      const warmB = Math.max(0, Math.floor(b * 0.9)); // Warm: less blue
+      // Extract RGB from hex colors and add opacity
+      const hexToRgba = (hex: string, opacity: number) => {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+      };
 
-      const coldR = Math.max(0, Math.floor(r * 0.9)); // Cold: less red
-      const coldG = Math.min(255, Math.floor(g * 1.05)); // Cold: slightly more green
-      const coldB = Math.min(255, Math.floor(b * 1.15)); // Cold: more blue
+      // Use theme's gradient colors with 0.88 opacity for immersive effect
+      const startColor = hexToRgba(gradientStart, 0.88);
+      const endColor = hexToRgba(gradientEnd, 0.88);
 
-      // Warm → Cold gradient with consistent high opacity
-      root.style.setProperty('--glass-bg', `linear-gradient(135deg, rgba(${warmR}, ${warmG}, ${warmB}, 0.88) 0%, rgba(${coldR}, ${coldG}, ${coldB}, 0.88) 100%)`);
+      root.style.setProperty('--glass-bg', `linear-gradient(135deg, ${startColor} 0%, ${endColor} 100%)`);
       root.style.setProperty('--glass-backdrop', 'none');
 
-      // Header uses warm tone
-      root.style.setProperty('--glass-header-bg', `rgba(${warmR}, ${warmG}, ${warmB}, 0.35)`);
+      // Header uses start gradient color
+      root.style.setProperty('--glass-header-bg', hexToRgba(gradientStart, 0.35));
     } else {
       // Windows/Linux: Full glassmorphism with backdrop-filter
       root.style.setProperty('--glass-bg', theme.glass.bg);
