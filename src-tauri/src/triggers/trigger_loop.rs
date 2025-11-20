@@ -27,7 +27,9 @@ async fn trigger_loop(app_handle: AppHandle) {
     let personalization_manager = app_handle.state::<Arc<Mutex<PersonalizationManager>>>();
     let state_machine = app_handle.state::<std::sync::Arc<tokio::sync::Mutex<TriggerStateMachine>>>();
 
-    let mut ticker = interval(Duration::from_millis(2000)); // Reduced from 500ms to 2s
+    // macOS Fix: Reduced frequency to prevent glassmorphism flicker
+    // Frequent events destabilize backdrop-filter on macOS transparent windows
+    let mut ticker = interval(Duration::from_millis(5000)); // 5s (was 2s)
     let mut consecutive_failures = 0;
     const MAX_FAILURES: u32 = 3;
 

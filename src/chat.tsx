@@ -368,8 +368,9 @@ function ChatWindow() {
         />
       )}
 
-      {/* Status Indicator (J2) */}
-      <StatusIndicator />
+      {/* Status Indicator (J2) - DISABLED: Causes macOS glassmorphism flicker */}
+      {/* setInterval(1000ms) causes constant re-renders that destabilize backdrop-filter */}
+      {/* <StatusIndicator /> */}
 
       {/* Clueless Phase 1: Opportunity Toast */}
       <OpportunityToast 
