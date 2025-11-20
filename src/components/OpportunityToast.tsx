@@ -25,8 +25,10 @@ interface OpportunityToastProps {
 
 export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) {
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
+  const [timeoutId, setTimeoutId] = useState<number | null>(null);
+  const [isPinned, setIsPinned] = useState(false);
   const { theme } = useTheme();
-  
+
   // Register in layout system - Priority 2 (below QuickActions)
   const position = useLayoutPosition('opportunity-toast', 'bottom-right', 2, 200, 384);
   
@@ -35,12 +37,22 @@ export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) 
     console.log('[OpportunityToast] 📦 State changed - opportunity:', opportunity);
   }, [opportunity]);
 
+  // Cleanup timeout on unmount or opportunity change
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        console.log('[OpportunityToast] 🧹 Cleaning up timeout on unmount');
+        window.clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
+
   // Listen for opportunities from backend
   useEvent<Opportunity>(EVENTS.OPPORTUNITY, (opp) => {
     console.log('[OpportunityToast] 🎯 Handler called with:', opp);
     console.log('[OpportunityToast] 🆔 Opportunity ID:', opp.id);
     console.log('[OpportunityToast] 📊 Confidence:', opp.confidence);
-    
+
     // Skip if already dismissed
     if (shadowStore.isOpportunityDismissed(opp.id)) {
       console.log('[OpportunityToast] ⚠️ SKIPPED - Already dismissed:', opp.id);
@@ -52,23 +64,57 @@ export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) 
     if (opp.confidence >= 0.5) {
       console.log('[OpportunityToast] ✅ Showing toast for:', opp.id);
       setOpportunity(opp);
-      
+      setIsPinned(false); // Reset pinned state for new opportunity
+
       // Play toast-in sound (Cluely)
       soundManager.play('toast-in');
 
-      // Auto-dismiss after 10s
-      setTimeout(() => {
+      // Auto-dismiss after 30s (unless pinned)
+      const id = window.setTimeout(() => {
         console.log('[OpportunityToast] ⏱️ Auto-dismissing:', opp.id);
         setOpportunity(null);
         soundManager.play('toast-out');
-      }, 10000);
+        setTimeoutId(null);
+      }, 30000);
+      setTimeoutId(id);
     } else {
       console.log('[OpportunityToast] ⚠️ SKIPPED - Low confidence:', opp.confidence);
     }
   });
 
+  // Pause timer on hover
+  const handleMouseEnter = () => {
+    if (timeoutId && !isPinned) {
+      console.log('[OpportunityToast] ⏸️ Pausing timer on hover');
+      window.clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
+  };
+
+  // Resume timer on mouse leave (unless pinned)
+  const handleMouseLeave = () => {
+    if (!isPinned && opportunity && !timeoutId) {
+      console.log('[OpportunityToast] ▶️ Resuming timer on mouse leave');
+      const id = window.setTimeout(() => {
+        console.log('[OpportunityToast] ⏱️ Auto-dismissing after hover:', opportunity.id);
+        setOpportunity(null);
+        soundManager.play('toast-out');
+        setTimeoutId(null);
+      }, 30000);
+      setTimeoutId(id);
+    }
+  };
+
   const handleView = async () => {
     if (!opportunity) return;
+
+    // Pin the notification (stop auto-dismiss)
+    setIsPinned(true);
+    if (timeoutId) {
+      console.log('[OpportunityToast] 📌 Pinning notification');
+      window.clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
 
     try {
       // Record user accepted
@@ -78,16 +124,24 @@ export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) 
       });
 
       // Open dock to show details
+      // TODO: Pass opportunity details to dock so it can display the suggestion
       onOpenDock?.();
     } catch (e) {
       console.error("Failed to record opportunity response:", e);
     }
 
-    setOpportunity(null);
+    // Keep the notification visible while showing details in dock
+    console.log('[OpportunityToast] 👁️ Keeping notification visible while viewing details');
   };
 
   const handleDismiss = async () => {
     if (!opportunity) return;
+
+    // Clear any active timeout
+    if (timeoutId) {
+      window.clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
 
     try {
       // Record dismissed
@@ -103,6 +157,7 @@ export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) 
     }
 
     setOpportunity(null);
+    setIsPinned(false);
   };
 
   // Render using Portal to escape parent overflow:hidden
@@ -117,6 +172,8 @@ export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) 
           transition={SPRING_CONFIG}
           className=""
           data-testid="opportunity-toast"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
           style={{
             position: 'fixed',
             ...position,
