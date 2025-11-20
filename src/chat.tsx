@@ -46,7 +46,7 @@ function ChatWindow() {
   const [error, setError] = useState<string | null>(null);
   
   // Phase 2: Quick Actions context
-  const [currentContext] = useState({
+  const [currentContext, setCurrentContext] = useState({
     app: "Cursor",
     selectedText: "",
     url: "",
@@ -117,15 +117,31 @@ function ChatWindow() {
         setTriggerContext(event.payload);
         setShowBubble(true); // Afficher la bulle
       });
-      
+
       console.log('✅ trigger_fired listener registered');
-      
+
       return () => {
         unlisten();
       };
     };
-    
+
     setupListeners();
+  }, []);
+
+  // Clear selected text when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      const selection = window.getSelection();
+      if (!selection || selection.toString().trim() === '') {
+        setCurrentContext((prev) => ({
+          ...prev,
+          selectedText: '',
+        }));
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const generateMockSuggestion = (appName: string): string => {
@@ -162,6 +178,30 @@ function ChatWindow() {
       console.log(`Window pinned: ${newPinnedState}`);
     } catch (e) {
       console.error('Failed to toggle pin:', e);
+    }
+  };
+
+  const handleTextSelection = () => {
+    const selection = window.getSelection();
+    const selectedText = selection?.toString().trim() || '';
+
+    if (selectedText !== currentContext.selectedText) {
+      setCurrentContext((prev) => ({
+        ...prev,
+        selectedText,
+      }));
+      console.log('Text selected:', selectedText);
+    }
+  };
+
+  const handleNewChat = () => {
+    if (messages.length === 0) return;
+
+    const confirmed = window.confirm('Voulez-vous vraiment effacer tous les messages et commencer une nouvelle conversation ?');
+    if (confirmed) {
+      setMessages([]);
+      setOpportunityContext(null);
+      console.log('Chat cleared, starting new conversation');
     }
   };
 
@@ -264,6 +304,30 @@ Question de l'utilisateur : ${messageText}`;
               >
                 ❓ Aide
               </button>
+              {messages.length > 0 && (
+                <button
+                  onClick={handleNewChat}
+                  style={{
+                    padding: '6px 12px',
+                    background: 'rgba(255, 107, 107, 0.2)',
+                    border: '1px solid rgba(255, 107, 107, 0.5)',
+                    borderRadius: '6px',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontSize: '0.85em',
+                    fontWeight: '600',
+                    transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 107, 107, 0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 107, 107, 0.2)';
+                  }}
+                >
+                  🔄 Nouveau
+                </button>
+              )}
               <button
                 onClick={togglePin}
                 style={{
@@ -406,7 +470,7 @@ Question de l'utilisateur : ${messageText}`;
             </p>
           </div>
         ) : (
-          <div className="messages-container">
+          <div className="messages-container" onMouseUp={handleTextSelection}>
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -416,10 +480,10 @@ Question de l'utilisateur : ${messageText}`;
               >
                 <div>{message.content}</div>
                 <div className="message-timestamp">{formatTime(message.timestamp)}</div>
-                
+
                 {/* Clueless Phase 1: Message Feedback */}
                 {message.role === 'assistant' && (
-                  <MessageFeedback 
+                  <MessageFeedback
                     messageId={message.id.toString()}
                     onFeedback={(helpful) => {
                       console.log(`Feedback for message ${message.id}:`, helpful);
