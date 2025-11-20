@@ -21,9 +21,10 @@ import { useTheme } from "../contexts/ThemeContext";
 interface OpportunityToastProps {
   onOpenDock?: () => void;
   onOpenDigest?: () => void;
+  onOpenChat?: (opportunity: Opportunity) => void;
 }
 
-export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) {
+export default function OpportunityToast({ onOpenDock, onOpenChat }: OpportunityToastProps) {
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
   const [timeoutId, setTimeoutId] = useState<number | null>(null);
   const [isPinned, setIsPinned] = useState(false);
@@ -123,15 +124,17 @@ export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) 
         accepted: true,
       });
 
-      // Open dock to show details
-      // TODO: Pass opportunity details to dock so it can display the suggestion
-      onOpenDock?.();
+      // Open chat with opportunity details
+      console.log('[OpportunityToast] 💬 Opening opportunity in chat');
+      onOpenChat?.(opportunity);
+
+      // Hide toast after opening chat
+      setOpportunity(null);
+      setIsPinned(false);
+      soundManager.play('toast-out');
     } catch (e) {
       console.error("Failed to record opportunity response:", e);
     }
-
-    // Keep the notification visible while showing details in dock
-    console.log('[OpportunityToast] 👁️ Keeping notification visible while viewing details');
   };
 
   const handleDismiss = async () => {

@@ -14,12 +14,14 @@ import { DailyDigest } from './components/DailyDigest';
 import { StreakTracker } from './components/StreakTracker';
 import { PersonalitySelector } from './components/PersonalitySelector';
 import { PauseMode } from './components/PauseMode';
+import { OpportunityLayer } from './components/OpportunityLayer';
 import { LayoutProvider } from './contexts/LayoutContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import useWindowLifecycle from './hooks/useWindowLifecycle';
 import useDesktopFocus from './hooks/useDesktopFocus';
 import useActivityDetection from './hooks/useActivityDetection';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import type { Opportunity } from './lib';
 import './styles/island-globals.css';
 import './components/TriggerBubble.css';
 
@@ -56,7 +58,10 @@ function ChatWindow() {
   
   // Phase 3: Daily Digest
   const [isDigestOpen, setIsDigestOpen] = useState(false);
-  
+
+  // Opportunity Layer
+  const [activeOpportunity, setActiveOpportunity] = useState<Opportunity | null>(null);
+
   useWindowLifecycle({
     onFocus: () => {},
     onBlur: () => {},
@@ -212,6 +217,24 @@ function ChatWindow() {
         </HeaderDraggable>
 
       <div className="sl-body">
+        {/* Opportunity Layer */}
+        {activeOpportunity && (
+          <OpportunityLayer
+            opportunity={activeOpportunity}
+            onClose={() => setActiveOpportunity(null)}
+            onDiscuss={(text) => {
+              // Add the opportunity discussion as a user message
+              addMessage('user', text);
+              setActiveOpportunity(null);
+            }}
+            onApply={() => {
+              // Add confirmation message
+              addMessage('assistant', `✓ Suggestion appliquée avec succès !`);
+              setActiveOpportunity(null);
+            }}
+          />
+        )}
+
         {messages.length === 0 ? (
           <div style={{ 
             display: 'flex', 
@@ -373,9 +396,13 @@ function ChatWindow() {
       {/* <StatusIndicator /> */}
 
       {/* Clueless Phase 1: Opportunity Toast */}
-      <OpportunityToast 
+      <OpportunityToast
         onOpenDock={() => setIsDockOpen(true)}
         onOpenDigest={() => setIsDigestOpen(true)}
+        onOpenChat={(opportunity) => {
+          console.log('[Chat] Opening opportunity in chat:', opportunity);
+          setActiveOpportunity(opportunity);
+        }}
       />
 
       {/* Clueless Phase 2: Quick Actions */}
