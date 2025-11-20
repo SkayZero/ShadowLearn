@@ -29,6 +29,22 @@ export function OpportunityLayer({
 
   if (!opportunity) return null;
 
+  // Helper to format context object for display
+  const formatContext = (context: any): string => {
+    if (typeof context === 'string') return context;
+    if (context && typeof context === 'object') {
+      if (context.app_name) {
+        const parts = [context.app_name];
+        if (context.idle_seconds) {
+          parts.push(`inactif ${Math.round(context.idle_seconds)}s`);
+        }
+        return parts.join(' • ');
+      }
+      return JSON.stringify(context);
+    }
+    return 'Aucun contexte supplémentaire';
+  };
+
   const handleApply = async () => {
     setIsApplying(true);
     try {
@@ -58,7 +74,7 @@ export function OpportunityLayer({
 
   const handleDiscuss = () => {
     // Create a formatted message to discuss the opportunity
-    const discussMessage = `💡 À propos de cette suggestion :\n\n${opportunity.suggestion}\n\nContexte : ${opportunity.context || 'Aucun contexte supplémentaire'}`;
+    const discussMessage = `💡 À propos de cette suggestion :\n\n${opportunity.suggestion}\n\nContexte : ${formatContext(opportunity.context)}`;
     onDiscuss(discussMessage);
   };
 
@@ -161,7 +177,7 @@ export function OpportunityLayer({
                     borderRadius: '8px',
                   }}
                 >
-                  <strong>Contexte détecté :</strong> {opportunity.context}
+                  <strong>Contexte détecté :</strong> {formatContext(opportunity.context)}
                 </div>
               )}
 
