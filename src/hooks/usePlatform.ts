@@ -4,25 +4,25 @@
  */
 
 import { useEffect } from 'react';
-import { platform } from '@tauri-apps/plugin-os';
 
 export function usePlatform() {
   useEffect(() => {
-    const detectPlatform = async () => {
-      try {
-        const os = platform();
+    // Detect platform using navigator.userAgent
+    // Tauri apps run in webview, userAgent contains OS info
+    const userAgent = navigator.userAgent.toLowerCase();
 
-        // Add platform-specific class to body
-        document.body.classList.add(`platform-${os}`);
+    let os = 'unknown';
+    if (userAgent.includes('mac')) {
+      os = 'macos';
+    } else if (userAgent.includes('win')) {
+      os = 'windows';
+    } else if (userAgent.includes('linux')) {
+      os = 'linux';
+    }
 
-        console.log(`[Platform] Detected: ${os}`);
-      } catch (error) {
-        console.error('[Platform] Detection failed:', error);
-        // Fallback: assume not macOS if detection fails
-        document.body.classList.add('platform-unknown');
-      }
-    };
+    // Add platform-specific class to body
+    document.body.classList.add(`platform-${os}`);
 
-    detectPlatform();
+    console.log(`[Platform] Detected: ${os} (UserAgent: ${userAgent})`);
   }, []);
 }
