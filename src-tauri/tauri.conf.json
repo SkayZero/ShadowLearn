@@ -36,7 +36,7 @@
         "resizable": true,
         "decorations": false,
         "transparent": true,
-        "alwaysOnTop": true,
+        "alwaysOnTop": false,
         "shadow": true,
         "center": false,
         "dragDropEnabled": false,
@@ -55,7 +55,7 @@
         "resizable": true,
         "decorations": false,
         "transparent": true,
-        "alwaysOnTop": true,
+        "alwaysOnTop": false,
         "shadow": true,
         "center": false,
         "dragDropEnabled": false,
@@ -92,6 +92,7 @@
             "core:window:allow-show",
             "core:window:allow-set-focus",
             "core:window:allow-minimize",
+            "core:window:allow-set-always-on-top",
             "core:event:allow-listen",
             "core:event:default"
           ]

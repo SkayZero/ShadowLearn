@@ -72,6 +72,9 @@ function ChatWindow() {
   // Help Modal
   const [isHelpOpen, setIsHelpOpen] = useState(false);
 
+  // Pin Mode (always-on-top)
+  const [isPinned, setIsPinned] = useState(false);
+
   useWindowLifecycle({
     onFocus: () => {},
     onBlur: () => {},
@@ -145,6 +148,21 @@ function ChatWindow() {
       timestamp: new Date(),
     };
     setMessages((prev) => [...prev, newMessage]);
+  };
+
+  const togglePin = async () => {
+    try {
+      const { invoke } = await import('@tauri-apps/api/core');
+      const { getCurrentWindow } = await import('@tauri-apps/api/window');
+      const window = getCurrentWindow();
+
+      const newPinnedState = !isPinned;
+      await window.setAlwaysOnTop(newPinnedState);
+      setIsPinned(newPinnedState);
+      console.log(`Window pinned: ${newPinnedState}`);
+    } catch (e) {
+      console.error('Failed to toggle pin:', e);
+    }
   };
 
   const handleSend = async () => {
@@ -245,6 +263,28 @@ Question de l'utilisateur : ${messageText}`;
                 }}
               >
                 ❓ Aide
+              </button>
+              <button
+                onClick={togglePin}
+                style={{
+                  padding: '6px 12px',
+                  background: isPinned ? 'rgba(255, 193, 7, 0.2)' : 'rgba(135, 206, 235, 0.2)',
+                  border: `1px solid ${isPinned ? 'rgba(255, 193, 7, 0.5)' : 'rgba(135, 206, 235, 0.5)'}`,
+                  borderRadius: '6px',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontSize: '0.85em',
+                  fontWeight: '600',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = isPinned ? 'rgba(255, 193, 7, 0.3)' : 'rgba(135, 206, 235, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = isPinned ? 'rgba(255, 193, 7, 0.2)' : 'rgba(135, 206, 235, 0.2)';
+                }}
+              >
+                {isPinned ? '📌 Épinglé' : '📌 Épingler'}
               </button>
               <button
                 onClick={() => setIsActive(!isActive)}
