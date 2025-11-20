@@ -1131,10 +1131,33 @@ pub async fn run() {
             Ok(())
         })
         .on_window_event(|window, event| {
-            // Global handler for all windows - only hide chat window, keep context visible
+            // Global handler for all windows - LOG ALL EVENTS for debugging
+            let label = window.label();
+
+            // Log all events for chat window to diagnose hiding issue
+            if label == "chat" {
+                match event {
+                    tauri::WindowEvent::CloseRequested { .. } => {
+                        info!("🚨 [{}] CloseRequested event", label);
+                    }
+                    tauri::WindowEvent::Focused(focused) => {
+                        info!("🎯 [{}] Focused event: {}", label, focused);
+                    }
+                    tauri::WindowEvent::Moved(_) => {
+                        // Too verbose, skip
+                    }
+                    tauri::WindowEvent::Resized(_) => {
+                        // Too verbose, skip
+                    }
+                    _ => {
+                        info!("📡 [{}] Window event: {:?}", label, event);
+                    }
+                }
+            }
+
+            // Only hide chat window on CloseRequested, keep context visible
             match event {
                 tauri::WindowEvent::CloseRequested { api, .. } => {
-                    // Only hide chat window, not context
                     if window.label() == "chat" {
                         api.prevent_close();
                         if let Err(e) = window.hide() {

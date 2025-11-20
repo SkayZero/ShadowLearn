@@ -138,6 +138,10 @@ export default function OpportunityToast({ onOpenDock, onOpenChat }: Opportunity
       onOpenChat?.(opportunity);
       console.log('[OpportunityToast] ✅ onOpenChat called');
 
+      // TESTING: Delay hiding toast to see if it helps with window visibility
+      console.log('[OpportunityToast] ⏳ Waiting 500ms before hiding toast...');
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       // Hide toast after opening chat
       console.log('[OpportunityToast] 👋 Hiding toast...');
       setOpportunity(null);
