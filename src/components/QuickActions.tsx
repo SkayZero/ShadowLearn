@@ -34,33 +34,8 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
     const generateActions = async () => {
       const contextActions: QuickAction[] = [];
 
-      // Actions universelles toujours visibles
-      if (onOpenDock) {
-        contextActions.push({
-          id: "open-dock",
-          label: "Ouvrir Dock",
-          icon: "🎛️",
-          description: "Afficher le panneau principal",
-          action: async () => {
-            console.log("Opening dock");
-            onOpenDock();
-          },
-        });
-      }
-      
-      // Action: Stats/Digest
-      if (onOpenDigest) {
-        contextActions.push({
-          id: "view-stats",
-          label: "Voir mes stats",
-          icon: "📊",
-          description: "Digest du jour",
-          action: async () => {
-            console.log("Opening digest");
-            onOpenDigest();
-          },
-        });
-      }
+      // IMPORTANT: Actions universelles (Dock, Stats, Aide) ont été déplacées dans SmartDock
+      // QuickActions ne contient maintenant que des actions vraiment contextuelles
 
       // Si du texte est sélectionné
       if (context?.selectedText) {
@@ -149,26 +124,12 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
         });
       }
 
-      // Action universelle: Aide
-      contextActions.push({
-        id: "help",
-        label: "Aide",
-        icon: "❓",
-        description: "Afficher l'aide",
-        action: async () => {
-          console.log("Showing help");
-          await invoke("chat_with_ai", {
-            message: "/help",
-          });
-        },
-      });
-
       setActions(contextActions);
       setIsVisible(contextActions.length > 0);
     };
 
     generateActions();
-  }, [context]);
+  }, [context, onOpenDock, onOpenDigest]);
 
   if (!isVisible || actions.length === 0) {
     return null;

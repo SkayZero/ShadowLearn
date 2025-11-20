@@ -194,12 +194,34 @@ function ChatWindow() {
       <LayoutProvider>
         <WindowManager>
           <div className="sl-island">
-        <HeaderDraggable 
+        <HeaderDraggable
           title="ShadowLearn"
           showMinimize={true}
           rightContent={
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <button 
+              <button
+                onClick={() => setIsDockOpen(true)}
+                style={{
+                  padding: '6px 12px',
+                  background: 'rgba(135, 206, 235, 0.2)',
+                  border: '1px solid rgba(135, 206, 235, 0.5)',
+                  borderRadius: '6px',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontSize: '0.85em',
+                  fontWeight: '600',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(135, 206, 235, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(135, 206, 235, 0.2)';
+                }}
+              >
+                🎛️ Dock
+              </button>
+              <button
                 onClick={() => setIsActive(!isActive)}
                 style={{
                   padding: '6px 12px',
