@@ -4,9 +4,6 @@ use tauri_plugin_window_state::StateFlags;
 use tokio::sync::Mutex;
 use tracing::{error, info, warn};
 
-#[cfg(target_os = "macos")]
-use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
-
 mod adaptive;
 mod chat;
 mod commands; // Clueless: Slash Commands
@@ -1346,39 +1343,6 @@ pub async fn run() {
             {
                 app.set_activation_policy(tauri::ActivationPolicy::Accessory);
                 info!("🍎 macOS: Activation policy set to Accessory (prevents Stage Manager glitches)");
-            }
-
-            // Apply native macOS vibrancy to all windows
-            // This uses native NSVisualEffectView instead of CSS backdrop-filter
-            // which avoids the WebKit flicker bug on transparent windows
-            #[cfg(target_os = "macos")]
-            {
-                // Apply vibrancy to main window
-                if let Some(main_window) = app.get_webview_window("main") {
-                    if let Err(e) = apply_vibrancy(&main_window, NSVisualEffectMaterial::UnderWindowBackground, None, None) {
-                        warn!("⚠️ Failed to apply vibrancy to main window: {}", e);
-                    } else {
-                        info!("✨ Native vibrancy applied to main window (UnderWindowBackground)");
-                    }
-                }
-
-                // Apply vibrancy to chat window
-                if let Some(chat_window) = app.get_webview_window("chat") {
-                    if let Err(e) = apply_vibrancy(&chat_window, NSVisualEffectMaterial::UnderWindowBackground, None, None) {
-                        warn!("⚠️ Failed to apply vibrancy to chat window: {}", e);
-                    } else {
-                        info!("✨ Native vibrancy applied to chat window (UnderWindowBackground)");
-                    }
-                }
-
-                // Apply vibrancy to context window
-                if let Some(context_window) = app.get_webview_window("context") {
-                    if let Err(e) = apply_vibrancy(&context_window, NSVisualEffectMaterial::UnderWindowBackground, None, None) {
-                        warn!("⚠️ Failed to apply vibrancy to context window: {}", e);
-                    } else {
-                        info!("✨ Native vibrancy applied to context window (UnderWindowBackground)");
-                    }
-                }
             }
 
             // Force show and position chat window

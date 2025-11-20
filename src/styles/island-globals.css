@@ -36,33 +36,25 @@ body,
   display: flex;
   flex-direction: column;
 
-  /* Glassmorphism with platform-conditional blur
-   * macOS: Uses native NSVisualEffectView (window-vibrancy plugin)
-   * Windows/Linux: Uses CSS backdrop-filter
+  /* Glassmorphism with optimized backdrop-filter
+   * Higher opacity + GPU acceleration reduces flicker on macOS
    */
   background: var(--glass-bg) !important;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-2xl);
   box-shadow: var(--glass-shadow);
 
-  /* Enable backdrop-filter by default (Windows/Linux) */
+  /* Backdrop filter for glassmorphism */
   backdrop-filter: var(--glass-backdrop) !important;
   -webkit-backdrop-filter: var(--glass-backdrop) !important;
 
-  /* Keep GPU optimization for smooth rendering */
+  /* GPU optimization for smooth rendering and reduced flicker */
   transform: translate3d(0, 0, 0);
   will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
 
   overflow: hidden;
-}
-
-/* macOS: Disable CSS backdrop-filter (uses native vibrancy instead)
- * Native vibrancy is applied via window-vibrancy Rust plugin
- * This prevents the WebKit backdrop-filter flicker bug
- */
-.platform-macos .sl-island {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
 }
 
 /* ============================================
@@ -279,14 +271,12 @@ body,
 
 .sl-input {
   padding: 12px;
-  background: rgba(26, 61, 110, 0.4);
-  /* backdrop-filter: REMOVED - Option A */
+  background: transparent;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .input-field {
   background: rgba(255, 255, 255, 0.1);
-  /* backdrop-filter: REMOVED - Option A */
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 10px 14px;
@@ -324,7 +314,6 @@ body,
 
 .message-user {
   background: rgba(26, 61, 110, 0.9);
-  /* backdrop-filter: REMOVED - Option A */
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 18px;
   padding: 10px 14px;
@@ -338,7 +327,6 @@ body,
 
 .message-assistant {
   background: rgba(81, 130, 108, 0.7);
-  /* backdrop-filter: REMOVED - Option A */
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 18px;
   padding: 10px 14px;
@@ -361,7 +349,6 @@ body,
 
 .context-card {
   background: rgba(255, 255, 255, 0.12);
-  /* backdrop-filter: REMOVED - Option A */
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 12px;

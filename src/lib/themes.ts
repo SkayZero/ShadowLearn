@@ -65,23 +65,23 @@ export const THEMES: Record<Personality, Theme> = {
     },
 
     glass: {
-      bg: "rgba(110, 231, 183, 0.6)",  // Moderate opacity with native blur
+      bg: "rgba(110, 231, 183, 0.85)",  // High opacity for stability
       border: "rgba(110, 231, 183, 0.25)",
       shadow: "0 8px 32px rgba(110, 231, 183, 0.15)",
     },
-    
+
     led: {
       deep: "#34d399",
       normal: "#6ee7b7",
       blocked: "#a7f3d0",
     },
-    
+
     glow: "rgba(110, 231, 183, 0.3)",
     particleSpeed: 0.5,
     font: "'Inter', sans-serif",
     transitionSpeed: 500,
   },
-  
+
   aura: {
     id: "aura",
     name: "AURA",
@@ -99,23 +99,23 @@ export const THEMES: Record<Personality, Theme> = {
     },
 
     glass: {
-      bg: "rgba(196, 181, 253, 0.6)",  // Moderate opacity with native blur
+      bg: "rgba(196, 181, 253, 0.85)",  // High opacity for stability
       border: "rgba(196, 181, 253, 0.25)",
       shadow: "0 8px 32px rgba(196, 181, 253, 0.15)",
     },
-    
+
     led: {
       deep: "#a78bfa",
       normal: "#c4b5fd",
       blocked: "#ddd6fe",
     },
-    
+
     glow: "rgba(196, 181, 253, 0.3)",
     particleSpeed: 0.3,
     font: "'Inter', sans-serif",
     transitionSpeed: 800,
   },
-  
+
   spark: {
     id: "spark",
     name: "SPARK",
@@ -133,23 +133,23 @@ export const THEMES: Record<Personality, Theme> = {
     },
 
     glass: {
-      bg: "rgba(251, 191, 36, 0.6)",  // Moderate opacity with native blur
+      bg: "rgba(251, 191, 36, 0.85)",  // High opacity for stability
       border: "rgba(251, 191, 36, 0.25)",
       shadow: "0 8px 32px rgba(251, 191, 36, 0.15)",
     },
-    
+
     led: {
       deep: "#f59e0b",
       normal: "#fbbf24",
       blocked: "#fcd34d",
     },
-    
+
     glow: "rgba(251, 191, 36, 0.3)",
     particleSpeed: 1.2,
     font: "'Satoshi', sans-serif",
     transitionSpeed: 300,
   },
-  
+
   nova: {
     id: "nova",
     name: "NOVA",
@@ -167,23 +167,23 @@ export const THEMES: Record<Personality, Theme> = {
     },
 
     glass: {
-      bg: "rgba(125, 211, 252, 0.6)",  // Moderate opacity with native blur
+      bg: "rgba(125, 211, 252, 0.85)",  // High opacity for stability
       border: "rgba(125, 211, 252, 0.25)",
       shadow: "0 8px 32px rgba(125, 211, 252, 0.15)",
     },
-    
+
     led: {
       deep: "#38bdf8",
       normal: "#7dd3fc",
       blocked: "#bae6fd",
     },
-    
+
     glow: "rgba(125, 211, 252, 0.3)",
     particleSpeed: 0.6,
     font: "'Space Grotesk', sans-serif",
     transitionSpeed: 600,
   },
-  
+
   kai: {
     id: "kai",
     name: "KAI",
@@ -201,23 +201,23 @@ export const THEMES: Record<Personality, Theme> = {
     },
 
     glass: {
-      bg: "rgba(110, 231, 183, 0.6)",  // Moderate opacity with native blur
+      bg: "rgba(110, 231, 183, 0.85)",  // High opacity for stability
       border: "rgba(110, 231, 183, 0.25)",
       shadow: "0 8px 32px rgba(110, 231, 183, 0.15)",
     },
-    
+
     led: {
       deep: "#34d399",
       normal: "#6ee7b7",
       blocked: "#a7f3d0",
     },
-    
+
     glow: "rgba(110, 231, 183, 0.3)",
     particleSpeed: 0.4,
     font: "'IBM Plex Mono', monospace",
     transitionSpeed: 400,
   },
-  
+
   echo: {
     id: "echo",
     name: "ECHO",
@@ -235,23 +235,23 @@ export const THEMES: Record<Personality, Theme> = {
     },
 
     glass: {
-      bg: "rgba(249, 168, 212, 0.6)",  // Moderate opacity with native blur
+      bg: "rgba(249, 168, 212, 0.85)",  // High opacity for stability
       border: "rgba(249, 168, 212, 0.25)",
       shadow: "0 8px 32px rgba(249, 168, 212, 0.15)",
     },
-    
+
     led: {
       deep: "#ec4899",
       normal: "#f9a8d4",
       blocked: "#fbcfe8",
     },
-    
+
     glow: "rgba(249, 168, 212, 0.3)",
     particleSpeed: 0.5,
     font: "'Playfair Display', serif",
     transitionSpeed: 700,
   },
-  
+
   void: {
     id: "void",
     name: "VOID",
@@ -269,7 +269,7 @@ export const THEMES: Record<Personality, Theme> = {
     },
 
     glass: {
-      bg: "rgba(255, 255, 255, 0.6)",  // Moderate opacity with native blur
+      bg: "rgba(255, 255, 255, 0.85)",  // High opacity for stability
       border: "rgba(255, 255, 255, 0.15)",
       shadow: "0 8px 32px rgba(0, 0, 0, 0.5)",
     },
