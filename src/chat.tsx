@@ -15,6 +15,7 @@ import { StreakTracker } from './components/StreakTracker';
 import { PersonalitySelector } from './components/PersonalitySelector';
 import { PauseMode } from './components/PauseMode';
 import { OpportunityLayer } from './components/OpportunityLayer';
+import { HelpModal } from './components/HelpModal';
 import { LayoutProvider } from './contexts/LayoutContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import useWindowLifecycle from './hooks/useWindowLifecycle';
