@@ -7,6 +7,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { Personality, Theme, THEMES, getTheme, getThemeCSSVariables } from '../lib/themes';
 import { invoke } from '@tauri-apps/api/core';
 import { listen, emit } from '@tauri-apps/api/event';
+import { usePlatform } from '../hooks/usePlatform';
 
 interface ThemeContextValue {
   personality: Personality;
@@ -19,6 +20,7 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [personality, setPersonalityState] = useState<Personality>('aerya');
   const [theme, setTheme] = useState<Theme>(THEMES.aerya);
+  const platform = usePlatform();
 
   // Load personality from backend on mount
   useEffect(() => {
@@ -52,10 +54,23 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     });
 
     // Update global glass variables to match theme
-    root.style.setProperty('--glass-bg', theme.glass.bg);
+    // macOS: Use higher opacity without backdrop-filter to prevent flicker
+    // Other platforms: Use lower opacity with backdrop-filter for glassmorphism
+    if (platform === 'macos') {
+      // macOS: No backdrop-filter, higher opacity (0.92) + gradient for depth
+      const color = theme.glass.bg.match(/rgba?\(([^)]+)\)/)?.[1] || '110, 231, 183, 0.92';
+      const [r, g, b] = color.split(',').map(v => parseInt(v.trim()));
+
+      root.style.setProperty('--glass-bg', `linear-gradient(135deg, rgba(${r}, ${g}, ${b}, 0.92) 0%, rgba(${r}, ${g}, ${b}, 0.88) 100%)`);
+      root.style.setProperty('--glass-backdrop', 'none');
+    } else {
+      // Windows/Linux: Full glassmorphism with backdrop-filter
+      root.style.setProperty('--glass-bg', theme.glass.bg);
+      root.style.setProperty('--glass-backdrop', 'blur(40px) saturate(180%)');
+    }
+
     root.style.setProperty('--glass-border', theme.glass.border);
     root.style.setProperty('--glass-shadow', theme.glass.shadow);
-    root.style.setProperty('--glass-backdrop', 'blur(40px) saturate(180%)');
 
     // Update text colors
     root.style.setProperty('--text-primary', theme.text.primary);
@@ -74,7 +89,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
     // Keep body transparent for glassmorphic effect
     body.style.background = 'transparent';
-  }, [theme]);
+  }, [theme, platform]);
 
   const loadPersonality = async () => {
     try {

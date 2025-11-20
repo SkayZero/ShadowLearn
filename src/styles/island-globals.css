@@ -36,30 +36,30 @@ body,
   display: flex;
   flex-direction: column;
 
-  /* Glassmorphism with anti-flicker optimizations */
+  /* Platform-specific glassmorphism
+   * macOS: Gradient background without backdrop-filter (stable, no flicker)
+   * Windows/Linux: Backdrop-filter glassmorphism (full effect)
+   */
   background: var(--glass-bg) !important;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-2xl);
   box-shadow: var(--glass-shadow);
 
-  /* Backdrop filter for glassmorphism */
+  /* Backdrop filter for glassmorphism (Windows/Linux) */
   backdrop-filter: var(--glass-backdrop) !important;
   -webkit-backdrop-filter: var(--glass-backdrop) !important;
 
-  /* Anti-flicker GPU optimizations */
+  /* GPU optimizations for smooth rendering */
   transform: translate3d(0, 0, 0);
-  transform-style: preserve-3d;
   backface-visibility: hidden;
-  perspective: 1000px;
-
-  /* Force compositing layer to prevent backdrop-filter re-calculation */
-  will-change: opacity;
-  isolation: isolate;
-
-  /* Prevent layout thrashing */
-  contain: layout style paint;
 
   overflow: hidden;
+}
+
+/* macOS: Ensure backdrop-filter is disabled (prevents flicker) */
+.platform-macos .sl-island {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 /* ============================================
@@ -72,7 +72,7 @@ body,
   font-size: 14px;
   color: rgba(255, 255, 255, 0.95);
 
-  /* Transparent header with backdrop blur */
+  /* Transparent header with backdrop blur (Windows/Linux) */
   background: var(--glass-emerald-tint) !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
@@ -92,9 +92,15 @@ body,
   /* Ensure drag is always active */
   pointer-events: auto;
 
-  /* Anti-flicker: Force GPU compositing */
+  /* GPU compositing */
   transform: translateZ(0);
-  will-change: opacity;
+}
+
+/* macOS: Disable header backdrop-filter (prevents flicker) */
+.platform-macos .sl-header {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(16, 185, 129, 0.3) !important;
 }
 
 /* Force ALL children of header to be draggable */
