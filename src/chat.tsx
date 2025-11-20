@@ -63,6 +63,12 @@ function ChatWindow() {
   // Opportunity Layer
   const [activeOpportunity, setActiveOpportunity] = useState<Opportunity | null>(null);
 
+  // Opportunity Context (for intelligent discussion)
+  const [opportunityContext, setOpportunityContext] = useState<{
+    opportunity: Opportunity;
+    isActive: boolean;
+  } | null>(null);
+
   // Help Modal
   const [isHelpOpen, setIsHelpOpen] = useState(false);
 
@@ -159,8 +165,22 @@ function ChatWindow() {
 
     try {
       const { invoke } = await import('@tauri-apps/api/core');
+
+      // Enrich message with opportunity context if active
+      let enrichedMessage = messageText;
+      if (opportunityContext?.isActive) {
+        const contextInfo = typeof opportunityContext.opportunity.context === 'object' && opportunityContext.opportunity.context.app_name
+          ? opportunityContext.opportunity.context.app_name
+          : 'Contexte détecté';
+
+        enrichedMessage = `[CONTEXTE: Opportunité détectée - ${contextInfo}]
+Suggestion en cours de discussion : "${opportunityContext.opportunity.suggestion}"
+
+Question de l'utilisateur : ${messageText}`;
+      }
+
       const response = await invoke<string>('chat_with_ai', {
-        message: messageText,
+        message: enrichedMessage,
         includeContext: true,
       });
 
@@ -253,8 +273,11 @@ function ChatWindow() {
             opportunity={activeOpportunity}
             onClose={() => setActiveOpportunity(null)}
             onDiscuss={(text) => {
-              // Add the opportunity discussion as a user message
-              addMessage('user', text);
+              // Activate opportunity context for intelligent discussion
+              setOpportunityContext({
+                opportunity: activeOpportunity,
+                isActive: true,
+              });
               setActiveOpportunity(null);
             }}
             onApply={() => {
@@ -263,6 +286,62 @@ function ChatWindow() {
               setActiveOpportunity(null);
             }}
           />
+        )}
+
+        {/* Opportunity Context Banner */}
+        {opportunityContext?.isActive && (
+          <div
+            style={{
+              padding: '12px 16px',
+              background: 'linear-gradient(135deg, rgba(135, 206, 235, 0.2), rgba(16, 185, 129, 0.2))',
+              border: '1px solid rgba(135, 206, 235, 0.5)',
+              borderRadius: '8px',
+              marginBottom: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
+              <span style={{ fontSize: '18px' }}>💡</span>
+              <div>
+                <div
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: '600',
+                    color: 'rgba(255, 255, 255, 0.9)',
+                  }}
+                >
+                  Discussion en cours
+                </div>
+                <div
+                  style={{
+                    fontSize: '12px',
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    marginTop: '2px',
+                  }}
+                >
+                  {opportunityContext.opportunity.suggestion}
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => setOpportunityContext(null)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'rgba(255, 255, 255, 0.7)',
+                cursor: 'pointer',
+                fontSize: '18px',
+                padding: '4px 8px',
+                transition: 'color 0.2s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 1)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)')}
+            >
+              ✕
+            </button>
+          </div>
         )}
 
         {messages.length === 0 ? (
