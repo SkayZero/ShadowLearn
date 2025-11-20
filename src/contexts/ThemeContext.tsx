@@ -57,16 +57,21 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // macOS: Use higher opacity without backdrop-filter to prevent flicker
     // Other platforms: Use lower opacity with backdrop-filter for glassmorphism
     if (platform === 'macos') {
-      // macOS: No backdrop-filter, higher opacity (0.92) + gradient for depth
+      // macOS: No backdrop-filter, pronounced gradient for depth (0.92 → 0.72)
       const color = theme.glass.bg.match(/rgba?\(([^)]+)\)/)?.[1] || '110, 231, 183, 0.92';
       const [r, g, b] = color.split(',').map(v => parseInt(v.trim()));
 
-      root.style.setProperty('--glass-bg', `linear-gradient(135deg, rgba(${r}, ${g}, ${b}, 0.92) 0%, rgba(${r}, ${g}, ${b}, 0.88) 100%)`);
+      // More pronounced gradient for visual depth
+      root.style.setProperty('--glass-bg', `linear-gradient(135deg, rgba(${r}, ${g}, ${b}, 0.92) 0%, rgba(${r}, ${g}, ${b}, 0.72) 100%)`);
       root.style.setProperty('--glass-backdrop', 'none');
+
+      // Header uses same theme color with slight tint
+      root.style.setProperty('--glass-header-bg', `rgba(${r}, ${g}, ${b}, 0.35)`);
     } else {
       // Windows/Linux: Full glassmorphism with backdrop-filter
       root.style.setProperty('--glass-bg', theme.glass.bg);
       root.style.setProperty('--glass-backdrop', 'blur(40px) saturate(180%)');
+      root.style.setProperty('--glass-header-bg', 'var(--glass-emerald-tint)');
     }
 
     root.style.setProperty('--glass-border', theme.glass.border);
