@@ -78,6 +78,21 @@ async fn toggle_window(app: AppHandle, label: String) -> Result<(), String> {
 }
 
 #[tauri::command]
+async fn ensure_chat_visible(app: AppHandle) -> Result<(), String> {
+    if let Some(window) = app.get_webview_window("chat") {
+        // Force window to stay visible and focused
+        window.show().map_err(|e| e.to_string())?;
+        window.set_focus().map_err(|e| e.to_string())?;
+        window.set_always_on_top(true).map_err(|e| e.to_string())?;
+        info!("💬 Chat window ensured visible and focused");
+        Ok(())
+    } else {
+        warn!("⚠️ Chat window not found");
+        Err("Chat window not found".to_string())
+    }
+}
+
+#[tauri::command]
 fn broadcast_event(app: AppHandle, event: String, payload: String) -> Result<(), String> {
     app.emit(&event, payload).map_err(|e| e.to_string())
 }
@@ -1144,6 +1159,7 @@ pub async fn run() {
         .manage(pattern_manager) // Phase 2.1: Pattern Recognition ML
         .invoke_handler(tauri::generate_handler![
             toggle_window,
+            ensure_chat_visible,
             broadcast_event,
             get_health_status,
             get_telemetry_stats,

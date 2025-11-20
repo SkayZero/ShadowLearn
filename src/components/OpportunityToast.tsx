@@ -5,7 +5,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { invoke } from "@tauri-apps/api/core";
-import { getCurrentWindow } from "@tauri-apps/api/window";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -119,10 +118,8 @@ export default function OpportunityToast({ onOpenDock, onOpenChat }: Opportunity
     }
 
     try {
-      // Ensure chat window stays visible and focused
-      const chatWindow = getCurrentWindow();
-      await chatWindow.show();
-      await chatWindow.setFocus();
+      // Ensure chat window stays visible and focused (backend command)
+      await invoke("ensure_chat_visible");
 
       // Record user accepted
       await invoke("record_opportunity_response", {

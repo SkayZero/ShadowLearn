@@ -66,8 +66,11 @@ function ChatWindow() {
     onFocus: () => {},
     onBlur: () => {},
   });
-  
-  useDesktopFocus({ enabled: true, delay: 150 });
+
+  // DISABLED: useDesktopFocus causes Chat window to become inaccessible on macOS
+  // The hook calls invoke('focus_window') which doesn't exist in backend
+  // Combined with skipTaskbar:true, this makes the window hide permanently
+  // useDesktopFocus({ enabled: true, delay: 150 });
   useActivityDetection(true);
 
   // Keyboard shortcuts (only work when window is focused)
