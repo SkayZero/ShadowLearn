@@ -63,6 +63,9 @@ function ChatWindow() {
   // Opportunity Layer
   const [activeOpportunity, setActiveOpportunity] = useState<Opportunity | null>(null);
 
+  // Help Modal
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
+
   useWindowLifecycle({
     onFocus: () => {},
     onBlur: () => {},
@@ -91,6 +94,7 @@ function ChatWindow() {
     onCloseModal: () => {
       if (isDockOpen) setIsDockOpen(false);
       if (isDigestOpen) setIsDigestOpen(false);
+      if (isHelpOpen) setIsHelpOpen(false);
     },
   });
 
@@ -201,7 +205,7 @@ function ChatWindow() {
           rightContent={
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
               <button
-                onClick={() => setIsDockOpen(true)}
+                onClick={() => setIsHelpOpen(true)}
                 style={{
                   padding: '6px 12px',
                   background: 'rgba(135, 206, 235, 0.2)',
@@ -220,7 +224,7 @@ function ChatWindow() {
                   e.currentTarget.style.background = 'rgba(135, 206, 235, 0.2)';
                 }}
               >
-                🎛️ Dock
+                ❓ Aide
               </button>
               <button
                 onClick={() => setIsActive(!isActive)}
@@ -506,6 +510,12 @@ function ChatWindow() {
       <DailyDigest
         isOpen={isDigestOpen}
         onClose={() => setIsDigestOpen(false)}
+      />
+
+      {/* Help Modal */}
+      <HelpModal
+        isOpen={isHelpOpen}
+        onClose={() => setIsHelpOpen(false)}
       />
         </WindowManager>
       </LayoutProvider>

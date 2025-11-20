@@ -34,8 +34,33 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
     const generateActions = async () => {
       const contextActions: QuickAction[] = [];
 
-      // IMPORTANT: Actions universelles (Dock, Stats, Aide) ont été déplacées dans SmartDock
-      // QuickActions ne contient maintenant que des actions vraiment contextuelles
+      // Action universelle: Ouvrir Dock (toujours visible)
+      if (onOpenDock) {
+        contextActions.push({
+          id: "open-dock",
+          label: "Ouvrir Dock",
+          icon: "🎛️",
+          description: "Afficher le panneau principal",
+          action: async () => {
+            console.log("Opening dock");
+            onOpenDock();
+          },
+        });
+      }
+
+      // Action: Stats/Digest
+      if (onOpenDigest) {
+        contextActions.push({
+          id: "view-stats",
+          label: "Voir mes stats",
+          icon: "📊",
+          description: "Digest du jour",
+          action: async () => {
+            console.log("Opening digest");
+            onOpenDigest();
+          },
+        });
+      }
 
       // Si du texte est sélectionné
       if (context?.selectedText) {
