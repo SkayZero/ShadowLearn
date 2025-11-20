@@ -41,7 +41,7 @@
         "center": false,
         "dragDropEnabled": false,
         "visible": true,
-        "skipTaskbar": true,
+        "skipTaskbar": false,
         "visibleOnAllWorkspaces": true,
         "acceptFirstMouse": true,
         "tabbingIdentifier": "shadowlearn"
@@ -60,7 +60,7 @@
         "center": false,
         "dragDropEnabled": false,
         "visible": true,
-        "skipTaskbar": true,
+        "skipTaskbar": false,
         "visibleOnAllWorkspaces": true,
         "acceptFirstMouse": true,
         "tabbingIdentifier": "shadowlearn"
