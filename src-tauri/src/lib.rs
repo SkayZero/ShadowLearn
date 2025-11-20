@@ -1373,13 +1373,14 @@ pub async fn run() {
         .setup(|app| {
             info!("🔍 Checking available windows...");
 
-            // macOS Fix: Set activation policy to Accessory to prevent Stage Manager glitches
-            // Issue: https://github.com/tauri-apps/tauri/issues/8255
-            // This prevents transparent window glitches on macOS Sonoma when focus changes
+            // macOS Fix: Use Regular activation policy so app appears in dock
+            // Previous: Accessory policy prevented Stage Manager glitches but made windows inaccessible
+            // Tradeoff: App now appears in dock and windows are accessible, but may have occasional
+            // Stage Manager visual glitches on focus change (acceptable vs inaccessible windows)
             #[cfg(target_os = "macos")]
             {
-                app.set_activation_policy(tauri::ActivationPolicy::Accessory);
-                info!("🍎 macOS: Activation policy set to Accessory (prevents Stage Manager glitches)");
+                app.set_activation_policy(tauri::ActivationPolicy::Regular);
+                info!("🍎 macOS: Activation policy set to Regular (app accessible in dock)");
             }
 
             // Force show and position chat window
