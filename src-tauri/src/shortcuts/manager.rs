@@ -11,16 +11,23 @@ pub struct ShortcutConfig {
     pub screenshot_analyze: String,  // Default: "Ctrl+Shift+S"
     pub toggle_bubbles: String,      // Default: "Ctrl+Shift+H"
     pub open_dashboard: String,      // Default: "Ctrl+Shift+D"
+    pub toggle_spotlight: String,    // Default: "Cmd+Shift+L" (macOS) / "Ctrl+Shift+L" (others)
     pub dismiss_bubble: String,      // Default: "Escape"
     pub enabled: bool,
 }
 
 impl Default for ShortcutConfig {
     fn default() -> Self {
+        #[cfg(target_os = "macos")]
+        let spotlight_shortcut = "Cmd+Shift+L";
+        #[cfg(not(target_os = "macos"))]
+        let spotlight_shortcut = "Ctrl+Shift+L";
+
         Self {
             screenshot_analyze: "Ctrl+Shift+S".to_string(),
             toggle_bubbles: "Ctrl+Shift+H".to_string(),
             open_dashboard: "Ctrl+Shift+D".to_string(),
+            toggle_spotlight: spotlight_shortcut.to_string(),
             dismiss_bubble: "Escape".to_string(),
             enabled: true,
         }
@@ -33,6 +40,7 @@ pub enum ShortcutAction {
     ScreenshotAnalyze,
     ToggleBubbles,
     OpenDashboard,
+    ToggleSpotlight,
     DismissBubble,
 }
 
@@ -82,6 +90,14 @@ impl ShortcutManager {
         )
         .await?;
 
+        // Toggle Spotlight
+        self.register_shortcut(
+            app,
+            &self.config.toggle_spotlight,
+            ShortcutAction::ToggleSpotlight,
+        )
+        .await?;
+
         // Dismiss Bubble (Escape)
         self.register_shortcut(
             app,
@@ -113,9 +129,41 @@ impl ShortcutManager {
                 if event.state == ShortcutState::Pressed {
                     info!("🎹 Shortcut triggered: {:?}", action_clone);
 
-                    // Emit event to frontend
-                    if let Err(e) = app_handle.emit("shortcut-triggered", &action_clone) {
-                        error!("Failed to emit shortcut event: {}", e);
+                    // Handle ToggleSpotlight directly in backend
+                    if matches!(action_clone, ShortcutAction::ToggleSpotlight) {
+                        if let Some(spotlight_window) = app_handle.get_webview_window("spotlight") {
+                            match spotlight_window.is_visible() {
+                                Ok(true) => {
+                                    info!("🔍 Hiding Spotlight window");
+                                    if let Err(e) = spotlight_window.hide() {
+                                        error!("Failed to hide spotlight: {}", e);
+                                    }
+                                }
+                                Ok(false) => {
+                                    info!("🔍 Showing Spotlight window");
+                                    if let Err(e) = spotlight_window.show() {
+                                        error!("Failed to show spotlight: {}", e);
+                                    }
+                                    if let Err(e) = spotlight_window.set_focus() {
+                                        error!("Failed to focus spotlight: {}", e);
+                                    }
+                                    // Emit event to tell Spotlight frontend to show content
+                                    if let Err(e) = app_handle.emit("spotlight:show", ()) {
+                                        error!("Failed to emit spotlight:show: {}", e);
+                                    }
+                                }
+                                Err(e) => {
+                                    error!("Failed to check spotlight visibility: {}", e);
+                                }
+                            }
+                        } else {
+                            error!("Spotlight window not found");
+                        }
+                    } else {
+                        // Emit event to frontend for other shortcuts
+                        if let Err(e) = app_handle.emit("shortcut-triggered", &action_clone) {
+                            error!("Failed to emit shortcut event: {}", e);
+                        }
                     }
                 }
             })

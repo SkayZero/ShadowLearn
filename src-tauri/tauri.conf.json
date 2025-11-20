@@ -64,6 +64,24 @@
         "visibleOnAllWorkspaces": true,
         "acceptFirstMouse": true,
         "tabbingIdentifier": "shadowlearn"
+      },
+      {
+        "label": "spotlight",
+        "title": "ShadowLearn — Spotlight",
+        "url": "spotlight.html",
+        "width": 500,
+        "height": 300,
+        "resizable": false,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "shadow": true,
+        "center": true,
+        "visible": false,
+        "skipTaskbar": true,
+        "visibleOnAllWorkspaces": true,
+        "acceptFirstMouse": true,
+        "focus": true
       }
     ],
     "security": {
@@ -93,6 +111,18 @@
             "core:window:allow-set-focus",
             "core:window:allow-minimize",
             "core:window:allow-set-always-on-top",
+            "core:event:allow-listen",
+            "core:event:default"
+          ]
+        },
+        {
+          "identifier": "spotlight-window",
+          "windows": ["spotlight"],
+          "permissions": [
+            "core:window:allow-hide",
+            "core:window:allow-show",
+            "core:window:allow-set-focus",
+            "core:window:allow-close",
             "core:event:allow-listen",
             "core:event:default"
           ]
