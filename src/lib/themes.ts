@@ -65,7 +65,7 @@ export const THEMES: Record<Personality, Theme> = {
     },
 
     glass: {
-      bg: "rgba(110, 231, 183, 0.85)",  // High opacity for stability
+      bg: "rgba(110, 231, 183, 0.65)",  // Balanced opacity
       border: "rgba(110, 231, 183, 0.25)",
       shadow: "0 8px 32px rgba(110, 231, 183, 0.15)",
     },
@@ -99,7 +99,7 @@ export const THEMES: Record<Personality, Theme> = {
     },
 
     glass: {
-      bg: "rgba(196, 181, 253, 0.85)",  // High opacity for stability
+      bg: "rgba(196, 181, 253, 0.65)",  // Balanced opacity
       border: "rgba(196, 181, 253, 0.25)",
       shadow: "0 8px 32px rgba(196, 181, 253, 0.15)",
     },
@@ -133,7 +133,7 @@ export const THEMES: Record<Personality, Theme> = {
     },
 
     glass: {
-      bg: "rgba(251, 191, 36, 0.85)",  // High opacity for stability
+      bg: "rgba(251, 191, 36, 0.65)",  // Balanced opacity
       border: "rgba(251, 191, 36, 0.25)",
       shadow: "0 8px 32px rgba(251, 191, 36, 0.15)",
     },
@@ -167,7 +167,7 @@ export const THEMES: Record<Personality, Theme> = {
     },
 
     glass: {
-      bg: "rgba(125, 211, 252, 0.85)",  // High opacity for stability
+      bg: "rgba(125, 211, 252, 0.65)",  // Balanced opacity
       border: "rgba(125, 211, 252, 0.25)",
       shadow: "0 8px 32px rgba(125, 211, 252, 0.15)",
     },
@@ -201,7 +201,7 @@ export const THEMES: Record<Personality, Theme> = {
     },
 
     glass: {
-      bg: "rgba(110, 231, 183, 0.85)",  // High opacity for stability
+      bg: "rgba(110, 231, 183, 0.65)",  // Balanced opacity
       border: "rgba(110, 231, 183, 0.25)",
       shadow: "0 8px 32px rgba(110, 231, 183, 0.15)",
     },
@@ -235,7 +235,7 @@ export const THEMES: Record<Personality, Theme> = {
     },
 
     glass: {
-      bg: "rgba(249, 168, 212, 0.85)",  // High opacity for stability
+      bg: "rgba(249, 168, 212, 0.65)",  // Balanced opacity
       border: "rgba(249, 168, 212, 0.25)",
       shadow: "0 8px 32px rgba(249, 168, 212, 0.15)",
     },
@@ -269,7 +269,7 @@ export const THEMES: Record<Personality, Theme> = {
     },
 
     glass: {
-      bg: "rgba(255, 255, 255, 0.85)",  // High opacity for stability
+      bg: "rgba(255, 255, 255, 0.65)",  // Balanced opacity
       border: "rgba(255, 255, 255, 0.15)",
       shadow: "0 8px 32px rgba(0, 0, 0, 0.5)",
     },

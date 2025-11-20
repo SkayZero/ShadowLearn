@@ -36,9 +36,7 @@ body,
   display: flex;
   flex-direction: column;
 
-  /* Glassmorphism with optimized backdrop-filter
-   * Higher opacity + GPU acceleration reduces flicker on macOS
-   */
+  /* Glassmorphism with anti-flicker optimizations */
   background: var(--glass-bg) !important;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-2xl);
@@ -48,11 +46,18 @@ body,
   backdrop-filter: var(--glass-backdrop) !important;
   -webkit-backdrop-filter: var(--glass-backdrop) !important;
 
-  /* GPU optimization for smooth rendering and reduced flicker */
+  /* Anti-flicker GPU optimizations */
   transform: translate3d(0, 0, 0);
-  will-change: transform;
+  transform-style: preserve-3d;
   backface-visibility: hidden;
   perspective: 1000px;
+
+  /* Force compositing layer to prevent backdrop-filter re-calculation */
+  will-change: opacity;
+  isolation: isolate;
+
+  /* Prevent layout thrashing */
+  contain: layout style paint;
 
   overflow: hidden;
 }
@@ -65,9 +70,9 @@ body,
   padding: 16px 20px;
   font-weight: 600;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.95); /* Toujours visible */
+  color: rgba(255, 255, 255, 0.95);
 
-  /* Toujours transparent même quand focus */
+  /* Transparent header with backdrop blur */
   background: var(--glass-emerald-tint) !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
@@ -77,15 +82,19 @@ body,
   align-items: center;
   justify-content: space-between;
   min-height: 56px;
-  
+
   /* Always draggable - cursor changes to move on hover */
   cursor: move;
   user-select: none;
   -webkit-user-select: none;
   -webkit-app-region: drag;
-  
+
   /* Ensure drag is always active */
   pointer-events: auto;
+
+  /* Anti-flicker: Force GPU compositing */
+  transform: translateZ(0);
+  will-change: opacity;
 }
 
 /* Force ALL children of header to be draggable */
@@ -105,13 +114,6 @@ body,
 .sl-header:hover {
   background: rgba(15, 23, 42, 0.3);
   transition: background 0.2s ease;
-}
-
-/* macOS: Disable header backdrop-filter */
-.platform-macos .sl-header {
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  background: rgba(16, 185, 129, 0.25) !important;
 }
 
 /* Header right side (snooze + close) */
