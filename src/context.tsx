@@ -42,6 +42,8 @@ function ContextWindow() {
   useActivityDetection(true); // Throttled: 300ms mouse, 500ms keyboard
 
   useEffect(() => {
+    // macOS Fix: Reduced interval frequency to prevent glassmorphism flicker
+    // setInterval(2000ms) causes re-renders that destabilize backdrop-filter
     const interval = setInterval(async () => {
       try {
         const ctx = await capture();
@@ -55,7 +57,7 @@ function ContextWindow() {
       } catch (error) {
         console.error('Failed to capture context:', error);
       }
-      
+
       // Récupérer les apps mutées et l'allowlist
       try {
         const stats: any = await invoke('get_extended_trigger_stats');
@@ -70,7 +72,7 @@ function ContextWindow() {
       } catch (error) {
         console.error('Failed to get trigger stats:', error);
       }
-    }, 2000);
+    }, 10000); // 10s instead of 2s to reduce re-renders
 
     capture();
     return () => clearInterval(interval);
@@ -85,8 +87,9 @@ function ContextWindow() {
           showMinimize={true}
           rightContent={
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              {/* Clueless Phase 1: Ambient LED */}
-              <AmbientLED size={12} />
+              {/* Clueless Phase 1: Ambient LED - DISABLED for macOS flicker fix */}
+              {/* Framer Motion infinite animation disrupts compositor */}
+              {/* <AmbientLED size={12} /> */}
               <button
                 onClick={async () => {
                   try {
