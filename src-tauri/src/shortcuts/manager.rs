@@ -120,17 +120,29 @@ impl ShortcutManager {
         shortcut: &str,
         action: ShortcutAction,
     ) -> Result<(), String> {
+        info!("🔧 Attempting to register shortcut: '{}' for action: {:?}", shortcut, action);
+
         let shortcut_parsed: Shortcut = shortcut
             .parse()
-            .map_err(|e| format!("Invalid shortcut '{}': {:?}", shortcut, e))?;
+            .map_err(|e| {
+                error!("❌ Failed to parse shortcut '{}': {:?}", shortcut, e);
+                format!("Invalid shortcut '{}': {:?}", shortcut, e)
+            })?;
+
+        info!("✅ Shortcut '{}' parsed successfully", shortcut);
 
         let app_handle = app.clone();
         let action_clone = action.clone();
+        let shortcut_str = shortcut.to_string();
+
+        info!("🔧 About to call on_shortcut for '{}'...", shortcut_str);
 
         let register_result = app.global_shortcut()
             .on_shortcut(shortcut_parsed, move |_app, _shortcut, event| {
+                info!("🎹 SHORTCUT CALLBACK TRIGGERED! Event state: {:?}", event.state);
+
                 if event.state == ShortcutState::Pressed {
-                    info!("🎹 Shortcut triggered: {:?}", action_clone);
+                    info!("🎹 Shortcut triggered: {:?} (key: {})", action_clone, shortcut_str);
 
                     // Handle ToggleSpotlight directly in backend
                     if matches!(action_clone, ShortcutAction::ToggleSpotlight) {
@@ -187,6 +199,8 @@ impl ShortcutManager {
                             error!("Failed to emit shortcut event: {}", e);
                         }
                     }
+                } else {
+                    info!("🎹 Shortcut event received but not pressed state: {:?}", event.state);
                 }
             });
 
@@ -194,6 +208,8 @@ impl ShortcutManager {
             error!("❌ Failed to register shortcut '{}': {}", shortcut, e);
             return Err(format!("Failed to register shortcut '{}': {}", shortcut, e));
         }
+
+        info!("✅ on_shortcut() call completed successfully for '{}'", shortcut);
 
         // Store in registry
         let mut registry = self.registered_shortcuts.lock().await;
