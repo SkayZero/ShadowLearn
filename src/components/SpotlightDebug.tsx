@@ -10,12 +10,18 @@ export function SpotlightDebug() {
   const [status, setStatus] = useState<string>('');
 
   const handleToggleSpotlight = async () => {
+    console.log('🔍 [DEBUG] Clicking Toggle Spotlight button...');
+    setStatus('⏳ Appel toggle_spotlight...');
+
     try {
+      console.log('🔍 [DEBUG] Invoking toggle_spotlight command...');
       const isVisible = await invoke<boolean>('toggle_spotlight');
+      console.log('🔍 [DEBUG] toggle_spotlight returned:', isVisible);
+
       setStatus(isVisible ? '✅ Spotlight ouvert' : '🔒 Spotlight fermé');
       setTimeout(() => setStatus(''), 2000);
     } catch (error) {
-      console.error('Failed to toggle spotlight:', error);
+      console.error('❌ [DEBUG] Failed to toggle spotlight:', error);
       setStatus(`❌ Erreur: ${error}`);
       setTimeout(() => setStatus(''), 3000);
     }

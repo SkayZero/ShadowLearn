@@ -16,7 +16,8 @@ import './styles/island-globals.css';
 function SpotlightWindow() {
   const { theme } = useTheme();
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  // Always show content when window is visible (window visibility is controlled by Tauri)
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const setupListeners = async () => {
@@ -24,7 +25,7 @@ function SpotlightWindow() {
 
       // Listen for show/hide events
       const unlistenShow = await listen('spotlight:show', (event: any) => {
-        console.log('[Spotlight] Show event received:', event.payload);
+        console.log('🔍 [Spotlight] Show event received:', event.payload);
         if (event.payload?.opportunity) {
           setOpportunity(event.payload.opportunity);
         }
