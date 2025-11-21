@@ -7,16 +7,20 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { getCurrentWindow } from '@tauri-apps/api/window';
+import { invoke } from '@tauri-apps/api/core';
+import { emit } from '@tauri-apps/api/event';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from './contexts/ThemeContext';
 import { ThemeProvider } from './contexts/ThemeContext';
-import type { Opportunity } from './lib';
+import { OpportunityProvider, useOpportunities } from './contexts/OpportunityContext';
+import type { Opportunity } from './types';
 import './styles/island-globals.css';
 
 function SpotlightWindow() {
   useTheme(); // Keep theme sync
-  const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
+  const { latestOpportunity, markAsViewed, markAsActioned, markAsIgnored } = useOpportunities();
   const [isVisible, setIsVisible] = useState(false); // Hidden by default
+  const [viewModal, setViewModal] = useState(false); // For "Voir" modal
 
   useEffect(() => {
     const setupListeners = async () => {
@@ -33,10 +37,7 @@ function SpotlightWindow() {
       checkVisibility();
 
       // Listen for show/hide events
-      const unlistenShow = await listen('spotlight:show', (event: any) => {
-        if (event.payload?.opportunity) {
-          setOpportunity(event.payload.opportunity);
-        }
+      const unlistenShow = await listen('spotlight:show', () => {
         setIsVisible(true);
       });
 
@@ -78,44 +79,71 @@ function SpotlightWindow() {
 
   const handleClose = async () => {
     setIsVisible(false);
+    setViewModal(false);
     const window = getCurrentWindow();
     await window.hide();
   };
 
   const handleDiscuss = async () => {
-    // TODO: Open chat with opportunity context
+    if (!latestOpportunity) return;
+
+    // Mark as actioned
+    markAsActioned(latestOpportunity.id);
+
+    // Show chat window
+    try {
+      await invoke('show_window', { windowLabel: 'chat' });
+    } catch (err) {
+      console.error('Failed to show chat window:', err);
+    }
+
+    // Emit chat:prefill event with opportunity context
+    try {
+      await emit('chat:prefill', {
+        opportunityId: latestOpportunity.id,
+        context: latestOpportunity,
+      });
+    } catch (err) {
+      console.error('Failed to emit chat:prefill:', err);
+    }
+
     handleClose();
   };
 
   const handleView = async () => {
-    // TODO: Show more details
-    handleClose();
+    if (!latestOpportunity) return;
+
+    // Mark as viewed
+    markAsViewed(latestOpportunity.id);
+
+    // Show modal (don't close Spotlight)
+    setViewModal(true);
   };
 
   const handleIgnore = async () => {
-    if (opportunity) {
-      // TODO: Record ignored opportunity
-    }
+    if (!latestOpportunity) return;
+
+    // Mark as ignored
+    markAsIgnored(latestOpportunity.id);
+
     handleClose();
   };
 
-  // Mock opportunity for testing
-  const mockOpportunity: Opportunity = {
-    id: 'mock-1',
-    title: 'Suggestion de refactorisation',
-    preview: 'Tu répètes ce pattern 3 fois. Je peux te suggérer une factorisation.',
-    type: 'refacto',
-    suggestion: 'Tu répètes ce pattern 3 fois. Je peux te suggérer une factorisation.',
-    context: {
-      app_name: 'Cursor',
-      file: 'main.rs',
-      lines: [42, 89, 134],
-    },
-    confidence: 0.85,
-    created_at: Date.now(),
+  // Get type emoji
+  const getTypeEmoji = (type: string) => {
+    switch (type) {
+      case 'refacto': return '🔧';
+      case 'debug': return '🐛';
+      case 'learn': return '📚';
+      case 'tip': return '💡';
+      default: return '💡';
+    }
   };
 
-  const displayOpportunity = opportunity || mockOpportunity;
+  // No opportunity? Don't show Spotlight
+  if (!latestOpportunity) {
+    return null;
+  }
 
   return (
     <div
@@ -191,7 +219,7 @@ function SpotlightWindow() {
                 marginBottom: '20px',
               }}
             >
-              <span style={{ fontSize: '18px' }}>💡</span>
+              <span style={{ fontSize: '18px' }}>{getTypeEmoji(latestOpportunity.type)}</span>
               <span
                 style={{
                   fontSize: '13px',
@@ -201,7 +229,7 @@ function SpotlightWindow() {
                   letterSpacing: '0.5px',
                 }}
               >
-                Opportunité détectée
+                {latestOpportunity.type} • {Math.round(latestOpportunity.confidence * 100)}% confiance
               </span>
             </div>
 
@@ -214,21 +242,34 @@ function SpotlightWindow() {
                 minHeight: 0, // Allow shrinking
               }}
             >
-              {/* Suggestion */}
+              {/* Title */}
+              <h3
+                style={{
+                  fontSize: '18px',
+                  fontWeight: '700',
+                  color: 'var(--text-primary)',
+                  marginBottom: '12px',
+                  letterSpacing: '-0.3px',
+                }}
+              >
+                {latestOpportunity.title}
+              </h3>
+
+              {/* Description */}
               <p
                 style={{
-                  fontSize: '16px',
+                  fontSize: '15px',
                   lineHeight: '1.6',
-                  color: 'var(--text-primary)',
+                  color: 'var(--text-secondary)',
                   marginBottom: '20px',
                   fontWeight: '400',
                 }}
               >
-                {displayOpportunity.suggestion}
+                {latestOpportunity.description}
               </p>
 
-              {/* Context (if available) */}
-              {displayOpportunity.context && typeof displayOpportunity.context === 'object' && (
+              {/* Context */}
+              {latestOpportunity.context && (
                 <div
                   style={{
                     fontSize: '14px',
@@ -242,9 +283,63 @@ function SpotlightWindow() {
                 >
                   <strong style={{ color: 'var(--accent-primary)' }}>📍 Contexte</strong>
                   <div style={{ marginTop: '6px', fontSize: '13px' }}>
-                    {displayOpportunity.context.app_name || 'App'}
-                    {displayOpportunity.context.file && ` • ${displayOpportunity.context.file}`}
-                    {displayOpportunity.context.lines && ` • Lignes ${displayOpportunity.context.lines.join(', ')}`}
+                    {latestOpportunity.context.app}
+                    {latestOpportunity.context.file && ` • ${latestOpportunity.context.file}`}
+                    {latestOpportunity.context.line && ` • Ligne ${latestOpportunity.context.line}`}
+                  </div>
+                  {latestOpportunity.context.codeSnippet && (
+                    <pre
+                      style={{
+                        marginTop: '8px',
+                        padding: '8px',
+                        background: 'rgba(0, 0, 0, 0.3)',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontFamily: 'monospace',
+                        overflow: 'auto',
+                        maxHeight: '100px',
+                      }}
+                    >
+                      {latestOpportunity.context.codeSnippet}
+                    </pre>
+                  )}
+                </div>
+              )}
+
+              {/* View Modal (only when viewModal is true) */}
+              {viewModal && (
+                <div
+                  style={{
+                    marginTop: '12px',
+                    padding: '16px',
+                    background: 'rgba(135, 206, 235, 0.15)',
+                    border: '1px solid var(--accent-light)',
+                    borderRadius: '10px',
+                    fontSize: '14px',
+                    lineHeight: '1.5',
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <strong style={{ color: 'var(--accent-primary)' }}>👁 Détails complets</strong>
+                    <button
+                      onClick={() => setViewModal(false)}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: 'var(--text-muted)',
+                        cursor: 'pointer',
+                        fontSize: '16px',
+                      }}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <div style={{ color: 'var(--text-secondary)' }}>
+                    <p><strong>ID:</strong> {latestOpportunity.id}</p>
+                    <p><strong>Type:</strong> {latestOpportunity.type}</p>
+                    <p><strong>Confiance:</strong> {Math.round(latestOpportunity.confidence * 100)}%</p>
+                    <p><strong>Status:</strong> {latestOpportunity.status}</p>
+                    <p><strong>Timestamp:</strong> {new Date(latestOpportunity.timestamp * 1000).toLocaleString()}</p>
                   </div>
                 </div>
               )}
@@ -361,7 +456,9 @@ function SpotlightWindow() {
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ThemeProvider>
-      <SpotlightWindow />
+      <OpportunityProvider>
+        <SpotlightWindow />
+      </OpportunityProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

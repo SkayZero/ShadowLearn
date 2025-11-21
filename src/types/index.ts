@@ -37,3 +37,37 @@ export interface ScreenshotPreviewProps {
   onRemove?: () => void;
 }
 
+// ============================================
+// OPPORTUNITY TYPES (Phase 3A)
+// ============================================
+
+export type OpportunityType = 'refacto' | 'debug' | 'learn' | 'tip';
+
+export type OpportunityStatus = 'pending' | 'viewed' | 'actioned' | 'ignored';
+
+export interface OpportunityContext {
+  app: string;
+  file?: string;
+  line?: number;
+  codeSnippet?: string;
+}
+
+export interface OpportunityAction {
+  id: string;
+  label: string;
+  icon: string;
+  type: 'discuss' | 'view' | 'ignore' | 'custom';
+}
+
+export interface Opportunity {
+  id: string;
+  title: string;
+  description: string;
+  context: OpportunityContext;
+  type: OpportunityType;
+  confidence: number;
+  timestamp: number;
+  status: OpportunityStatus;
+  actions: OpportunityAction[];
+}
+

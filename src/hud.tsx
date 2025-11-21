@@ -38,8 +38,24 @@ function HUDIndicator() {
         }
       );
 
+      // Listen for HUD pulse events (from opportunity triggers)
+      const unlistenPulse = await listen<{ state: HUDState }>(
+        'hud:pulse',
+        (event) => {
+          console.log('🔔 HUD pulse received:', event.payload);
+          setState(event.payload.state);
+          setOpportunityCount((prev) => prev + 1);
+
+          // Auto-reset to normal after 30 seconds if no action
+          setTimeout(() => {
+            setState('normal');
+          }, 30000);
+        }
+      );
+
       return () => {
         unlistenState();
+        unlistenPulse();
       };
     };
 
