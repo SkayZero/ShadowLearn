@@ -17,7 +17,7 @@ import './styles/island-globals.css';
 
 function SpotlightWindow() {
   useTheme(); // Keep theme sync
-  const { latestOpportunity, markAsViewed, markAsActioned, markAsIgnored } = useOpportunities();
+  const { latestOpportunity, markAsViewed, markAsActioned, markAsIgnored, getOpportunity } = useOpportunities();
   const [isVisible, setIsVisible] = useState(false); // Hidden by default
   const [viewModal, setViewModal] = useState(false); // For "Voir" modal
 
@@ -326,42 +326,45 @@ function SpotlightWindow() {
               )}
 
               {/* View Modal (only when viewModal is true) */}
-              {viewModal && latestOpportunity && (
-                <div
-                  style={{
-                    marginTop: '12px',
-                    padding: '16px',
-                    background: 'rgba(135, 206, 235, 0.15)',
-                    border: '1px solid var(--accent-light)',
-                    borderRadius: '10px',
-                    fontSize: '14px',
-                    lineHeight: '1.5',
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <strong style={{ color: 'var(--accent-primary)' }}>👁 Détails complets</strong>
-                    <button
-                      onClick={() => setViewModal(false)}
-                      style={{
-                        background: 'transparent',
-                        border: 'none',
-                        color: 'var(--text-muted)',
-                        cursor: 'pointer',
-                        fontSize: '16px',
-                      }}
-                    >
-                      ✕
-                    </button>
+              {viewModal && latestOpportunity && (() => {
+                const currentOpp = getOpportunity(latestOpportunity.id);
+                return currentOpp ? (
+                  <div
+                    style={{
+                      marginTop: '12px',
+                      padding: '16px',
+                      background: 'rgba(135, 206, 235, 0.15)',
+                      border: '1px solid var(--accent-light)',
+                      borderRadius: '10px',
+                      fontSize: '14px',
+                      lineHeight: '1.5',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                      <strong style={{ color: 'var(--accent-primary)' }}>👁 Détails complets</strong>
+                      <button
+                        onClick={() => setViewModal(false)}
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          color: 'var(--text-muted)',
+                          cursor: 'pointer',
+                          fontSize: '16px',
+                        }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    <div style={{ color: 'var(--text-secondary)' }}>
+                      <p><strong>ID:</strong> {currentOpp.id}</p>
+                      <p><strong>Type:</strong> {currentOpp.type}</p>
+                      <p><strong>Confiance:</strong> {Math.round(currentOpp.confidence * 100)}%</p>
+                      <p><strong>Status:</strong> {currentOpp.status}</p>
+                      <p><strong>Timestamp:</strong> {new Date(currentOpp.timestamp * 1000).toLocaleString()}</p>
+                    </div>
                   </div>
-                  <div style={{ color: 'var(--text-secondary)' }}>
-                    <p><strong>ID:</strong> {latestOpportunity.id}</p>
-                    <p><strong>Type:</strong> {latestOpportunity.type}</p>
-                    <p><strong>Confiance:</strong> {Math.round(latestOpportunity.confidence * 100)}%</p>
-                    <p><strong>Status:</strong> {latestOpportunity.status}</p>
-                    <p><strong>Timestamp:</strong> {new Date(latestOpportunity.timestamp * 1000).toLocaleString()}</p>
-                  </div>
-                </div>
-              )}
+                ) : null;
+              })()}
             </div>
 
             {/* Actions - fixed at bottom */}
