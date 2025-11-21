@@ -19,10 +19,15 @@ echo "🔨 Rebuild complet..."
 echo "📥 Pull des derniers changements..."
 git pull origin claude/shadowlearn-learn-by-doing-01VmoEeKGsDfqGZBzYueyAdn
 
-# Build release
-echo "🚀 Build release..."
+# Build frontend avec Vite
+echo "⚡ Build frontend (Vite)..."
+pnpm build
+
+# Build backend avec Cargo
+echo "🚀 Build backend (Rust)..."
 cd src-tauri
 cargo build --release
+cd ..
 
 echo ""
 echo "✅ Build terminé!"
