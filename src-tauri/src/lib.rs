@@ -1448,20 +1448,6 @@ pub async fn run() {
                 warn!("⚠️ chat window NOT FOUND!");
             }
 
-            // Force show and position context window
-            if let Some(context) = app.get_webview_window("context") {
-                info!("✅ Found context window, showing...");
-                let _ = context.show();
-                let _ = context.set_focus();
-                if let Ok(Some(monitor)) = context.current_monitor() {
-                    let _size = monitor.size();
-                    let _ = context.set_position(PhysicalPosition::new(20, 100));
-                    info!("📍 Context window positioned and visible");
-                }
-            } else {
-                warn!("⚠️ context window NOT FOUND!");
-            }
-
             // Configure Spotlight window for macOS fullscreen support
             if let Some(spotlight) = app.get_webview_window("spotlight") {
                 info!("✅ Found spotlight window, configuring...");

@@ -160,6 +160,28 @@ impl ShortcutManager {
                                 Ok(false) => {
                                     info!("🔍 Spotlight currently hidden - showing");
 
+                                    // Position Spotlight like macOS Spotlight (top-center, 20% from top)
+                                    if let Ok(Some(monitor)) = spotlight_window.current_monitor() {
+                                        let monitor_size = monitor.size();
+                                        let monitor_pos = monitor.position();
+
+                                        // Spotlight window size: 600x500
+                                        let spotlight_width = 600;
+                                        let spotlight_height = 500;
+
+                                        // Calculate position:
+                                        // X: horizontally centered
+                                        // Y: 20% from top of screen (like macOS Spotlight)
+                                        let x = monitor_pos.x + (monitor_size.width as i32 - spotlight_width) / 2;
+                                        let y = monitor_pos.y + (monitor_size.height as f64 * 0.20) as i32;
+
+                                        if let Err(e) = spotlight_window.set_position(tauri::PhysicalPosition::new(x, y)) {
+                                            warn!("⚠️ Failed to position spotlight: {}", e);
+                                        } else {
+                                            info!("📍 Spotlight positioned at ({}, {}) - top-center", x, y);
+                                        }
+                                    }
+
                                     // Try to show
                                     if let Err(e) = spotlight_window.show() {
                                         error!("❌ Failed to show spotlight: {}", e);
