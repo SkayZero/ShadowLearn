@@ -39,7 +39,7 @@ export function ShadowReplay({ isOpen, onClose }: ShadowReplayProps) {
   const [events, setEvents] = useState<ReplayEvent[]>([]);
   const [playbackState, setPlaybackState] = useState<PlaybackState | null>(null);
   const [loading, setLoading] = useState(true);
-  const playbackIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const playbackIntervalRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (isOpen) {

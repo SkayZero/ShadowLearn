@@ -110,6 +110,8 @@ function SpotlightWindow() {
   // Mock opportunity for testing
   const mockOpportunity: Opportunity = {
     id: 'mock-1',
+    title: 'Suggestion de refactorisation',
+    preview: 'Tu répètes ce pattern 3 fois. Je peux te suggérer une factorisation.',
     type: 'refacto',
     suggestion: 'Tu répètes ce pattern 3 fois. Je peux te suggérer une factorisation.',
     context: {

@@ -21,6 +21,7 @@ interface Position {
   bottom?: string;
   left?: string;
   right?: string;
+  transform?: string;
 }
 
 interface LayoutContextValue {

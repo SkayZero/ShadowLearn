@@ -79,7 +79,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
           onClick={(e) => e.stopPropagation()}
           style={{
             background: theme.glass.bg,
-            backdropFilter: theme.glass.backdrop,
+            backdropFilter: 'blur(12px)',
             border: `1px solid ${theme.glass.border}`,
             borderRadius: '16px',
             padding: '24px',
