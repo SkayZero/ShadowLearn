@@ -60,14 +60,14 @@ pub async fn toggle_spotlight(app: tauri::AppHandle) -> Result<bool, String> {
         } else {
             info!("🔍 [toggle_spotlight] Showing window...");
 
-            // Step 1: Force size to 900×700 (override window-state plugin)
+            // Step 1: Force size to 1000×800 (content is 900×700, window needs margin)
             if let Err(e) = spotlight_window.set_size(Size::Physical(PhysicalSize {
-                width: 900,
-                height: 700,
+                width: 1000,
+                height: 800,
             })) {
                 error!("❌ [toggle_spotlight] Failed to set size: {}", e);
             } else {
-                info!("📐 [toggle_spotlight] Size forced to 900×700");
+                info!("📐 [toggle_spotlight] Size forced to 1000×800");
             }
 
             // Step 2: Center the window
