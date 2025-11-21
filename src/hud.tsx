@@ -45,12 +45,16 @@ function HUDIndicator() {
 
   const handleClick = async () => {
     console.log('[HUD] Clicked - opening Spotlight');
-    const { emit } = await import('@tauri-apps/api/event');
 
-    // Emit event to show Spotlight
-    await emit('hud:click', {});
+    try {
+      const { invoke } = await import('@tauri-apps/api/core');
 
-    // Backend will handle showing the Spotlight window
+      // Call toggle_spotlight command directly
+      const isVisible = await invoke<boolean>('toggle_spotlight');
+      console.log('[HUD] Spotlight toggled, now visible:', isVisible);
+    } catch (error) {
+      console.error('[HUD] Failed to toggle spotlight:', error);
+    }
   };
 
   // Color scheme based on state
