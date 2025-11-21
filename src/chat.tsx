@@ -15,7 +15,6 @@ import { PersonalitySelector } from './components/PersonalitySelector';
 import { PauseMode } from './components/PauseMode';
 import { OpportunityLayer } from './components/OpportunityLayer';
 import { HelpModal } from './components/HelpModal';
-import { SettingsModal } from './components/SettingsModal';
 import { LayoutProvider } from './contexts/LayoutContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import useWindowLifecycle from './hooks/useWindowLifecycle';
@@ -70,9 +69,6 @@ function ChatWindow() {
 
   // Help Modal
   const [isHelpOpen, setIsHelpOpen] = useState(false);
-
-  // Settings Modal
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   // Pin Mode (always-on-top)
   const [isPinned, setIsPinned] = useState(false);
@@ -284,7 +280,14 @@ Question de l'utilisateur : ${messageText}`;
           rightContent={
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
               <button
-                onClick={() => setIsSettingsOpen(true)}
+                onClick={async () => {
+                  try {
+                    const { invoke } = await import('@tauri-apps/api/core');
+                    await invoke('show_window', { windowLabel: 'settings' });
+                  } catch (error) {
+                    console.error('❌ Failed to show settings:', error);
+                  }
+                }}
                 style={{
                   padding: '6px 12px',
                   background: 'rgba(147, 51, 234, 0.2)',
@@ -722,12 +725,6 @@ Question de l'utilisateur : ${messageText}`;
       <HelpModal
         isOpen={isHelpOpen}
         onClose={() => setIsHelpOpen(false)}
-      />
-
-      {/* Settings Modal */}
-      <SettingsModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
       />
         </WindowManager>
       </LayoutProvider>

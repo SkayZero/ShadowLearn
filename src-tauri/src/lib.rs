@@ -1467,6 +1467,52 @@ pub async fn run() {
                 warn!("⚠️ spotlight window NOT FOUND!");
             }
 
+            // Configure HUD window for macOS fullscreen support (luciole)
+            if let Some(hud) = app.get_webview_window("hud") {
+                info!("✅ Found HUD window, configuring for fullscreen visibility...");
+
+                // Ensure it's visible
+                let _ = hud.show();
+                let _ = hud.set_always_on_top(true);
+
+                #[cfg(target_os = "macos")]
+                {
+                    use cocoa::appkit::{NSWindow, NSWindowCollectionBehavior, NSMainMenuWindowLevel};
+                    use cocoa::base::id;
+
+                    if let Ok(ns_window_ptr) = hud.ns_window() {
+                        let ns_window = ns_window_ptr as id;
+
+                        unsafe {
+                            // Configure window behavior to appear on all Spaces and in fullscreen
+                            let behavior = NSWindowCollectionBehavior::NSWindowCollectionBehaviorCanJoinAllSpaces
+                                | NSWindowCollectionBehavior::NSWindowCollectionBehaviorStationary
+                                | NSWindowCollectionBehavior::NSWindowCollectionBehaviorFullScreenAuxiliary;
+
+                            ns_window.setCollectionBehavior_(behavior);
+
+                            // Set window level above fullscreen apps (menu bar level + 1)
+                            let level = (NSMainMenuWindowLevel as i64) + 1;
+                            ns_window.setLevel_(level);
+
+                            info!("🔥 HUD configured with NSWindowCollectionBehavior for fullscreen visibility");
+                            info!("🔥 HUD window level set to {} (above menu bar)", level);
+                        }
+                    } else {
+                        warn!("⚠️ Failed to get HUD ns_window");
+                    }
+                }
+
+                #[cfg(not(target_os = "macos"))]
+                {
+                    info!("🔥 HUD configured (non-macOS: always-on-top only)");
+                }
+
+                info!("🔥 HUD ready - visible as ambient LED indicator");
+            } else {
+                warn!("⚠️ HUD window NOT FOUND!");
+            }
+
             // 🔥 Lance automatiquement la boucle de triggers
             tauri::async_runtime::spawn(triggers::trigger_loop::start_trigger_loop(
                 app.handle().clone(),

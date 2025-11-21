@@ -15,6 +15,7 @@ export default defineConfig(async () => ({
       input: {
         main: resolve(__dirname, 'index.html'),
         chat: resolve(__dirname, 'chat.html'),
+        settings: resolve(__dirname, 'settings.html'),
         spotlight: resolve(__dirname, 'spotlight.html'),
         hud: resolve(__dirname, 'hud.html'),
       },

@@ -47,6 +47,24 @@
         "tabbingIdentifier": "shadowlearn"
       },
       {
+        "label": "settings",
+        "title": "ShadowLearn — Réglages",
+        "url": "settings.html",
+        "width": 380,
+        "height": 520,
+        "resizable": true,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": false,
+        "shadow": true,
+        "center": false,
+        "visible": false,
+        "skipTaskbar": false,
+        "visibleOnAllWorkspaces": true,
+        "acceptFirstMouse": true,
+        "tabbingIdentifier": "shadowlearn"
+      },
+      {
         "label": "spotlight",
         "title": "ShadowLearn — Spotlight",
         "url": "spotlight.html",
@@ -115,7 +133,7 @@
         },
         {
           "identifier": "draggable-window",
-          "windows": ["chat"],
+          "windows": ["chat", "settings"],
           "permissions": [
             "core:window:allow-start-dragging",
             "core:window:allow-hide",

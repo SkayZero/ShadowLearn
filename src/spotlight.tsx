@@ -131,9 +131,10 @@ function SpotlightWindow() {
         width: '100vw',
         height: '100vh',
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start', // Top alignment for 20% positioning
         justifyContent: 'center',
-        background: 'rgba(0, 0, 0, 0.4)', // Dim background overlay
+        paddingTop: '20vh', // 20% from top like macOS Spotlight
+        background: 'transparent', // No backdrop dimming - user wants to see app behind
       }}
       onClick={handleClose}
     >
@@ -146,16 +147,18 @@ function SpotlightWindow() {
             transition={{ type: 'spring', damping: 30, stiffness: 400 }}
             onClick={(e) => e.stopPropagation()}
             style={{
-              width: '520px',
-              maxHeight: '420px',
+              width: '600px',
+              height: '500px',
               background: 'var(--glass-bg)',
               backdropFilter: 'var(--glass-backdrop)',
               WebkitBackdropFilter: 'var(--glass-backdrop)',
               border: '1px solid var(--glass-border)',
-              borderRadius: '20px',
+              borderRadius: '24px',
               boxShadow: 'var(--glass-shadow)',
-              padding: '28px',
-              overflow: 'auto',
+              padding: '32px',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
             }}
           >
             {/* Header */}
@@ -210,46 +213,57 @@ function SpotlightWindow() {
               </span>
             </div>
 
-            {/* Suggestion */}
-            <p
+            {/* Content Area - flex grow to take available space */}
+            <div
               style={{
-                fontSize: '16px',
-                lineHeight: '1.6',
-                color: 'var(--text-primary)',
-                marginBottom: '20px',
-                fontWeight: '400',
+                flex: '1 1 auto',
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: 0, // Allow shrinking
               }}
             >
-              {displayOpportunity.suggestion}
-            </p>
-
-            {/* Context (if available) */}
-            {displayOpportunity.context && typeof displayOpportunity.context === 'object' && (
-              <div
+              {/* Suggestion */}
+              <p
                 style={{
-                  fontSize: '14px',
-                  color: 'var(--text-secondary)',
-                  padding: '14px 16px',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  borderRadius: '10px',
-                  marginBottom: '24px',
-                  borderLeft: '3px solid var(--accent-primary)',
+                  fontSize: '16px',
+                  lineHeight: '1.6',
+                  color: 'var(--text-primary)',
+                  marginBottom: '20px',
+                  fontWeight: '400',
                 }}
               >
-                <strong style={{ color: 'var(--accent-primary)' }}>📍 Contexte</strong>
-                <div style={{ marginTop: '6px', fontSize: '13px' }}>
-                  {displayOpportunity.context.app_name || 'App'}
-                  {displayOpportunity.context.file && ` • ${displayOpportunity.context.file}`}
-                  {displayOpportunity.context.lines && ` • Lignes ${displayOpportunity.context.lines.join(', ')}`}
-                </div>
-              </div>
-            )}
+                {displayOpportunity.suggestion}
+              </p>
 
-            {/* Actions */}
+              {/* Context (if available) */}
+              {displayOpportunity.context && typeof displayOpportunity.context === 'object' && (
+                <div
+                  style={{
+                    fontSize: '14px',
+                    color: 'var(--text-secondary)',
+                    padding: '14px 16px',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    borderRadius: '10px',
+                    marginBottom: '20px',
+                    borderLeft: '3px solid var(--accent-primary)',
+                  }}
+                >
+                  <strong style={{ color: 'var(--accent-primary)' }}>📍 Contexte</strong>
+                  <div style={{ marginTop: '6px', fontSize: '13px' }}>
+                    {displayOpportunity.context.app_name || 'App'}
+                    {displayOpportunity.context.file && ` • ${displayOpportunity.context.file}`}
+                    {displayOpportunity.context.lines && ` • Lignes ${displayOpportunity.context.lines.join(', ')}`}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Actions - fixed at bottom */}
             <div
               style={{
                 display: 'flex',
                 gap: '12px',
+                marginTop: 'auto',
               }}
             >
               <button
@@ -336,10 +350,11 @@ function SpotlightWindow() {
             {/* Hint */}
             <p
               style={{
-                marginTop: '20px',
+                marginTop: '16px',
                 fontSize: '13px',
                 color: 'var(--text-muted)',
                 textAlign: 'center',
+                flexShrink: 0, // Don't shrink hint
               }}
             >
               Appuyez sur <kbd style={{ padding: '3px 8px', background: 'rgba(255,255,255,0.1)', borderRadius: '6px', fontSize: '12px', fontWeight: '600' }}>Esc</kbd> pour fermer
