@@ -1623,6 +1623,17 @@ pub async fn run() {
             if let Some(spotlight) = app.get_webview_window("spotlight") {
                 info!("✅ Found spotlight window, configuring...");
 
+                // Force window size to 900×700 (Phase 3A testing size)
+                use tauri::Size;
+                if let Err(e) = spotlight.set_size(Size::Physical(tauri::PhysicalSize {
+                    width: 900,
+                    height: 700,
+                })) {
+                    warn!("⚠️ Failed to set spotlight size: {}", e);
+                } else {
+                    info!("📐 Spotlight size forced to 900×700");
+                }
+
                 // Ensure it's hidden initially
                 let _ = spotlight.hide();
 
