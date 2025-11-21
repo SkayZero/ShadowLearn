@@ -66,10 +66,15 @@ export function OpportunityProvider({
 
   // Mark as viewed
   const markAsViewed = (id: string) => {
+    console.log(`[OpportunityContext] Marking ${id} as viewed`);
     setOpportunities((prev) =>
-      prev.map((opp) =>
-        opp.id === id ? { ...opp, status: 'viewed' as OpportunityStatus } : opp
-      )
+      prev.map((opp) => {
+        if (opp.id === id) {
+          console.log(`[OpportunityContext] Status ${opp.status} → viewed`);
+          return { ...opp, status: 'viewed' as OpportunityStatus };
+        }
+        return opp;
+      })
     );
   };
 

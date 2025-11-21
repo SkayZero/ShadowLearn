@@ -82,7 +82,7 @@ function SpotlightWindow() {
 
     // Show chat window
     try {
-      await invoke('show_window', { windowLabel: 'chat' });
+      await invoke('show_window', { window_label: 'chat' });
     } catch (err) {
       console.error('Failed to show chat window:', err);
     }
@@ -166,8 +166,9 @@ function SpotlightWindow() {
               flexDirection: 'column',
             }}
           >
-            {/* Header */}
+            {/* Header - Draggable */}
             <div
+              data-tauri-drag-region
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -175,6 +176,7 @@ function SpotlightWindow() {
                 marginBottom: '24px',
                 paddingBottom: '16px',
                 borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                cursor: 'move',
               }}
             >
               <span style={{ fontSize: '28px' }}>🔍</span>

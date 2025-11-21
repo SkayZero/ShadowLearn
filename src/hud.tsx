@@ -122,9 +122,9 @@ function HUDIndicator() {
         };
       case 'opportunity':
         return {
-          color: theme.led.normal,
-          opacity: 0.5,
-          glowStrength: 0.5,
+          color: '#FDB022', // Amber/Yellow for opportunities
+          opacity: 0.7,
+          glowStrength: 0.6,
           pulseSpeed: 2, // Slow pulse
         };
       case 'blocked':
