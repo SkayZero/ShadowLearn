@@ -16,6 +16,8 @@ export default defineConfig(async () => ({
         main: resolve(__dirname, 'index.html'),
         chat: resolve(__dirname, 'chat.html'),
         context: resolve(__dirname, 'context.html'),
+        spotlight: resolve(__dirname, 'spotlight.html'),
+        hud: resolve(__dirname, 'hud.html'),
       },
     },
   },
