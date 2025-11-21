@@ -15,6 +15,7 @@ import { PersonalitySelector } from './components/PersonalitySelector';
 import { PauseMode } from './components/PauseMode';
 import { OpportunityLayer } from './components/OpportunityLayer';
 import { HelpModal } from './components/HelpModal';
+import { SettingsModal } from './components/SettingsModal';
 import { LayoutProvider } from './contexts/LayoutContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import useWindowLifecycle from './hooks/useWindowLifecycle';
@@ -69,6 +70,9 @@ function ChatWindow() {
 
   // Help Modal
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+
+  // Settings Modal
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   // Pin Mode (always-on-top)
   const [isPinned, setIsPinned] = useState(false);
@@ -279,6 +283,28 @@ Question de l'utilisateur : ${messageText}`;
           showMinimize={true}
           rightContent={
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+              <button
+                onClick={() => setIsSettingsOpen(true)}
+                style={{
+                  padding: '6px 12px',
+                  background: 'rgba(147, 51, 234, 0.2)',
+                  border: '1px solid rgba(147, 51, 234, 0.5)',
+                  borderRadius: '6px',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontSize: '0.85em',
+                  fontWeight: '600',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(147, 51, 234, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(147, 51, 234, 0.2)';
+                }}
+              >
+                ⚙️ Réglages
+              </button>
               <button
                 onClick={() => setIsHelpOpen(true)}
                 style={{
@@ -696,6 +722,12 @@ Question de l'utilisateur : ${messageText}`;
       <HelpModal
         isOpen={isHelpOpen}
         onClose={() => setIsHelpOpen(false)}
+      />
+
+      {/* Settings Modal */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
       />
         </WindowManager>
       </LayoutProvider>
