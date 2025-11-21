@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::Arc;
-use tauri::{AppHandle, Emitter, Manager};
+use tauri::{AppHandle, Emitter, Manager, PhysicalSize, Size};
 use tauri_plugin_global_shortcut::{Shortcut, ShortcutState, GlobalShortcutExt};
 use tokio::sync::Mutex;
 use tracing::{error, info, warn};
@@ -160,7 +160,18 @@ impl ShortcutManager {
                                 Ok(false) => {
                                     info!("🔍 Spotlight currently hidden - showing");
 
-                                    // Center the window on screen
+                                    // FORCE size to 900×700 BEFORE centering
+                                    // This overrides any cached size from window-state plugin
+                                    if let Err(e) = spotlight_window.set_size(Size::Physical(PhysicalSize {
+                                        width: 900,
+                                        height: 700,
+                                    })) {
+                                        error!("❌ Failed to set spotlight size: {}", e);
+                                    } else {
+                                        info!("📐 Spotlight size forced to 900×700");
+                                    }
+
+                                    // Center the window on screen (AFTER setting correct size)
                                     if let Err(e) = spotlight_window.center() {
                                         warn!("⚠️ Failed to center spotlight: {}", e);
                                     } else {

@@ -19,7 +19,7 @@ function SpotlightWindow() {
   useTheme(); // Keep theme sync
   const { latestOpportunity, markAsViewed, markAsActioned, markAsIgnored, getOpportunity } = useOpportunities();
   const [isVisible, setIsVisible] = useState(false); // Hidden by default
-  const [viewModal, setViewModal] = useState(false); // For "Voir" modal
+  const [viewModalId, setViewModalId] = useState<string | null>(null); // ID of opportunity being viewed in modal
 
   useEffect(() => {
     const setupListeners = async () => {
@@ -69,7 +69,7 @@ function SpotlightWindow() {
 
   const handleClose = async () => {
     setIsVisible(false);
-    setViewModal(false);
+    setViewModalId(null);
     const window = getCurrentWindow();
     await window.hide();
   };
@@ -106,8 +106,8 @@ function SpotlightWindow() {
     // Mark as viewed
     markAsViewed(latestOpportunity.id);
 
-    // Show modal (don't close Spotlight)
-    setViewModal(true);
+    // Show modal with this opportunity's ID (don't close Spotlight)
+    setViewModalId(latestOpportunity.id);
   };
 
   const handleIgnore = async () => {
@@ -325,9 +325,9 @@ function SpotlightWindow() {
                 </div>
               )}
 
-              {/* View Modal (only when viewModal is true) */}
-              {viewModal && latestOpportunity && (() => {
-                const currentOpp = getOpportunity(latestOpportunity.id);
+              {/* View Modal (shows details for the viewed opportunity by ID) */}
+              {viewModalId && (() => {
+                const currentOpp = getOpportunity(viewModalId);
                 return currentOpp ? (
                   <div
                     style={{
@@ -343,7 +343,7 @@ function SpotlightWindow() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                       <strong style={{ color: 'var(--accent-primary)' }}>👁 Détails complets</strong>
                       <button
-                        onClick={() => setViewModal(false)}
+                        onClick={() => setViewModalId(null)}
                         style={{
                           background: 'transparent',
                           border: 'none',
