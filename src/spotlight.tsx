@@ -136,10 +136,9 @@ function SpotlightWindow() {
         width: '100vw',
         height: '100vh',
         display: 'flex',
-        alignItems: 'flex-start', // Top alignment for 20% positioning
+        alignItems: 'center', // Center vertically (Tauri centers window already)
         justifyContent: 'center',
-        paddingTop: '20vh', // 20% from top like macOS Spotlight
-        background: 'transparent', // No backdrop dimming - user wants to see app behind
+        background: 'transparent',
       }}
       onClick={handleClose}
     >
@@ -154,6 +153,7 @@ function SpotlightWindow() {
             style={{
               width: '900px',
               height: '700px',
+              boxSizing: 'border-box', // Include padding in dimensions
               background: 'var(--glass-bg)',
               backdropFilter: 'var(--glass-backdrop)',
               WebkitBackdropFilter: 'var(--glass-backdrop)',
