@@ -26,15 +26,6 @@ function SpotlightWindow() {
       const { listen } = await import('@tauri-apps/api/event');
       const window = getCurrentWindow();
 
-      // Listen for window visibility changes
-      const checkVisibility = async () => {
-        const visible = await window.isVisible();
-        setIsVisible(visible);
-      };
-
-      // Check initial visibility
-      checkVisibility();
-
       // Listen for show/hide events
       const unlistenShow = await listen('spotlight:show', () => {
         setIsVisible(true);
