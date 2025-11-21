@@ -18,13 +18,13 @@ pub struct ShortcutConfig {
 
 impl Default for ShortcutConfig {
     fn default() -> Self {
-        // Using Cmd+K (simple, like many apps use for quick access)
-        // K for "Knowledge" / "Kompanion"
-        // Less likely to conflict than Cmd+Shift+L (used by Chrome, VS Code, etc.)
+        // Using Cmd+J (simple and usually free)
+        // J could stand for "Jump to learning" or just be a simple free key
+        // Cmd+K is taken by many apps, Cmd+J is more rarely used
         #[cfg(target_os = "macos")]
-        let spotlight_shortcut = "Cmd+K";
+        let spotlight_shortcut = "Cmd+J";
         #[cfg(not(target_os = "macos"))]
-        let spotlight_shortcut = "Ctrl+K";
+        let spotlight_shortcut = "Ctrl+J";
 
         Self {
             screenshot_analyze: "Ctrl+Shift+S".to_string(),

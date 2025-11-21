@@ -1473,7 +1473,7 @@ pub async fn run() {
                     info!("🔍 Spotlight configured: always-on-top enabled");
                 }
 
-                info!("🔍 Spotlight window ready (hidden, will show on Cmd+K)");
+                info!("🔍 Spotlight window ready (hidden, will show on Cmd+J)");
             } else {
                 warn!("⚠️ spotlight window NOT FOUND!");
             }
