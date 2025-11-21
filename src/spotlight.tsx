@@ -16,12 +16,22 @@ import './styles/island-globals.css';
 function SpotlightWindow() {
   const { theme } = useTheme();
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
-  // Always show content when window is visible (window visibility is controlled by Tauri)
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false); // Hidden by default
 
   useEffect(() => {
     const setupListeners = async () => {
       const { listen } = await import('@tauri-apps/api/event');
+      const window = getCurrentWindow();
+
+      // Listen for window visibility changes
+      const checkVisibility = async () => {
+        const visible = await window.isVisible();
+        console.log('🔍 [Spotlight] Window visibility:', visible);
+        setIsVisible(visible);
+      };
+
+      // Check initial visibility
+      checkVisibility();
 
       // Listen for show/hide events
       const unlistenShow = await listen('spotlight:show', (event: any) => {
@@ -33,13 +43,26 @@ function SpotlightWindow() {
       });
 
       const unlistenHide = await listen('spotlight:hide', () => {
-        console.log('[Spotlight] Hide event received');
+        console.log('🔍 [Spotlight] Hide event received');
         setIsVisible(false);
+      });
+
+      // Listen for window focus changes (more reliable for detecting visibility)
+      const unlistenFocus = await window.listen('tauri://focus', () => {
+        console.log('🔍 [Spotlight] Window focused - showing content');
+        setIsVisible(true);
+      });
+
+      const unlistenBlur = await window.listen('tauri://blur', () => {
+        console.log('🔍 [Spotlight] Window blurred');
+        // Don't auto-hide on blur, let user control it
       });
 
       return () => {
         unlistenShow();
         unlistenHide();
+        unlistenFocus();
+        unlistenBlur();
       };
     };
 
@@ -108,28 +131,28 @@ function SpotlightWindow() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: 'transparent',
+        background: 'rgba(0, 0, 0, 0.4)', // Dim background overlay
       }}
       onClick={handleClose}
     >
       <AnimatePresence>
         {isVisible && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: -20 }}
+            initial={{ opacity: 0, scale: 0.95, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: -20 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            exit={{ opacity: 0, scale: 0.95, y: -10 }}
+            transition={{ type: 'spring', damping: 30, stiffness: 400 }}
             onClick={(e) => e.stopPropagation()}
             style={{
-              width: '480px',
-              maxHeight: '400px',
-              background: `linear-gradient(135deg, ${theme.glass.bg}, rgba(30, 41, 59, 0.95))`,
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-              border: `1px solid ${theme.glass.border}`,
-              borderRadius: '16px',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
-              padding: '24px',
+              width: '520px',
+              maxHeight: '420px',
+              background: 'var(--glass-bg)',
+              backdropFilter: 'var(--glass-backdrop)',
+              WebkitBackdropFilter: 'var(--glass-backdrop)',
+              border: '1px solid var(--glass-border)',
+              borderRadius: '20px',
+              boxShadow: 'var(--glass-shadow)',
+              padding: '28px',
               overflow: 'auto',
             }}
           >
@@ -139,16 +162,19 @@ function SpotlightWindow() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '12px',
-                marginBottom: '20px',
+                marginBottom: '24px',
+                paddingBottom: '16px',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
               }}
             >
-              <span style={{ fontSize: '24px' }}>🔍</span>
+              <span style={{ fontSize: '28px' }}>🔍</span>
               <h2
                 style={{
-                  fontSize: '18px',
+                  fontSize: '20px',
                   fontWeight: '700',
-                  color: theme.text.primary,
+                  color: 'var(--text-primary)',
                   margin: 0,
+                  letterSpacing: '-0.5px',
                 }}
               >
                 ShadowLearn
@@ -160,20 +186,20 @@ function SpotlightWindow() {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '6px',
-                padding: '4px 12px',
-                background: 'rgba(135, 206, 235, 0.2)',
-                border: '1px solid rgba(135, 206, 235, 0.4)',
+                gap: '8px',
+                padding: '6px 14px',
+                background: 'linear-gradient(135deg, rgba(135, 206, 235, 0.25), rgba(16, 185, 129, 0.25))',
+                border: '1px solid var(--accent-light)',
                 borderRadius: '12px',
-                marginBottom: '16px',
+                marginBottom: '20px',
               }}
             >
-              <span style={{ fontSize: '16px' }}>💡</span>
+              <span style={{ fontSize: '18px' }}>💡</span>
               <span
                 style={{
-                  fontSize: '12px',
+                  fontSize: '13px',
                   fontWeight: '600',
-                  color: theme.accent,
+                  color: 'var(--accent-primary)',
                   textTransform: 'uppercase',
                   letterSpacing: '0.5px',
                 }}
@@ -185,10 +211,11 @@ function SpotlightWindow() {
             {/* Suggestion */}
             <p
               style={{
-                fontSize: '15px',
+                fontSize: '16px',
                 lineHeight: '1.6',
-                color: theme.text.primary,
-                marginBottom: '16px',
+                color: 'var(--text-primary)',
+                marginBottom: '20px',
+                fontWeight: '400',
               }}
             >
               {displayOpportunity.suggestion}
@@ -198,18 +225,21 @@ function SpotlightWindow() {
             {displayOpportunity.context && typeof displayOpportunity.context === 'object' && (
               <div
                 style={{
-                  fontSize: '13px',
-                  color: theme.text.secondary,
-                  padding: '12px',
+                  fontSize: '14px',
+                  color: 'var(--text-secondary)',
+                  padding: '14px 16px',
                   background: 'rgba(255, 255, 255, 0.05)',
-                  borderRadius: '8px',
-                  marginBottom: '20px',
+                  borderRadius: '10px',
+                  marginBottom: '24px',
+                  borderLeft: '3px solid var(--accent-primary)',
                 }}
               >
-                <strong>📍 Contexte :</strong>{' '}
-                {displayOpportunity.context.app_name || 'App'}
-                {displayOpportunity.context.file && ` — ${displayOpportunity.context.file}`}
-                {displayOpportunity.context.lines && ` (lignes ${displayOpportunity.context.lines.join(', ')})`}
+                <strong style={{ color: 'var(--accent-primary)' }}>📍 Contexte</strong>
+                <div style={{ marginTop: '6px', fontSize: '13px' }}>
+                  {displayOpportunity.context.app_name || 'App'}
+                  {displayOpportunity.context.file && ` • ${displayOpportunity.context.file}`}
+                  {displayOpportunity.context.lines && ` • Lignes ${displayOpportunity.context.lines.join(', ')}`}
+                </div>
               </div>
             )}
 
@@ -217,31 +247,31 @@ function SpotlightWindow() {
             <div
               style={{
                 display: 'flex',
-                gap: '10px',
-                marginTop: '20px',
+                gap: '12px',
               }}
             >
               <button
                 onClick={handleView}
                 style={{
                   flex: 1,
-                  padding: '12px 20px',
-                  background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentLight})`,
+                  padding: '14px 24px',
+                  background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-light))',
                   border: 'none',
-                  borderRadius: '10px',
+                  borderRadius: '12px',
                   color: 'white',
                   fontWeight: '600',
-                  fontSize: '14px',
+                  fontSize: '15px',
                   cursor: 'pointer',
-                  transition: 'all 0.2s',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(135, 206, 235, 0.4)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(135, 206, 235, 0.35)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.15)';
                 }}
               >
                 ✓ Voir
@@ -251,22 +281,22 @@ function SpotlightWindow() {
                 onClick={handleDiscuss}
                 style={{
                   flex: 1,
-                  padding: '12px 20px',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: `1px solid ${theme.glass.border}`,
-                  borderRadius: '10px',
-                  color: theme.text.primary,
+                  padding: '14px 24px',
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  border: '1px solid var(--glass-border)',
+                  borderRadius: '12px',
+                  color: 'var(--text-primary)',
                   fontWeight: '600',
-                  fontSize: '14px',
+                  fontSize: '15px',
                   cursor: 'pointer',
-                  transition: 'all 0.2s',
+                  transition: 'all 0.2s ease',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
                   e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
@@ -276,23 +306,25 @@ function SpotlightWindow() {
               <button
                 onClick={handleIgnore}
                 style={{
-                  padding: '12px 20px',
+                  padding: '14px 20px',
                   background: 'transparent',
-                  border: `1px solid ${theme.glass.border}`,
-                  borderRadius: '10px',
-                  color: theme.text.muted,
+                  border: '1px solid var(--glass-border)',
+                  borderRadius: '12px',
+                  color: 'var(--text-muted)',
                   fontWeight: '500',
-                  fontSize: '14px',
+                  fontSize: '15px',
                   cursor: 'pointer',
-                  transition: 'all 0.2s',
+                  transition: 'all 0.2s ease',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = theme.text.primary;
-                  e.currentTarget.style.color = theme.text.primary;
+                  e.currentTarget.style.borderColor = 'var(--text-primary)';
+                  e.currentTarget.style.color = 'var(--text-primary)';
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = theme.glass.border;
-                  e.currentTarget.style.color = theme.text.muted;
+                  e.currentTarget.style.borderColor = 'var(--glass-border)';
+                  e.currentTarget.style.color = 'var(--text-muted)';
+                  e.currentTarget.style.background = 'transparent';
                 }}
               >
                 ✕
@@ -302,13 +334,13 @@ function SpotlightWindow() {
             {/* Hint */}
             <p
               style={{
-                marginTop: '16px',
-                fontSize: '12px',
-                color: theme.text.muted,
+                marginTop: '20px',
+                fontSize: '13px',
+                color: 'var(--text-muted)',
                 textAlign: 'center',
               }}
             >
-              Appuyez sur <kbd style={{ padding: '2px 6px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px' }}>Esc</kbd> pour fermer
+              Appuyez sur <kbd style={{ padding: '3px 8px', background: 'rgba(255,255,255,0.1)', borderRadius: '6px', fontSize: '12px', fontWeight: '600' }}>Esc</kbd> pour fermer
             </p>
           </motion.div>
         )}
