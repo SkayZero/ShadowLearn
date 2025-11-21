@@ -167,7 +167,6 @@ function ContextWindow() {
                           onClick={async () => {
                             try {
                               await invoke('unmute_app', { appName: app });
-                              console.log(`✅ Unmuted ${app}`);
                             } catch (error) {
                               console.error('Failed to unmute app:', error);
                             }

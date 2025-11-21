@@ -38,12 +38,10 @@ export function useScreenMonitor() {
 
   // Listen to screen-change events from backend
   useEvent<ScreenChange>('screen-change', (change) => {
-    console.log('📸 Screen change detected:', change);
     setLatestChange(change);
 
     // Auto-show suggestion if Claude Vision provided analysis
     if (change.analysis) {
-      console.log('✨ Claude Vision suggestion:', change.analysis);
 
       // Emit custom event for other components to listen
       window.dispatchEvent(
@@ -64,7 +62,6 @@ export function useScreenMonitor() {
       setError(null);
       await invoke('start_screen_monitor');
       setIsMonitoring(true);
-      console.log('🎬 Screen monitoring started');
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : String(err);
       setError(errorMsg);
@@ -77,7 +74,6 @@ export function useScreenMonitor() {
       setError(null);
       await invoke('stop_screen_monitor');
       setIsMonitoring(false);
-      console.log('🛑 Screen monitoring stopped');
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : String(err);
       setError(errorMsg);
@@ -89,7 +85,6 @@ export function useScreenMonitor() {
     try {
       setError(null);
       await invoke('reset_monitor_detector');
-      console.log('🔄 Screen monitor detector reset');
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : String(err);
       setError(errorMsg);

@@ -29,7 +29,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     // Listen for theme changes from other windows
     const unlisten = listen<string>('theme-changed', (event) => {
       const newPersonality = event.payload as Personality;
-      console.log(`🎨 Theme changed event received: ${newPersonality}`);
 
       if (THEMES[newPersonality]) {
         setPersonalityState(newPersonality);
@@ -134,7 +133,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       // Broadcast theme change to all other windows
       await emit('theme-changed', newPersonality);
 
-      console.log(`✨ Theme changed to: ${newPersonality} (broadcasted to all windows)`);
     } catch (error) {
       console.error('Failed to save personality:', error);
       throw error;

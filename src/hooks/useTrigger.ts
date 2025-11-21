@@ -47,7 +47,6 @@ export function useTrigger(
         hasStarted.current = true;
         try {
           await invoke('start_trigger_loop');
-          console.log('✅ Trigger loop started');
         } catch (e) {
           console.error('❌ Failed to start trigger loop:', e);
         }
@@ -55,12 +54,10 @@ export function useTrigger(
 
       const unlisten = await listen<Context>('trigger_fired', (event) => {
         const ctx = event.payload;
-        console.log('🔔 Trigger fired:', ctx.app.name);
         
         // Anti-spam: cooldown de 30s sur le frontend
         const now = Date.now();
         if (now - lastTriggerTime.current < 30000) {
-          console.log('🚫 Trigger ignoré (cooldown frontend 30s)');
           return;
         }
         lastTriggerTime.current = now;
@@ -127,7 +124,6 @@ export function useTrigger(
  */
 export async function startTriggerLoop(): Promise<void> {
   await invoke('start_trigger_loop');
-  console.log('✅ Trigger loop started');
 }
 
 /**
@@ -135,7 +131,6 @@ export async function startTriggerLoop(): Promise<void> {
  */
 export async function dismissBubble(): Promise<void> {
   await invoke('record_bubble_dismissed');
-  console.log('❌ Bubble dismissed');
 }
 
 /**
@@ -143,7 +138,6 @@ export async function dismissBubble(): Promise<void> {
  */
 export async function recordUserAction(): Promise<void> {
   await invoke('record_user_action');
-  console.log('✅ User action recorded');
 }
 
 /**
@@ -158,7 +152,6 @@ export async function getTriggerStats(): Promise<TriggerStats> {
  */
 export async function addToAllowlist(appName: string): Promise<void> {
   await invoke('add_to_allowlist', { appName });
-  console.log(`➕ Added '${appName}' to allowlist`);
 }
 
 /**
@@ -166,6 +159,5 @@ export async function addToAllowlist(appName: string): Promise<void> {
  */
 export async function removeFromAllowlist(appName: string): Promise<void> {
   await invoke('remove_from_allowlist', { appName });
-  console.log(`➖ Removed '${appName}' from allowlist`);
 }
 

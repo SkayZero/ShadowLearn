@@ -42,7 +42,6 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
           icon: "🎛️",
           description: "Afficher le panneau principal",
           action: async () => {
-            console.log("Opening dock");
             onOpenDock();
           },
         });
@@ -56,7 +55,6 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
           icon: "💡",
           description: "Expliquer la sélection",
           action: async () => {
-            console.log("Explaining:", context.selectedText);
             await invoke("chat_with_ai", {
               message: `/expliquer ${context.selectedText}`,
             });
@@ -69,7 +67,6 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
           icon: "🔄",
           description: "Reformuler plus simplement",
           action: async () => {
-            console.log("Simplifying:", context.selectedText);
             await invoke("chat_with_ai", {
               message: `/pasclair ${context.selectedText}`,
             });
@@ -82,7 +79,6 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
           icon: "🌐",
           description: "Traduire le texte",
           action: async () => {
-            console.log("Translating:", context.selectedText);
             await invoke("chat_with_ai", {
               message: `/traduire ${context.selectedText}`,
             });
@@ -98,7 +94,6 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
           icon: "📝",
           description: "Résumer la page",
           action: async () => {
-            console.log("Summarizing page");
             await invoke("chat_with_ai", {
               message: "/résumer cette page",
             });

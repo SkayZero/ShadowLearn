@@ -23,7 +23,6 @@ export function usePlatform(): Platform {
     // Add platform class to document element
     document.documentElement.classList.add(`platform-${platform}`);
 
-    console.log(`[Platform] Detected: ${platform}`);
 
     return () => {
       // Cleanup on unmount

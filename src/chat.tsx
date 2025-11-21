@@ -96,7 +96,6 @@ function ChatWindow() {
     },
     onTogglePause: () => {
       // Pause mode toggle will be implemented with PauseMode component
-      console.log('Toggle pause mode');
     },
     onCloseModal: () => {
       if (isDockOpen) setIsDockOpen(false);
@@ -110,13 +109,10 @@ function ChatWindow() {
     const setupListeners = async () => {
       const { listen } = await import('@tauri-apps/api/event');
       const unlisten = await listen('trigger_fired', (event: any) => {
-        console.log('🎯 Trigger fired event:', event);
-        console.log('🎯 Event payload:', event.payload);
         setTriggerContext(event.payload);
         setShowBubble(true); // Afficher la bulle
       });
 
-      console.log('✅ trigger_fired listener registered');
 
       return () => {
         unlisten();
@@ -172,7 +168,6 @@ function ChatWindow() {
       const newPinnedState = !isPinned;
       await window.setAlwaysOnTop(newPinnedState);
       setIsPinned(newPinnedState);
-      console.log(`Window pinned: ${newPinnedState}`);
     } catch (e) {
       console.error('Failed to toggle pin:', e);
     }
@@ -187,7 +182,6 @@ function ChatWindow() {
         ...prev,
         selectedText,
       }));
-      console.log('Text selected:', selectedText);
     }
   };
 
@@ -198,7 +192,6 @@ function ChatWindow() {
     if (confirmed) {
       setMessages([]);
       setOpportunityContext(null);
-      console.log('Chat cleared, starting new conversation');
     }
   };
 
@@ -511,8 +504,7 @@ Question de l'utilisateur : ${messageText}`;
                 {message.role === 'assistant' && (
                   <MessageFeedback
                     messageId={message.id.toString()}
-                    onFeedback={(helpful) => {
-                      console.log(`Feedback for message ${message.id}:`, helpful);
+                    onFeedback={(_helpful) => {
                     }}
                   />
                 )}
@@ -572,7 +564,6 @@ Question de l'utilisateur : ${messageText}`;
             <button
               onClick={() => {
                 addMessage('user', '👍 Utile');
-                console.log('✅ Feedback: utile');
                 // TODO: Logger feedback dans DB
               }}
               style={{
@@ -590,7 +581,6 @@ Question de l'utilisateur : ${messageText}`;
             <button
               onClick={() => {
                 addMessage('user', '👎 Pas utile');
-                console.log('❌ Feedback: pas utile');
                 // TODO: Logger feedback dans DB
               }}
               style={{
@@ -616,11 +606,9 @@ Question de l'utilisateur : ${messageText}`;
           context={triggerContext}
           isVisible={showBubble}
           onHide={() => {
-            console.log('🔴 Hiding bubble');
             setShowBubble(false);
           }}
           onUserInteraction={() => {
-            console.log('✅ User interaction');
             setShowBubble(false);
             // Ajouter une carte mock basée sur l'app
             const appName = triggerContext?.app?.name || 'Application';
@@ -639,7 +627,6 @@ Question de l'utilisateur : ${messageText}`;
         onOpenDock={() => setIsDockOpen(true)}
         onOpenDigest={() => setIsDigestOpen(true)}
         onOpenChat={(opportunity) => {
-          console.log('[Chat] Opening opportunity in chat:', opportunity);
           setActiveOpportunity(opportunity);
         }}
       />
@@ -665,15 +652,15 @@ Question de l'utilisateur : ${messageText}`;
           <StreakTracker compact={false} />
           
           {/* Personality Selector */}
-          <PersonalitySelector 
+          <PersonalitySelector
             compact={false}
-            onPersonalityChange={(p) => console.log("Personality changed to:", p)}
+            onPersonalityChange={() => {}}
           />
-          
+
           {/* Pause Mode */}
-          <PauseMode 
+          <PauseMode
             compact={false}
-            onPauseChange={(isPaused) => console.log("Pause mode:", isPaused)}
+            onPauseChange={() => {}}
           />
           
           {/* Quick actions */}

@@ -26,7 +26,6 @@ function SpotlightWindow() {
       // Listen for window visibility changes
       const checkVisibility = async () => {
         const visible = await window.isVisible();
-        console.log('🔍 [Spotlight] Window visibility:', visible);
         setIsVisible(visible);
       };
 
@@ -35,7 +34,6 @@ function SpotlightWindow() {
 
       // Listen for show/hide events
       const unlistenShow = await listen('spotlight:show', (event: any) => {
-        console.log('🔍 [Spotlight] Show event received:', event.payload);
         if (event.payload?.opportunity) {
           setOpportunity(event.payload.opportunity);
         }
@@ -43,18 +41,15 @@ function SpotlightWindow() {
       });
 
       const unlistenHide = await listen('spotlight:hide', () => {
-        console.log('🔍 [Spotlight] Hide event received');
         setIsVisible(false);
       });
 
       // Listen for window focus changes (more reliable for detecting visibility)
       const unlistenFocus = await window.listen('tauri://focus', () => {
-        console.log('🔍 [Spotlight] Window focused - showing content');
         setIsVisible(true);
       });
 
       const unlistenBlur = await window.listen('tauri://blur', () => {
-        console.log('🔍 [Spotlight] Window blurred');
         // Don't auto-hide on blur, let user control it
       });
 
@@ -88,19 +83,16 @@ function SpotlightWindow() {
   };
 
   const handleDiscuss = async () => {
-    console.log('[Spotlight] Discuss clicked');
     // TODO: Open chat with opportunity context
     handleClose();
   };
 
   const handleView = async () => {
-    console.log('[Spotlight] View clicked');
     // TODO: Show more details
     handleClose();
   };
 
   const handleIgnore = async () => {
-    console.log('[Spotlight] Ignore clicked');
     if (opportunity) {
       // TODO: Record ignored opportunity
     }

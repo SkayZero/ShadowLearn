@@ -54,7 +54,6 @@ export function useShortcuts(handlers: ShortcutHandlers = {}) {
     // Listen for shortcut events
     const unlisten = listen<ShortcutAction>('shortcut-triggered', (event) => {
       const action = event.payload;
-      console.log('🎹 Shortcut triggered:', action);
 
       switch (action) {
         case 'screenshot-analyze':

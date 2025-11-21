@@ -33,8 +33,7 @@ export default function App() {
 
   // Integrate trigger system with TriggerBubble
   const { triggerContext, showBubble, hideBubble, handleUserInteraction } = useTrigger(
-    (ctx) => {
-      console.log('🔔 Trigger received:', ctx.app.name);
+    (_ctx) => {
       // Context is already managed by the hook
     },
     true, // autoStart

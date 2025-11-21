@@ -45,7 +45,6 @@ export const ScreenMonitorBubble: React.FC<ScreenMonitorBubbleProps> = ({
 
   const handleOpenChat = () => {
     // TODO: Integrate with chat window
-    console.log('Opening chat with suggestion:', suggestion?.text);
     dismiss();
   };
 

@@ -10,6 +10,7 @@ import ReactDOM from 'react-dom/client';
 import { motion } from 'framer-motion';
 import { useTheme } from './contexts/ThemeContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { hexToRgba } from './utils/helpers';
 import './styles/island-globals.css';
 
 type HUDState = 'normal' | 'opportunity' | 'blocked';
@@ -30,7 +31,6 @@ function HUDIndicator() {
       const unlistenState = await listen<{ state: HUDState; count?: number }>(
         'hud:state-change',
         (event) => {
-          console.log('[HUD] State change:', event.payload);
           setState(event.payload.state);
           if (event.payload.count !== undefined) {
             setOpportunityCount(event.payload.count);
@@ -53,7 +53,6 @@ function HUDIndicator() {
 
     if (timeSinceLastClick < 300) {
       // Double-click detected!
-      console.log('[HUD] Double-click detected - opening Spotlight');
       e.preventDefault();
       e.stopPropagation();
 
@@ -63,8 +62,7 @@ function HUDIndicator() {
 
       try {
         const { invoke } = await import('@tauri-apps/api/core');
-        const isVisible = await invoke<boolean>('toggle_spotlight');
-        console.log('[HUD] Spotlight toggled, now visible:', isVisible);
+        await invoke<boolean>('toggle_spotlight');
       } catch (error) {
         console.error('[HUD] Failed to toggle spotlight:', error);
       }
@@ -118,14 +116,6 @@ function HUDIndicator() {
 
   const colors = getStateColors();
   const isPulsing = colors.pulseSpeed > 0;
-
-  // Convert hex to rgba
-  const hexToRgba = (hex: string, alpha: number) => {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-  };
 
   return (
     <div

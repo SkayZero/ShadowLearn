@@ -83,7 +83,6 @@ export function useSmartPositioning(options: SmartPositioningOptions) {
       const pos = initialPosition || calculateOptimalPosition(cursorRef.current);
       setPosition(pos);
       isPositioned.current = true;
-      console.log('🎯 Smart positioning: bulle affichée (position fixe)', pos);
     }
     setIsVisible(true);
   }, [calculateOptimalPosition]);
@@ -91,14 +90,12 @@ export function useSmartPositioning(options: SmartPositioningOptions) {
   const hideBubble = useCallback(() => {
     setIsVisible(false);
     isPositioned.current = false; // Reset pour le prochain affichage
-    console.log('🎯 Smart positioning: bulle cachée');
   }, []);
 
   const forceReposition = useCallback(() => {
     if (isVisible) {
       const newPos = calculateOptimalPosition(cursorRef.current);
       setPosition(newPos);
-      console.log('🎯 Smart positioning: repositionnement forcé', newPos);
     }
   }, [isVisible, calculateOptimalPosition]);
 

@@ -85,7 +85,6 @@ export function usePersonalization() {
   const applySuggestions = useCallback(async (suggestions: SmartSuggestions) => {
     try {
       await invoke('apply_smart_suggestions', { suggestions });
-      console.log('✅ Smart suggestions applied');
     } catch (err) {
       console.error('Failed to apply smart suggestions:', err);
       setError(err as string);
@@ -95,7 +94,6 @@ export function usePersonalization() {
   const savePatterns = useCallback(async () => {
     try {
       await invoke('save_ml_patterns');
-      console.log('💾 ML patterns saved');
     } catch (err) {
       console.error('Failed to save ML patterns:', err);
       setError(err as string);
@@ -106,7 +104,6 @@ export function usePersonalization() {
     try {
       await invoke('load_ml_patterns');
       await fetchPatterns(); // Refresh patterns after loading
-      console.log('📂 ML patterns loaded');
     } catch (err) {
       console.error('Failed to load ML patterns:', err);
       setError(err as string);

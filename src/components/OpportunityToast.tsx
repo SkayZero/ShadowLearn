@@ -35,14 +35,12 @@ export default function OpportunityToast({ onOpenDock: _onOpenDock, onOpenChat }
   
   // Debug: Log state changes
   useEffect(() => {
-    console.log('[OpportunityToast] 📦 State changed - opportunity:', opportunity);
   }, [opportunity]);
 
   // Cleanup timeout on unmount or opportunity change
   useEffect(() => {
     return () => {
       if (timeoutId) {
-        console.log('[OpportunityToast] 🧹 Cleaning up timeout on unmount');
         window.clearTimeout(timeoutId);
       }
     };
@@ -50,20 +48,15 @@ export default function OpportunityToast({ onOpenDock: _onOpenDock, onOpenChat }
 
   // Listen for opportunities from backend
   useEvent<Opportunity>(EVENTS.OPPORTUNITY, (opp) => {
-    console.log('[OpportunityToast] 🎯 Handler called with:', opp);
-    console.log('[OpportunityToast] 🆔 Opportunity ID:', opp.id);
-    console.log('[OpportunityToast] 📊 Confidence:', opp.confidence);
 
     // Skip if already dismissed
     if (shadowStore.isOpportunityDismissed(opp.id)) {
-      console.log('[OpportunityToast] ⚠️ SKIPPED - Already dismissed:', opp.id);
       return;
     }
 
     // Only show medium+ confidence opportunities (0.5+)
     // Backend sends 0.6 for short idle, 0.8 for long idle
     if (opp.confidence >= 0.5) {
-      console.log('[OpportunityToast] ✅ Showing toast for:', opp.id);
       setOpportunity(opp);
       setIsPinned(false); // Reset pinned state for new opportunity
 
@@ -72,21 +65,18 @@ export default function OpportunityToast({ onOpenDock: _onOpenDock, onOpenChat }
 
       // Auto-dismiss after 30s (unless pinned)
       const id = window.setTimeout(() => {
-        console.log('[OpportunityToast] ⏱️ Auto-dismissing:', opp.id);
         setOpportunity(null);
         soundManager.play('toast-out');
         setTimeoutId(null);
       }, 30000);
       setTimeoutId(id);
     } else {
-      console.log('[OpportunityToast] ⚠️ SKIPPED - Low confidence:', opp.confidence);
     }
   });
 
   // Pause timer on hover
   const handleMouseEnter = () => {
     if (timeoutId && !isPinned) {
-      console.log('[OpportunityToast] ⏸️ Pausing timer on hover');
       window.clearTimeout(timeoutId);
       setTimeoutId(null);
     }
@@ -95,9 +85,7 @@ export default function OpportunityToast({ onOpenDock: _onOpenDock, onOpenChat }
   // Resume timer on mouse leave (unless pinned)
   const handleMouseLeave = () => {
     if (!isPinned && opportunity && !timeoutId) {
-      console.log('[OpportunityToast] ▶️ Resuming timer on mouse leave');
       const id = window.setTimeout(() => {
-        console.log('[OpportunityToast] ⏱️ Auto-dismissing after hover:', opportunity.id);
         setOpportunity(null);
         soundManager.play('toast-out');
         setTimeoutId(null);
@@ -109,45 +97,34 @@ export default function OpportunityToast({ onOpenDock: _onOpenDock, onOpenChat }
   const handleView = async () => {
     if (!opportunity) return;
 
-    console.log('[OpportunityToast] 🎬 handleView started for opportunity:', opportunity.id);
 
     // Pin the notification (stop auto-dismiss)
     setIsPinned(true);
     if (timeoutId) {
-      console.log('[OpportunityToast] 📌 Pinning notification');
       window.clearTimeout(timeoutId);
       setTimeoutId(null);
     }
 
     try {
       // Ensure chat window stays visible and focused (backend command)
-      console.log('[OpportunityToast] 🔧 Calling ensure_chat_visible...');
       await invoke("ensure_chat_visible");
-      console.log('[OpportunityToast] ✅ ensure_chat_visible succeeded');
 
       // Record user accepted
-      console.log('[OpportunityToast] 📝 Recording opportunity response...');
       await invoke("record_opportunity_response", {
         opportunityId: opportunity.id,
         accepted: true,
       });
-      console.log('[OpportunityToast] ✅ Response recorded');
 
       // Open chat with opportunity details
-      console.log('[OpportunityToast] 💬 Calling onOpenChat...');
       onOpenChat?.(opportunity);
-      console.log('[OpportunityToast] ✅ onOpenChat called');
 
       // TESTING: Delay hiding toast to see if it helps with window visibility
-      console.log('[OpportunityToast] ⏳ Waiting 500ms before hiding toast...');
       await new Promise(resolve => setTimeout(resolve, 500));
 
       // Hide toast after opening chat
-      console.log('[OpportunityToast] 👋 Hiding toast...');
       setOpportunity(null);
       setIsPinned(false);
       soundManager.play('toast-out');
-      console.log('[OpportunityToast] ✅ handleView completed successfully');
     } catch (e) {
       console.error("[OpportunityToast] ❌ Error in handleView:", e);
     }

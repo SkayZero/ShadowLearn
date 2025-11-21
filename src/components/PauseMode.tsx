@@ -57,7 +57,6 @@ export function PauseMode({ compact = false, onPauseChange }: PauseModeProps) {
   const pauseActivity = async (duration: PauseDuration) => {
     try {
       // await invoke("pause_activity", { duration });
-      console.log("Activity paused for:", duration);
       setIsPaused(true);
       setShowDurationPicker(false);
       
@@ -76,7 +75,6 @@ export function PauseMode({ compact = false, onPauseChange }: PauseModeProps) {
   const resumeActivity = async () => {
     try {
       // await invoke("resume_activity");
-      console.log("Activity resumed");
       setIsPaused(false);
       setRemainingTime(null);
       onPauseChange?.(false);

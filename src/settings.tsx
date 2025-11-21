@@ -51,7 +51,6 @@ function SettingsWindow() {
   const handleUnmute = async (app: string) => {
     try {
       await invoke('unmute_app', { appName: app });
-      console.log(`✅ Unmuted ${app}`);
       await loadSettings();
     } catch (error) {
       console.error('Failed to unmute app:', error);

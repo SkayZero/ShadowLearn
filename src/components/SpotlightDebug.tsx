@@ -19,14 +19,12 @@ export function SpotlightDebug() {
     try {
       const config = await invoke<any>('get_shortcuts_config');
       setCurrentShortcut(config.toggle_spotlight);
-      console.log('📋 Current shortcut:', config.toggle_spotlight);
     } catch (error) {
       console.error('Failed to load shortcut config:', error);
     }
   };
 
   const handleToggleSpotlight = async () => {
-    console.log('🔍 [DEBUG] Toggle Spotlight...');
     setStatus('⏳ Ouverture...');
 
     try {
@@ -42,7 +40,6 @@ export function SpotlightDebug() {
 
   const handleTestHUDClick = async () => {
     setStatus('🔍 Test du HUD...');
-    console.log('[DEBUG] Simulating HUD click...');
 
     // Simulate what the HUD does
     try {

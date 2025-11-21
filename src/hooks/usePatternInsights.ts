@@ -168,7 +168,6 @@ export function usePatternInsights() {
   const savePatterns = useCallback(async () => {
     try {
       await invoke('save_patterns_to_disk');
-      console.log('[Pattern] ✅ Patterns saved to disk');
     } catch (err) {
       console.error('[Pattern] Failed to save patterns:', err);
       setError(String(err));
@@ -182,7 +181,6 @@ export function usePatternInsights() {
       setPatterns([]);
       setPrediction(null);
       setStats(null);
-      console.log('[Pattern] 🗑️ Patterns cleared');
     } catch (err) {
       console.error('[Pattern] Failed to clear patterns:', err);
       setError(String(err));
