@@ -151,9 +151,11 @@ function SpotlightWindow() {
             transition={{ type: 'spring', damping: 30, stiffness: 400 }}
             onClick={(e) => e.stopPropagation()}
             style={{
-              width: '900px',
-              height: '700px',
-              boxSizing: 'border-box', // Include padding in dimensions
+              width: '90%',
+              maxWidth: '800px',
+              height: '90%',
+              maxHeight: '600px',
+              boxSizing: 'border-box',
               background: 'var(--glass-bg)',
               backdropFilter: 'var(--glass-backdrop)',
               WebkitBackdropFilter: 'var(--glass-backdrop)',
@@ -161,7 +163,7 @@ function SpotlightWindow() {
               borderRadius: '24px',
               boxShadow: 'var(--glass-shadow)',
               padding: '32px',
-              overflow: 'hidden',
+              overflow: 'auto',
               display: 'flex',
               flexDirection: 'column',
             }}
