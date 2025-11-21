@@ -18,12 +18,13 @@ pub struct ShortcutConfig {
 
 impl Default for ShortcutConfig {
     fn default() -> Self {
-        // Using Ctrl+Shift+L (Cmd+Shift+L on macOS)
-        // L for "Learn" - ShadowLearn's primary function
+        // Using Cmd+K (simple, like many apps use for quick access)
+        // K for "Knowledge" / "Kompanion"
+        // Less likely to conflict than Cmd+Shift+L (used by Chrome, VS Code, etc.)
         #[cfg(target_os = "macos")]
-        let spotlight_shortcut = "Cmd+Shift+L";
+        let spotlight_shortcut = "Cmd+K";
         #[cfg(not(target_os = "macos"))]
-        let spotlight_shortcut = "Ctrl+Shift+L";
+        let spotlight_shortcut = "Ctrl+K";
 
         Self {
             screenshot_analyze: "Ctrl+Shift+S".to_string(),
@@ -126,40 +127,59 @@ impl ShortcutManager {
         let app_handle = app.clone();
         let action_clone = action.clone();
 
-        app.global_shortcut()
+        let register_result = app.global_shortcut()
             .on_shortcut(shortcut_parsed, move |_app, _shortcut, event| {
                 if event.state == ShortcutState::Pressed {
                     info!("🎹 Shortcut triggered: {:?}", action_clone);
 
                     // Handle ToggleSpotlight directly in backend
                     if matches!(action_clone, ShortcutAction::ToggleSpotlight) {
+                        info!("🔍 Processing ToggleSpotlight shortcut");
                         if let Some(spotlight_window) = app_handle.get_webview_window("spotlight") {
                             match spotlight_window.is_visible() {
                                 Ok(true) => {
-                                    info!("🔍 Hiding Spotlight window");
+                                    info!("🔍 Spotlight currently visible - hiding");
                                     if let Err(e) = spotlight_window.hide() {
-                                        error!("Failed to hide spotlight: {}", e);
+                                        error!("❌ Failed to hide spotlight: {}", e);
+                                    } else {
+                                        info!("✅ Spotlight hidden successfully");
                                     }
                                 }
                                 Ok(false) => {
-                                    info!("🔍 Showing Spotlight window");
+                                    info!("🔍 Spotlight currently hidden - showing");
+
+                                    // Try to show
                                     if let Err(e) = spotlight_window.show() {
-                                        error!("Failed to show spotlight: {}", e);
+                                        error!("❌ Failed to show spotlight: {}", e);
+                                    } else {
+                                        info!("✅ Spotlight shown successfully");
                                     }
+
+                                    // Try to focus
                                     if let Err(e) = spotlight_window.set_focus() {
-                                        error!("Failed to focus spotlight: {}", e);
+                                        error!("❌ Failed to focus spotlight: {}", e);
+                                    } else {
+                                        info!("✅ Spotlight focused successfully");
                                     }
+
+                                    // Try to bring to front
+                                    if let Err(e) = spotlight_window.set_always_on_top(true) {
+                                        error!("❌ Failed to set always on top: {}", e);
+                                    }
+
                                     // Emit event to tell Spotlight frontend to show content
                                     if let Err(e) = app_handle.emit("spotlight:show", ()) {
-                                        error!("Failed to emit spotlight:show: {}", e);
+                                        error!("❌ Failed to emit spotlight:show: {}", e);
+                                    } else {
+                                        info!("✅ Emitted spotlight:show event");
                                     }
                                 }
                                 Err(e) => {
-                                    error!("Failed to check spotlight visibility: {}", e);
+                                    error!("❌ Failed to check spotlight visibility: {}", e);
                                 }
                             }
                         } else {
-                            error!("Spotlight window not found");
+                            error!("❌ Spotlight window not found!");
                         }
                     } else {
                         // Emit event to frontend for other shortcuts
@@ -168,8 +188,12 @@ impl ShortcutManager {
                         }
                     }
                 }
-            })
-            .map_err(|e| format!("Failed to register shortcut '{}': {}", shortcut, e))?;
+            });
+
+        if let Err(e) = register_result {
+            error!("❌ Failed to register shortcut '{}': {}", shortcut, e);
+            return Err(format!("Failed to register shortcut '{}': {}", shortcut, e));
+        }
 
         // Store in registry
         let mut registry = self.registered_shortcuts.lock().await;

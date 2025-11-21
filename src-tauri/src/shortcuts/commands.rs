@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use tauri::Emitter;
 use tokio::sync::Mutex;
-use tracing::info;
+use tracing::{error, info};
 
 /// Get shortcut configuration
 #[tauri::command]
@@ -43,30 +43,56 @@ pub async fn trigger_shortcut_action(
 pub async fn toggle_spotlight(app: tauri::AppHandle) -> Result<bool, String> {
     use tauri::Manager;
 
-    info!("🔍 Manually toggling Spotlight window");
+    info!("🔍 [toggle_spotlight] Starting...");
 
     if let Some(spotlight_window) = app.get_webview_window("spotlight") {
         let is_visible = spotlight_window.is_visible().unwrap_or(false);
+        info!("🔍 [toggle_spotlight] Current visibility: {}", is_visible);
 
         if is_visible {
-            info!("🔍 Hiding Spotlight window");
-            spotlight_window.hide()
-                .map_err(|e| format!("Failed to hide spotlight: {}", e))?;
+            info!("🔍 [toggle_spotlight] Hiding window...");
+            if let Err(e) = spotlight_window.hide() {
+                error!("❌ [toggle_spotlight] Failed to hide: {}", e);
+                return Err(format!("Failed to hide spotlight: {}", e));
+            }
+            info!("✅ [toggle_spotlight] Hidden successfully");
             Ok(false)
         } else {
-            info!("🔍 Showing Spotlight window");
-            spotlight_window.show()
-                .map_err(|e| format!("Failed to show spotlight: {}", e))?;
-            spotlight_window.set_focus()
-                .map_err(|e| format!("Failed to focus spotlight: {}", e))?;
+            info!("🔍 [toggle_spotlight] Showing window...");
 
-            // Emit event to tell Spotlight frontend to show content
-            app.emit("spotlight:show", ())
-                .map_err(|e| format!("Failed to emit spotlight:show: {}", e))?;
+            // Step 1: Show
+            if let Err(e) = spotlight_window.show() {
+                error!("❌ [toggle_spotlight] Failed to show: {}", e);
+                return Err(format!("Failed to show spotlight: {}", e));
+            }
+            info!("✅ [toggle_spotlight] Show called successfully");
 
+            // Step 2: Set always on top
+            if let Err(e) = spotlight_window.set_always_on_top(true) {
+                error!("❌ [toggle_spotlight] Failed to set always on top: {}", e);
+            } else {
+                info!("✅ [toggle_spotlight] Always on top set");
+            }
+
+            // Step 3: Focus
+            if let Err(e) = spotlight_window.set_focus() {
+                error!("❌ [toggle_spotlight] Failed to focus: {}", e);
+            } else {
+                info!("✅ [toggle_spotlight] Focused successfully");
+            }
+
+            // Step 4: Emit event
+            if let Err(e) = app.emit("spotlight:show", ()) {
+                error!("❌ [toggle_spotlight] Failed to emit event: {}", e);
+            } else {
+                info!("✅ [toggle_spotlight] Event emitted");
+            }
+
+            info!("✅ [toggle_spotlight] Complete - window should be visible");
             Ok(true)
         }
     } else {
+        error!("❌ [toggle_spotlight] Spotlight window not found!");
         Err("Spotlight window not found".to_string())
     }
 }
