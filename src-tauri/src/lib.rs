@@ -1,5 +1,5 @@
 use std::sync::Arc;
-use tauri::{AppHandle, Emitter, Manager, PhysicalPosition};
+use tauri::{AppHandle, Emitter, Listener, Manager, PhysicalPosition};
 use tauri_plugin_window_state::StateFlags;
 use tokio::sync::Mutex;
 use tracing::{error, info, warn};
