@@ -1624,15 +1624,32 @@ pub async fn run() {
                 info!("✅ Found spotlight window, configuring...");
 
                 // Force window size to 900×700 (Phase 3A testing size)
+                // IMPORTANT: Must override window-state plugin which restores saved size
                 use tauri::Size;
+
+                // Try immediately
                 if let Err(e) = spotlight.set_size(Size::Physical(tauri::PhysicalSize {
                     width: 900,
                     height: 700,
                 })) {
-                    warn!("⚠️ Failed to set spotlight size: {}", e);
+                    warn!("⚠️ Failed to set spotlight size (immediate): {}", e);
                 } else {
-                    info!("📐 Spotlight size forced to 900×700");
+                    info!("📐 Spotlight size set to 900×700 (immediate)");
                 }
+
+                // Also set after delay to override window-state restoration
+                let spotlight_clone = spotlight.clone();
+                tokio::spawn(async move {
+                    tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
+                    if let Err(e) = spotlight_clone.set_size(Size::Physical(tauri::PhysicalSize {
+                        width: 900,
+                        height: 700,
+                    })) {
+                        warn!("⚠️ Failed to set spotlight size (delayed): {}", e);
+                    } else {
+                        info!("📐 Spotlight size FORCED to 900×700 (delayed, overriding window-state)");
+                    }
+                });
 
                 // Ensure it's hidden initially
                 let _ = spotlight.hide();
