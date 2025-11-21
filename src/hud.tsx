@@ -24,6 +24,8 @@ function HUDIndicator() {
   const lastClickRef = useRef<number>(0);
 
   useEffect(() => {
+    console.log('[HUD] Component mounted, setting up listeners...');
+
     const setupListeners = async () => {
       const { listen } = await import('@tauri-apps/api/event');
 
@@ -31,6 +33,7 @@ function HUDIndicator() {
       const unlistenState = await listen<{ state: HUDState; count?: number }>(
         'hud:state-change',
         (event) => {
+          console.log('[HUD] State change event received:', event.payload);
           setState(event.payload.state);
           if (event.payload.count !== undefined) {
             setOpportunityCount(event.payload.count);
@@ -42,18 +45,22 @@ function HUDIndicator() {
       const unlistenPulse = await listen<{ state: HUDState }>(
         'hud:pulse',
         (event) => {
-          console.log('🔔 HUD pulse received:', event.payload);
+          console.log('🔔 [HUD] Pulse event received:', event.payload);
           setState(event.payload.state);
           setOpportunityCount((prev) => prev + 1);
 
           // Auto-reset to normal after 30 seconds if no action
           setTimeout(() => {
+            console.log('[HUD] Auto-reset to normal after 30s');
             setState('normal');
           }, 30000);
         }
       );
 
+      console.log('[HUD] Event listeners registered successfully');
+
       return () => {
+        console.log('[HUD] Cleaning up listeners');
         unlistenState();
         unlistenPulse();
       };

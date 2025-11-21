@@ -166,8 +166,8 @@ function SpotlightWindow() {
             transition={{ type: 'spring', damping: 30, stiffness: 400 }}
             onClick={(e) => e.stopPropagation()}
             style={{
-              width: '600px',
-              height: '500px',
+              width: '900px',
+              height: '700px',
               background: 'var(--glass-bg)',
               backdropFilter: 'var(--glass-backdrop)',
               WebkitBackdropFilter: 'var(--glass-backdrop)',
