@@ -165,9 +165,9 @@ impl ShortcutManager {
                                         let monitor_size = monitor.size();
                                         let monitor_pos = monitor.position();
 
-                                        // Spotlight window size: 600x500
-                                        let spotlight_width = 600;
-                                        let spotlight_height = 500;
+                                        // Spotlight window size: 900x700 (for Phase 3A testing)
+                                        let spotlight_width = 900;
+                                        let spotlight_height = 700;
 
                                         // Calculate position:
                                         // X: horizontally centered
