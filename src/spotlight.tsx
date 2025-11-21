@@ -130,11 +130,6 @@ function SpotlightWindow() {
     }
   };
 
-  // No opportunity? Don't show Spotlight
-  if (!latestOpportunity) {
-    return null;
-  }
-
   return (
     <div
       style={{
@@ -196,32 +191,49 @@ function SpotlightWindow() {
               </h2>
             </div>
 
-            {/* Opportunity Badge */}
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '6px 14px',
-                background: 'linear-gradient(135deg, rgba(135, 206, 235, 0.25), rgba(16, 185, 129, 0.25))',
-                border: '1px solid var(--accent-light)',
-                borderRadius: '12px',
-                marginBottom: '20px',
-              }}
-            >
-              <span style={{ fontSize: '18px' }}>{getTypeEmoji(latestOpportunity.type)}</span>
-              <span
+            {/* Opportunity Badge or Empty State */}
+            {latestOpportunity ? (
+              <div
                 style={{
-                  fontSize: '13px',
-                  fontWeight: '600',
-                  color: 'var(--accent-primary)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '6px 14px',
+                  background: 'linear-gradient(135deg, rgba(135, 206, 235, 0.25), rgba(16, 185, 129, 0.25))',
+                  border: '1px solid var(--accent-light)',
+                  borderRadius: '12px',
+                  marginBottom: '20px',
                 }}
               >
-                {latestOpportunity.type} • {Math.round(latestOpportunity.confidence * 100)}% confiance
-              </span>
-            </div>
+                <span style={{ fontSize: '18px' }}>{getTypeEmoji(latestOpportunity.type)}</span>
+                <span
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: '600',
+                    color: 'var(--accent-primary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                  }}
+                >
+                  {latestOpportunity.type} • {Math.round(latestOpportunity.confidence * 100)}% confiance
+                </span>
+              </div>
+            ) : (
+              <div
+                style={{
+                  padding: '12px 16px',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  borderRadius: '12px',
+                  marginBottom: '20px',
+                  textAlign: 'center',
+                }}
+              >
+                <span style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>
+                  Aucune opportunité en attente
+                </span>
+              </div>
+            )}
 
             {/* Content Area - flex grow to take available space */}
             <div
@@ -232,34 +244,49 @@ function SpotlightWindow() {
                 minHeight: 0, // Allow shrinking
               }}
             >
-              {/* Title */}
-              <h3
-                style={{
-                  fontSize: '18px',
-                  fontWeight: '700',
-                  color: 'var(--text-primary)',
-                  marginBottom: '12px',
-                  letterSpacing: '-0.3px',
-                }}
-              >
-                {latestOpportunity.title}
-              </h3>
+              {latestOpportunity ? (
+                <>
+                  {/* Title */}
+                  <h3
+                    style={{
+                      fontSize: '18px',
+                      fontWeight: '700',
+                      color: 'var(--text-primary)',
+                      marginBottom: '12px',
+                      letterSpacing: '-0.3px',
+                    }}
+                  >
+                    {latestOpportunity.title}
+                  </h3>
 
-              {/* Description */}
-              <p
-                style={{
-                  fontSize: '15px',
-                  lineHeight: '1.6',
-                  color: 'var(--text-secondary)',
-                  marginBottom: '20px',
-                  fontWeight: '400',
-                }}
-              >
-                {latestOpportunity.description}
-              </p>
+                  {/* Description */}
+                  <p
+                    style={{
+                      fontSize: '15px',
+                      lineHeight: '1.6',
+                      color: 'var(--text-secondary)',
+                      marginBottom: '20px',
+                      fontWeight: '400',
+                    }}
+                  >
+                    {latestOpportunity.description}
+                  </p>
+                </>
+              ) : (
+                <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+                  <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
+                  <p style={{ fontSize: '16px', color: 'var(--text-primary)', marginBottom: '8px', fontWeight: '600' }}>
+                    Aucune opportunité disponible
+                  </p>
+                  <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                    Trigger une nouvelle opportunité depuis le panneau debug<br/>
+                    pour tester le système.
+                  </p>
+                </div>
+              )}
 
               {/* Context */}
-              {latestOpportunity.context && (
+              {latestOpportunity && latestOpportunity.context && (
                 <div
                   style={{
                     fontSize: '14px',
@@ -297,7 +324,7 @@ function SpotlightWindow() {
               )}
 
               {/* View Modal (only when viewModal is true) */}
-              {viewModal && (
+              {viewModal && latestOpportunity && (
                 <div
                   style={{
                     marginTop: '12px',
@@ -336,14 +363,15 @@ function SpotlightWindow() {
             </div>
 
             {/* Actions - fixed at bottom */}
-            <div
-              style={{
-                display: 'flex',
-                gap: '12px',
-                marginTop: 'auto',
-              }}
-            >
-              <button
+            {latestOpportunity && (
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '12px',
+                  marginTop: 'auto',
+                }}
+              >
+                <button
                 onClick={handleView}
                 style={{
                   flex: 1,
@@ -423,6 +451,7 @@ function SpotlightWindow() {
                 ✕
               </button>
             </div>
+            )}
 
             {/* Hint */}
             <p
