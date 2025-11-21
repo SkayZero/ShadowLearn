@@ -185,10 +185,7 @@
     "macOS": {
       "minimumSystemVersion": "10.13",
       "entitlements": "entitlements.plist",
-      "infoPlist": {
-        "NSAppleEventsUsageDescription": "ShadowLearn utilise les raccourcis clavier globaux pour accéder rapidement au Spotlight d'apprentissage.",
-        "NSInputMonitoringUsageDescription": "ShadowLearn a besoin de surveiller le clavier pour les raccourcis globaux (ex: Cmd+J pour ouvrir Spotlight)."
-      },
+      "infoPlist": "Info.plist",
       "exceptionDomain": null,
       "frameworks": [],
       "providerShortName": null,
