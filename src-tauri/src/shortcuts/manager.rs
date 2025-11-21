@@ -160,29 +160,43 @@ impl ShortcutManager {
                                 Ok(false) => {
                                     info!("🔍 Spotlight currently hidden - showing");
 
+                                    // DEBUG: Check current size BEFORE any changes
+                                    if let Ok(size_before) = spotlight_window.outer_size() {
+                                        warn!("📏 [DEBUG] Size BEFORE set_size: {}×{}", size_before.width, size_before.height);
+                                    }
+
                                     // FORCE size to 900×700 BEFORE centering
-                                    // This overrides any cached size from window-state plugin
                                     if let Err(e) = spotlight_window.set_size(Size::Physical(PhysicalSize {
                                         width: 900,
                                         height: 700,
                                     })) {
                                         error!("❌ Failed to set spotlight size: {}", e);
                                     } else {
-                                        info!("📐 Spotlight size forced to 900×700");
+                                        info!("📐 set_size(900×700) called successfully");
                                     }
 
-                                    // Center the window on screen (AFTER setting correct size)
+                                    // DEBUG: Check size AFTER set_size
+                                    if let Ok(size_after) = spotlight_window.outer_size() {
+                                        warn!("📏 [DEBUG] Size AFTER set_size: {}×{}", size_after.width, size_after.height);
+                                    }
+
+                                    // Center the window on screen
                                     if let Err(e) = spotlight_window.center() {
                                         warn!("⚠️ Failed to center spotlight: {}", e);
                                     } else {
-                                        info!("📍 Spotlight centered on screen");
+                                        info!("📍 Spotlight centered");
                                     }
 
                                     // Try to show
                                     if let Err(e) = spotlight_window.show() {
                                         error!("❌ Failed to show spotlight: {}", e);
                                     } else {
-                                        info!("✅ Spotlight shown successfully");
+                                        info!("✅ Spotlight shown");
+                                    }
+
+                                    // DEBUG: Final size check AFTER show
+                                    if let Ok(size_final) = spotlight_window.outer_size() {
+                                        warn!("📏 [DEBUG] Size AFTER show: {}×{}", size_final.width, size_final.height);
                                     }
 
                                     // Try to focus
