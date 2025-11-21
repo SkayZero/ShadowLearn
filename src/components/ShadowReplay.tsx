@@ -295,7 +295,7 @@ export function ShadowReplay({ isOpen, onClose }: ShadowReplayProps) {
                         key={event.id}
                         event={event}
                         index={i}
-                        isPlaying={playbackState?.is_playing && playbackState.current_index === i}
+                        isPlaying={!!(playbackState?.is_playing && playbackState.current_index === i)}
                       />
                     ))}
                   </div>

@@ -271,7 +271,7 @@ function OverviewTab({ metrics }: { metrics: any }) {
             Best Hours to Work
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {top_productive_hours.slice(0, 5).map((hour, i) => (
+            {top_productive_hours.slice(0, 5).map((hour: any, i: number) => (
               <motion.div
                 key={hour.hour}
                 initial={{ opacity: 0, x: -10 }}
