@@ -3,7 +3,7 @@
  * Provides theme system based on selected personality
  */
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Personality, Theme, THEMES, getTheme, getThemeCSSVariables } from '../lib/themes';
 import { invoke } from '@tauri-apps/api/core';
 import { listen, emit } from '@tauri-apps/api/event';

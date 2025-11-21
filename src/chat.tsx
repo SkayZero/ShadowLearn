@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import HeaderDraggable from './components/HeaderDraggable';
 import WindowManager from './components/WindowManager';
 import { TriggerBubble } from './components/TriggerBubble';
-import { StatusIndicator } from './components/StatusIndicator';
 import { MessageFeedback } from './components/MessageFeedback';
 import OpportunityToast from './components/OpportunityToast';
 import { SlashCommands } from './components/SlashCommands';
@@ -20,7 +19,6 @@ import { SpotlightDebug } from './components/SpotlightDebug';
 import { LayoutProvider } from './contexts/LayoutContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import useWindowLifecycle from './hooks/useWindowLifecycle';
-import useDesktopFocus from './hooks/useDesktopFocus';
 import useActivityDetection from './hooks/useActivityDetection';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import type { Opportunity } from './lib';
@@ -169,7 +167,6 @@ function ChatWindow() {
 
   const togglePin = async () => {
     try {
-      const { invoke } = await import('@tauri-apps/api/core');
       const { getCurrentWindow } = await import('@tauri-apps/api/window');
       const window = getCurrentWindow();
 
@@ -377,7 +374,7 @@ Question de l'utilisateur : ${messageText}`;
           <OpportunityLayer
             opportunity={activeOpportunity}
             onClose={() => setActiveOpportunity(null)}
-            onDiscuss={(text) => {
+            onDiscuss={(_text) => {
               // Activate opportunity context for intelligent discussion
               setOpportunityContext({
                 opportunity: activeOpportunity,

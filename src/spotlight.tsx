@@ -14,7 +14,7 @@ import type { Opportunity } from './lib';
 import './styles/island-globals.css';
 
 function SpotlightWindow() {
-  const { theme } = useTheme();
+  useTheme(); // Keep theme sync
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
   const [isVisible, setIsVisible] = useState(false); // Hidden by default
 

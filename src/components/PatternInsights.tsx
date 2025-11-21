@@ -3,7 +3,7 @@
  * Phase 2.1 - Display learned workflow patterns and predictions
  */
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   usePatternInsights,

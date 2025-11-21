@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "../contexts/ThemeContext";
-import { Personality, THEMES } from "../lib/themes";
+import { Personality } from "../lib/themes";
 
 interface PersonalityOption {
   id: Personality;

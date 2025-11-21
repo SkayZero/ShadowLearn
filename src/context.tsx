@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import { invoke } from '@tauri-apps/api/core';
 import HeaderDraggable from './components/HeaderDraggable';
 import WindowManager from './components/WindowManager';
-import { AmbientLED } from './components/AmbientLED';
 import { ContextPreviewCard } from './components/ContextPreviewCard';
 import { ThemeProvider } from './contexts/ThemeContext';
 import useWindowLifecycle from './hooks/useWindowLifecycle';

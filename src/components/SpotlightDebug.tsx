@@ -3,14 +3,12 @@
  * Allows user to configure shortcut and test Spotlight
  */
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 
 export function SpotlightDebug() {
   const [status, setStatus] = useState<string>('');
   const [currentShortcut, setCurrentShortcut] = useState<string>('Cmd+J');
-  const [customShortcut, setCustomShortcut] = useState<string>('');
-  const [isEditing, setIsEditing] = useState(false);
 
   // Load current shortcut on mount
   useEffect(() => {
@@ -181,7 +179,6 @@ export function SpotlightDebug() {
                 cursor: 'pointer',
               }}
               onClick={() => {
-                setCustomShortcut(suggestion.key);
                 setStatus(`💡 ${suggestion.key} copié`);
                 setTimeout(() => setStatus(''), 2000);
               }}

@@ -4,7 +4,7 @@
  * Prevents overlap and adapts to window size
  */
 
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 
 type Zone = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'center';
 

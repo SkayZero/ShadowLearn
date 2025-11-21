@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useProductivity } from '../hooks/useProductivity';
 import type { DayMetrics } from '../hooks/useProductivity';

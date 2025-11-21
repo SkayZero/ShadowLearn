@@ -6,7 +6,6 @@
 
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import { getCurrentWindow } from '@tauri-apps/api/window';
 import { motion } from 'framer-motion';
 import { useTheme } from './contexts/ThemeContext';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -15,7 +14,7 @@ import './styles/island-globals.css';
 type HUDState = 'idle' | 'opportunity' | 'urgent';
 
 function HUDIndicator() {
-  const { theme } = useTheme();
+  useTheme(); // Keep theme sync
   const [state, setState] = useState<HUDState>('idle');
   const [opportunityCount, setOpportunityCount] = useState(0);
 

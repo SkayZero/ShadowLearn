@@ -24,7 +24,7 @@ interface OpportunityToastProps {
   onOpenChat?: (opportunity: Opportunity) => void;
 }
 
-export default function OpportunityToast({ onOpenDock, onOpenChat }: OpportunityToastProps) {
+export default function OpportunityToast({ onOpenDock: _onOpenDock, onOpenChat }: OpportunityToastProps) {
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
   const [timeoutId, setTimeoutId] = useState<number | null>(null);
   const [isPinned, setIsPinned] = useState(false);

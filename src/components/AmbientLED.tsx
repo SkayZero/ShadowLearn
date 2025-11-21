@@ -4,8 +4,7 @@
  */
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
+import { useState } from "react";
 import { useEvent, EVENTS, type FlowStateData } from "../lib";
 import { useTheme } from "../contexts/ThemeContext";
 

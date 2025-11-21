@@ -177,7 +177,7 @@ export const eventBus = new EventBus();
 // React Hook for Event Listening
 // ============================================================================
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 
 /**
  * React hook for listening to Tauri events
