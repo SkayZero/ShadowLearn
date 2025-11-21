@@ -1385,8 +1385,8 @@ pub async fn run() {
             let shortcut_mgr_clone = shortcut_mgr.inner().clone();
             let app_handle = app.handle().clone();
 
-            // Use block_on instead of spawn to ensure shortcuts are registered before continuing
-            tauri::async_runtime::block_on(async move {
+            // Spawn async task to register shortcuts (cannot use block_on inside Tauri runtime)
+            tauri::async_runtime::spawn(async move {
                 info!("🎹 Inside async block - acquiring lock...");
                 let manager = shortcut_mgr_clone.lock().await;
                 info!("🎹 Lock acquired - calling register_all...");
@@ -1396,7 +1396,7 @@ pub async fn run() {
                     info!("✅ All global shortcuts registered");
                 }
             });
-            info!("🎹 After shortcut registration block");
+            info!("🎹 Shortcut registration task spawned");
 
             // Setup HUD click listener to show Spotlight
             let app_handle_for_hud = app.handle().clone();
