@@ -1116,17 +1116,23 @@ pub async fn run() {
             }
 
             // Register global shortcuts
+            info!("🎹 About to register global shortcuts...");
             let shortcut_mgr = app.state::<Arc<Mutex<shortcuts::ShortcutManager>>>();
             let shortcut_mgr_clone = shortcut_mgr.inner().clone();
             let app_handle = app.handle().clone();
-            tauri::async_runtime::spawn(async move {
+
+            // Use block_on instead of spawn to ensure shortcuts are registered before continuing
+            tauri::async_runtime::block_on(async move {
+                info!("🎹 Inside async block - acquiring lock...");
                 let manager = shortcut_mgr_clone.lock().await;
+                info!("🎹 Lock acquired - calling register_all...");
                 if let Err(e) = manager.register_all(&app_handle).await {
                     error!("❌ Failed to register shortcuts: {}", e);
                 } else {
                     info!("✅ All global shortcuts registered");
                 }
             });
+            info!("🎹 After shortcut registration block");
 
             // Setup HUD click listener to show Spotlight
             let app_handle_for_hud = app.handle().clone();
