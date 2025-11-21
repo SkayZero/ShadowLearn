@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Description for accessibility permissions (needed for global shortcuts) -->
+    <key>NSAppleEventsUsageDescription</key>
+    <string>ShadowLearn utilise les raccourcis clavier globaux pour accéder rapidement au Spotlight d'apprentissage.</string>
+
+    <!-- Description for keyboard monitoring (may be needed for global shortcuts) -->
+    <key>NSInputMonitoringUsageDescription</key>
+    <string>ShadowLearn a besoin de surveiller le clavier pour les raccourcis globaux (ex: Cmd+J pour ouvrir Spotlight).</string>
+
+    <!-- App stays active in background -->
+    <key>LSUIElement</key>
+    <false/>
+
+    <!-- Allow background execution -->
+    <key>LSBackgroundOnly</key>
+    <false/>
+</dict>
+</plist>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Allow global shortcuts and keyboard event monitoring -->
+    <key>com.apple.security.automation.apple-events</key>
+    <true/>
+
+    <!-- Network client for API calls -->
+    <key>com.apple.security.network.client</key>
+    <true/>
+
+    <!-- Allow app to remain active in background -->
+    <key>com.apple.security.app-sandbox</key>
+    <false/>
+</dict>
+</plist>

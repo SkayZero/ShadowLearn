@@ -108,6 +108,17 @@
       "csp": null,
       "capabilities": [
         {
+          "identifier": "global-shortcuts",
+          "description": "Global keyboard shortcuts for all windows",
+          "permissions": [
+            "global-shortcut:allow-is-registered",
+            "global-shortcut:allow-register",
+            "global-shortcut:allow-register-all",
+            "global-shortcut:allow-unregister",
+            "global-shortcut:allow-unregister-all"
+          ]
+        },
+        {
           "identifier": "main-window",
           "windows": ["main"],
           "permissions": [
@@ -170,6 +181,15 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "macOS": {
+      "minimumSystemVersion": "10.13",
+      "entitlements": "entitlements.plist",
+      "infoString": "Info.plist",
+      "exceptionDomain": null,
+      "frameworks": [],
+      "providerShortName": null,
+      "signingIdentity": null
+    }
   }
 }
