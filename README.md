@@ -34,13 +34,13 @@ pnpm tauri dev
 
 **Jour 1 (2h)** — Comprendre le projet :
 1. [README.md](README.md) (5 min) ← Vous êtes ici
-2. **[CONTEXT.md](CONTEXT.md)** (45 min) ← 🔥 **COMMENCEZ ICI** (toute la mémoire du projet)
-3. [SETUP.md](SETUP.md) (30 min)
+2. **[CONTEXT.md](docs/CONTEXT.md)** (45 min) ← 🔥 **COMMENCEZ ICI** (toute la mémoire du projet)
+3. [SETUP.md](docs/SETUP.md) (30 min)
 4. Lancer l'app en dev (30 min)
 
 **Jour 2 (3h)** — Architecture et pratique :
-1. [SYSTEM_OVERVIEW.md](SYSTEM_OVERVIEW.md) (1h) — Architecture + workflows
-2. [MAINTENANCE.md](MAINTENANCE.md) (30 min) — Où modifier quoi
+1. [SYSTEM_OVERVIEW.md](docs/SYSTEM_OVERVIEW.md) (1h) — Architecture + workflows
+2. [MAINTENANCE.md](docs/MAINTENANCE.md) (30 min) — Où modifier quoi
 3. Première modification simple (1h)
 
 **Jour 3+** — Approfondissement :
