@@ -13,7 +13,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from './contexts/ThemeContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { OpportunityProvider, useOpportunities } from './contexts/OpportunityContext';
-import type { Opportunity } from './types';
 import './styles/island-globals.css';
 
 function SpotlightWindow() {
