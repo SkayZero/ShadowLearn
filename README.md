@@ -1,193 +1,144 @@
-# 🌑 ShadowLearn - AI Learning Assistant
+# 🌑 ShadowLearn
 
-ShadowLearn est une application desktop d'apprentissage intelligent basée sur Tauri v2 et React, conçue pour aider les développeurs en analysant leur contexte de travail et en générant des réponses adaptatives.
+**Assistant d'apprentissage ambient pour développeurs créatifs**
 
----
-
-## 🚀 Fonctionnalités Principales
-
-### J21.5: Consolidation & Robustesse
-- ✅ **Timeout LLM 30s** avec fallback heuristique
-- ✅ **Feature Flags** dynamiques (USE_INTENT_GATE)
-- ✅ **Observabilité complète** (cluster_ms, intent_ms, cache_hit_rate)
-- ✅ **Bouton Paramètres** ⚙️ pour contrôle à chaud
-
-### J22: Adaptive Prompting Engine
-- ✅ **Prompts contextuels** basés sur l'intention détectée
-- ✅ **Templates adaptatifs** (Concise, Pedagogical, Creative, Analytical, Empathetic)
-- ✅ **Cache intelligent** avec TTL 10 minutes
-- ✅ **Trust scaling** pour ajustement dynamique
-
-### Fonctionnalités existantes
-- 📸 Capture d'écran contextuelle (J11)
-- 🔔 Système de triggers intelligents (J12)
-- 💤 Snooze & gestion d'activité (J15)
-- 🛡️ Anti-spam & UX optimisée (J16)
-- 💾 Persistance SQLite (J17)
-- 🧠 Personalisation ML (J18)
-- 🎯 User trust scoring (J19)
-- ✅ Artefact validation (J20)
+ShadowLearn détecte automatiquement les opportunités d'apprentissage pendant que vous codez, sans jamais interrompre votre flow créatif. Conçu pour les développeurs qui travaillent en fullscreen (FL Studio, VS Code, etc.) et veulent un assistant discret mais toujours présent.
 
 ---
 
-## 📦 Installation
+## 👁️ Vue d'ensemble (en 30 secondes)
 
-### Prérequis
-- Node.js 22+
-- Rust stable
-- pnpm
+- **ShadowLearn** = assistant d'apprentissage ambient, non-intrusif
+- **HUD** = "luciole dans la nuit" (60x60px, toujours visible, adapté au thème)
+- **Spotlight** = `Cmd+Shift+Y` (macOS) ou `Ctrl+Shift+Y` (autres)
+- **Philosophie** : Pas de backdrop dimming, pas de fenêtres bloquantes
+- **3 fenêtres** : HUD (ambient LED), Spotlight (décisions rapides), Chat (discussions approfondies)
 
-### Installation
+---
+
+## 🚀 Quickstart
+
 ```bash
+# Prérequis: Node 22+, Rust stable, pnpm
 git clone <repo>
-cd shadowlearn
+cd ShadowLearn
 pnpm install
+pnpm tauri dev
 ```
-
-### Lancement
-```bash
-# Mode développement avec logs
-./run_with_logs.sh
-
-# Dans un autre terminal: monitoring
-./monitor_logs.sh
-```
-
----
-
-## 🧪 Tests
-
-### Tests automatiques
-```bash
-# Test J21.5 (Phase 1)
-./test_j21_5.sh
-
-# Test J22 (Phase 3)
-./test_j22.sh
-
-# Métriques complètes
-./show_j21_metrics.sh
-```
-
-### Checklist de validation
-```bash
-./monitor_j21_5.sh
-```
-
----
-
-## ⚙️ Configuration
-
-### Feature Flags
-Via variables d'environnement:
-```bash
-export SL_USE_INTENT_GATE=true   # Intent Gate
-export SL_SMART_TRIGGERS=true    # Smart Triggers
-export SL_TELEMETRY=true         # Telemetry
-```
-
-Via interface:
-1. Cliquer sur ⚙️ dans le header
-2. Activer/désactiver les feature flags
-3. Observer les changements en temps réel
-
----
-
-## 📊 Monitoring
-
-### Logs en temps réel
-```bash
-# Filtrage J21.5 & J22
-tail -f /tmp/shadowlearn_dev.log | grep -E "(cluster_ms|intent_ms|ADAPTIVE)"
-
-# Métriques complètes
-./show_j21_metrics.sh
-```
-
-### Métriques clés
-- `cluster_ms`: Latence clustering (< 100ms)
-- `intent_ms`: Latence détection (< 2s OpenAI, < 5s Ollama)
-- `cache_hit_rate`: Taux de cache (> 40% attendu)
-- `trust_score`: Score de confiance utilisateur
-
----
-
-## 🏗️ Architecture
-
-### Backend (Rust)
-- `src/clustering/` - Groupement SimHash
-- `src/intent/` - Détection d'intention LLM
-- `src/adaptive/` - Prompts adaptatifs
-- `src/learning/` - Système d'apprentissage complet
-- `src/triggers/` - Déclencheurs intelligents
-- `src/persistence/` - Base de données SQLite
-
-### Frontend (React/TypeScript)
-- `src/components/SettingsPanel.tsx` - Panel de paramètres
-- `src/hooks/` - Hooks React pour triggers, health, etc.
 
 ---
 
 ## 📚 Documentation
 
-- [J21.5 + J22 Documentation](./docs/J21_5_J22_COMPLETE.md)
-- [Guide de test manuel](./manual_test_guide.md)
-- [Plan de test complet](./TEST_COMPLETE.md)
+### Pour nouveau développeur
+
+**Jour 1 (2h)** — Comprendre le projet :
+1. [README.md](README.md) (5 min) ← Vous êtes ici
+2. **[CONTEXT.md](CONTEXT.md)** (45 min) ← 🔥 **COMMENCEZ ICI** (toute la mémoire du projet)
+3. [SETUP.md](SETUP.md) (30 min)
+4. Lancer l'app en dev (30 min)
+
+**Jour 2 (3h)** — Architecture et pratique :
+1. [SYSTEM_OVERVIEW.md](SYSTEM_OVERVIEW.md) (1h) — Architecture + workflows
+2. [MAINTENANCE.md](MAINTENANCE.md) (30 min) — Où modifier quoi
+3. Première modification simple (1h)
+
+**Jour 3+** — Approfondissement :
+- [docs/reference/API.md](docs/reference/API.md) — Commandes Tauri
+- [docs/reference/SECURITY.md](docs/reference/SECURITY.md) — Privacy & sécurité
 
 ---
 
-## 🔧 Développement
+## 🔑 Glossaire rapide
 
-### Structure du projet
+| Terme | Définition |
+|-------|------------|
+| **HUD** | Indicateur ambient LED (60x60px) toujours visible, change de couleur selon l'état |
+| **Spotlight** | Fenêtre popup (600x500px) style macOS Spotlight, apparaît en top-center |
+| **Opportunité** | Moment détecté où l'utilisateur pourrait apprendre quelque chose |
+| **Trigger** | Événement qui déclenche une détection (copier du code, erreur, etc.) |
+| **Ambient assistant** | Assistant non-intrusif, toujours présent mais jamais bloquant |
+| **Luciole** | Design du HUD inspiré d'une luciole dans la nuit |
+| **Glassmorphism** | Style visuel avec backdrop blur et transparence |
+
+---
+
+## 🛠️ Stack technique
+
+- **Desktop**: Tauri v2 (Rust + TypeScript)
+- **Frontend**: React 19 + Framer Motion + TypeScript
+- **Backend**: Rust + Tokio async runtime
+- **Storage**: SQLite local
+- **Build**: Vite 7 + pnpm
+- **Platform**: macOS (primaire), Windows/Linux (secondaire)
+
+---
+
+## ⌨️ Raccourcis clavier
+
+| Raccourci | Action |
+|-----------|--------|
+| `Cmd+Shift+Y` (macOS)<br>`Ctrl+Shift+Y` (autres) | Toggle Spotlight |
+| `Esc` | Fermer Spotlight |
+| Double-clic HUD | Ouvrir Spotlight |
+| Click + glisser HUD | Déplacer le HUD |
+
+---
+
+## 🎨 Philosophie de design
+
+1. **Non-intrusif** : Jamais de backdrop dimming, jamais de fenêtres modales bloquantes
+2. **Toujours accessible** : HUD visible même en fullscreen (cocoa FFI sur macOS)
+3. **Contextuellement adapté** : Couleurs et comportement s'adaptent aux thèmes de personnalité
+4. **Workflow-first** : L'app s'adapte au flow créatif, pas l'inverse
+
+---
+
+## 📁 Structure du projet
+
 ```
-shadowlearn/
-├── src/                    # Frontend React
-│   ├── components/        # Composants UI
-│   ├── hooks/             # Hooks React
-│   └── styles/            # Styles CSS
-├── src-tauri/             # Backend Rust
-│   ├── src/
-│   │   ├── adaptive/      # J22: Adaptive Prompting
-│   │   ├── clustering/    # J21: Clustering
-│   │   ├── intent/        # J21: Intent Detection
-│   │   ├── learning/      # Learning System
-│   │   └── triggers/      # Trigger System
-│   └── Cargo.toml         # Dépendances Rust
-└── docs/                  # Documentation
-
-```
-
-### Compilation
-```bash
-# Backend uniquement
-cd src-tauri && cargo build
-
-# Frontend + Backend
-pnpm tauri build
+ShadowLearn/
+├── src/                    # Frontend React/TypeScript
+│   ├── components/         # Composants UI
+│   ├── hooks/              # Custom hooks React
+│   ├── contexts/           # Contexts (Theme, etc.)
+│   └── utils/              # Utilitaires partagés
+├── src-tauri/              # Backend Rust/Tauri
+│   └── src/
+│       ├── shortcuts/      # Gestion raccourcis globaux
+│       ├── triggers/       # Détection opportunités
+│       └── lib.rs          # Entry point Tauri
+├── *.html                  # Entry points Vite (chat, hud, spotlight, settings)
+└── docs/                   # Documentation
+    └── reference/          # Références API/sécurité
 ```
 
 ---
 
-## 🎯 Prochaines étapes
+## 🤝 Contribuer
 
-### J23: Artifact Generation
-- Génération d' artefacts contextuels
-- Validation automatique
-- Intégration avec prompts adaptatifs
+Voir [MAINTENANCE.md](MAINTENANCE.md) pour savoir où modifier quoi.
 
-### J24: Learning Loop
-- Feedback utilisateur
-- Trust scoring continu
-- Ajustement adaptatif
+Pour les conventions de code et tests :
+- TypeScript : ESLint + Prettier (pas de console.log en production)
+- Rust : clippy + rustfmt
+- Commits : Messages clairs en français
 
 ---
 
-## 📝 License
+## 📄 License
 
-MIT
+[À définir]
 
 ---
 
-## 🙏 Contribution
+## 🆘 Besoin d'aide ?
 
-Contributions bienvenues ! Voir les [issues](../../issues) pour les tâches en cours.
+1. **Problème de setup ?** → [SETUP.md](SETUP.md)
+2. **Comprendre l'architecture ?** → [SYSTEM_OVERVIEW.md](SYSTEM_OVERVIEW.md)
+3. **Modifier une feature ?** → [MAINTENANCE.md](MAINTENANCE.md)
+4. **Bug ou question ?** → Ouvrir une issue
+
+---
+
+**Note** : Ce projet évolue rapidement. La documentation est maintenue à jour après chaque changement majeur. Si vous trouvez une incohérence, signalez-la ou créez une PR.
