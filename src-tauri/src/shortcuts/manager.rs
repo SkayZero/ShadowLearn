@@ -18,13 +18,13 @@ pub struct ShortcutConfig {
 
 impl Default for ShortcutConfig {
     fn default() -> Self {
-        // Using Cmd+J (simple and usually free)
-        // J could stand for "Jump to learning" or just be a simple free key
-        // Cmd+K is taken by many apps, Cmd+J is more rarely used
+        // Using Cmd+Shift+Y for Spotlight
+        // Y = "Yes, show me!" / "Yo!"
+        // Shift modifier reduces conflicts with other apps
         #[cfg(target_os = "macos")]
-        let spotlight_shortcut = "Cmd+J";
+        let spotlight_shortcut = "Cmd+Shift+Y";
         #[cfg(not(target_os = "macos"))]
-        let spotlight_shortcut = "Ctrl+J";
+        let spotlight_shortcut = "Ctrl+Shift+Y";
 
         Self {
             screenshot_analyze: "Ctrl+Shift+S".to_string(),

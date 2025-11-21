@@ -5,6 +5,6 @@
     <key>NSAppleEventsUsageDescription</key>
     <string>ShadowLearn utilise les raccourcis clavier globaux pour accéder rapidement au Spotlight d'apprentissage.</string>
     <key>NSInputMonitoringUsageDescription</key>
-    <string>ShadowLearn a besoin de surveiller le clavier pour les raccourcis globaux (ex: Cmd+J pour ouvrir Spotlight).</string>
+    <string>ShadowLearn a besoin de surveiller le clavier pour les raccourcis globaux (ex: Cmd+Shift+Y pour ouvrir Spotlight).</string>
 </dict>
 </plist>
