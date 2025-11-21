@@ -11,6 +11,8 @@ export interface Opportunity {
   title: string;
   confidence: number;
   preview: string;
+  suggestion?: string;
+  type?: string;
   context?: any;
   created_at?: number;
 }
