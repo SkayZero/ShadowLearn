@@ -70,7 +70,7 @@
         "url": "spotlight.html",
         "width": 900,
         "height": 700,
-        "resizable": false,
+        "resizable": true,
         "decorations": false,
         "transparent": true,
         "alwaysOnTop": true,
