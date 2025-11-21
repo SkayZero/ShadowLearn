@@ -1458,7 +1458,26 @@ pub async fn run() {
             } else {
                 warn!("⚠️ context window NOT FOUND!");
             }
-            
+
+            // Configure Spotlight window for macOS fullscreen support
+            if let Some(spotlight) = app.get_webview_window("spotlight") {
+                info!("✅ Found spotlight window, configuring...");
+
+                // Ensure it's hidden initially
+                let _ = spotlight.hide();
+
+                // Set always on top to ensure visibility over fullscreen apps
+                if let Err(e) = spotlight.set_always_on_top(true) {
+                    warn!("⚠️ Failed to set spotlight always on top: {}", e);
+                } else {
+                    info!("🔍 Spotlight configured: always-on-top enabled");
+                }
+
+                info!("🔍 Spotlight window ready (hidden, will show on Cmd+Shift+K)");
+            } else {
+                warn!("⚠️ spotlight window NOT FOUND!");
+            }
+
             // 🔥 Lance automatiquement la boucle de triggers
             tauri::async_runtime::spawn(triggers::trigger_loop::start_trigger_loop(
                 app.handle().clone(),
