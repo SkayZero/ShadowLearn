@@ -17,6 +17,7 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
   if (!isOpen) return null;
 
   const shortcuts = [
+    { key: 'Cmd/Ctrl + Shift + Y', description: 'Ouvrir/fermer Spotlight' },
     { key: 'Cmd/Ctrl + K', description: 'Ouvrir/fermer le Dock' },
     { key: 'Cmd/Ctrl + D', description: 'Ouvrir le Digest du jour' },
     { key: 'Escape', description: 'Fermer les modales' },
@@ -24,20 +25,20 @@ export function HelpModal({ isOpen, onClose }: HelpModalProps) {
 
   const faqs = [
     {
-      q: 'Comment activer ShadowLearn ?',
-      a: 'Cliquez sur le bouton "✗ Inactif" dans le header pour passer en mode "✓ Actif".',
+      q: 'Qu\'est-ce que le HUD (luciole) ?',
+      a: 'Le petit indicateur lumineux en haut à droite. Il change de couleur selon votre activité : vert (normal), jaune pulsant (opportunité), rouge pulsant (blocage). Double-cliquez dessus pour ouvrir Spotlight.',
+    },
+    {
+      q: 'Comment déplacer le HUD ?',
+      a: 'Cliquez une fois et maintenez pour glisser-déposer le HUD où vous voulez. Sa position se réinitialise à chaque redémarrage.',
+    },
+    {
+      q: 'Comment ouvrir Spotlight ?',
+      a: 'Appuyez sur Cmd+Shift+Y (macOS) ou Ctrl+Shift+Y (autres) pour ouvrir Spotlight. Vous pouvez aussi double-cliquer sur le HUD.',
     },
     {
       q: 'Que sont les opportunités ?',
-      a: 'Ce sont des suggestions intelligentes basées sur votre activité. Quand une apparaît, cliquez sur "Voir" pour l\'explorer dans le chat.',
-    },
-    {
-      q: 'Comment discuter d\'une opportunité ?',
-      a: 'Cliquez sur "💬 Discuter" dans l\'OpportunityLayer pour poser des questions à l\'assistant.',
-    },
-    {
-      q: 'Où trouver mes statistiques ?',
-      a: 'Ouvrez le Dock (🎛️) puis cliquez sur "📊 Voir le Digest" pour voir vos stats quotidiennes.',
+      a: 'Ce sont des suggestions intelligentes basées sur votre activité. Quand une apparaît, le HUD pulse et vous pouvez ouvrir Spotlight pour voir les détails.',
     },
   ];
 
