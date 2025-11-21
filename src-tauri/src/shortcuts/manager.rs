@@ -18,10 +18,13 @@ pub struct ShortcutConfig {
 
 impl Default for ShortcutConfig {
     fn default() -> Self {
+        // Using Cmd+Option+Space to avoid conflicts with common app shortcuts
+        // Cmd+Shift+L conflicts with: Chrome (downloads), VS Code, etc.
+        // Cmd+Option+Space is inspired by Spotlight (Cmd+Space) but less likely to conflict
         #[cfg(target_os = "macos")]
-        let spotlight_shortcut = "Cmd+Shift+L";
+        let spotlight_shortcut = "Cmd+Option+Space";
         #[cfg(not(target_os = "macos"))]
-        let spotlight_shortcut = "Ctrl+Shift+L";
+        let spotlight_shortcut = "Ctrl+Alt+Space";
 
         Self {
             screenshot_analyze: "Ctrl+Shift+S".to_string(),

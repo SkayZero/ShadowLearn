@@ -1363,6 +1363,7 @@ pub async fn run() {
             shortcuts::commands::get_shortcuts_config,
             shortcuts::commands::list_shortcuts,
             shortcuts::commands::trigger_shortcut_action,
+            shortcuts::commands::toggle_spotlight,
             // Privacy Zones commands
             privacy::commands::get_privacy_zones_config,
             privacy::commands::add_privacy_zone,

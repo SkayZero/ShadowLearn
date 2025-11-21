@@ -16,6 +16,7 @@ import { PersonalitySelector } from './components/PersonalitySelector';
 import { PauseMode } from './components/PauseMode';
 import { OpportunityLayer } from './components/OpportunityLayer';
 import { HelpModal } from './components/HelpModal';
+import { SpotlightDebug } from './components/SpotlightDebug';
 import { LayoutProvider } from './contexts/LayoutContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import useWindowLifecycle from './hooks/useWindowLifecycle';
@@ -700,6 +701,9 @@ Question de l'utilisateur : ${messageText}`;
         isOpen={isHelpOpen}
         onClose={() => setIsHelpOpen(false)}
       />
+
+      {/* DEBUG: Spotlight Testing */}
+      <SpotlightDebug />
         </WindowManager>
       </LayoutProvider>
     </ThemeProvider>
