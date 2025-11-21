@@ -7,12 +7,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { invoke } from "@tauri-apps/api/core";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { 
-  useEvent, 
-  EVENTS, 
-  shadowStore, 
+import {
+  useEvent,
+  EVENTS,
+  shadowStore,
   type Opportunity,
-  SPRING_CONFIG 
+  SPRING_CONFIG
 } from "../lib";
 import soundManager from "../lib/soundManager";
 import { useLayoutPosition } from "../contexts/LayoutContext";
@@ -21,72 +21,123 @@ import { useTheme } from "../contexts/ThemeContext";
 interface OpportunityToastProps {
   onOpenDock?: () => void;
   onOpenDigest?: () => void;
+  onOpenChat?: (opportunity: Opportunity) => void;
 }
 
-export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) {
+export default function OpportunityToast({ onOpenDock: _onOpenDock, onOpenChat }: OpportunityToastProps) {
   const [opportunity, setOpportunity] = useState<Opportunity | null>(null);
+  const [timeoutId, setTimeoutId] = useState<number | null>(null);
+  const [isPinned, setIsPinned] = useState(false);
   const { theme } = useTheme();
-  
+
   // Register in layout system - Priority 2 (below QuickActions)
   const position = useLayoutPosition('opportunity-toast', 'bottom-right', 2, 200, 384);
   
   // Debug: Log state changes
   useEffect(() => {
-    console.log('[OpportunityToast] 📦 State changed - opportunity:', opportunity);
   }, [opportunity]);
+
+  // Cleanup timeout on unmount or opportunity change
+  useEffect(() => {
+    return () => {
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
+    };
+  }, [timeoutId]);
 
   // Listen for opportunities from backend
   useEvent<Opportunity>(EVENTS.OPPORTUNITY, (opp) => {
-    console.log('[OpportunityToast] 🎯 Handler called with:', opp);
-    console.log('[OpportunityToast] 🆔 Opportunity ID:', opp.id);
-    console.log('[OpportunityToast] 📊 Confidence:', opp.confidence);
-    
+
     // Skip if already dismissed
     if (shadowStore.isOpportunityDismissed(opp.id)) {
-      console.log('[OpportunityToast] ⚠️ SKIPPED - Already dismissed:', opp.id);
       return;
     }
 
-    // Only show high-confidence opportunities
-    if (opp.confidence > 0.7) {
-      console.log('[OpportunityToast] ✅ Showing toast for:', opp.id);
+    // Only show medium+ confidence opportunities (0.5+)
+    // Backend sends 0.6 for short idle, 0.8 for long idle
+    if (opp.confidence >= 0.5) {
       setOpportunity(opp);
-      
+      setIsPinned(false); // Reset pinned state for new opportunity
+
       // Play toast-in sound (Cluely)
       soundManager.play('toast-in');
 
-      // Auto-dismiss after 10s
-      setTimeout(() => {
-        console.log('[OpportunityToast] ⏱️ Auto-dismissing:', opp.id);
+      // Auto-dismiss after 30s (unless pinned)
+      const id = window.setTimeout(() => {
         setOpportunity(null);
         soundManager.play('toast-out');
-      }, 10000);
+        setTimeoutId(null);
+      }, 30000);
+      setTimeoutId(id);
     } else {
-      console.log('[OpportunityToast] ⚠️ SKIPPED - Low confidence:', opp.confidence);
     }
   });
+
+  // Pause timer on hover
+  const handleMouseEnter = () => {
+    if (timeoutId && !isPinned) {
+      window.clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
+  };
+
+  // Resume timer on mouse leave (unless pinned)
+  const handleMouseLeave = () => {
+    if (!isPinned && opportunity && !timeoutId) {
+      const id = window.setTimeout(() => {
+        setOpportunity(null);
+        soundManager.play('toast-out');
+        setTimeoutId(null);
+      }, 30000);
+      setTimeoutId(id);
+    }
+  };
 
   const handleView = async () => {
     if (!opportunity) return;
 
+
+    // Pin the notification (stop auto-dismiss)
+    setIsPinned(true);
+    if (timeoutId) {
+      window.clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
+
     try {
+      // Ensure chat window stays visible and focused (backend command)
+      await invoke("ensure_chat_visible");
+
       // Record user accepted
       await invoke("record_opportunity_response", {
         opportunityId: opportunity.id,
         accepted: true,
       });
 
-      // Open dock to show details
-      onOpenDock?.();
-    } catch (e) {
-      console.error("Failed to record opportunity response:", e);
-    }
+      // Open chat with opportunity details
+      onOpenChat?.(opportunity);
 
-    setOpportunity(null);
+      // TESTING: Delay hiding toast to see if it helps with window visibility
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Hide toast after opening chat
+      setOpportunity(null);
+      setIsPinned(false);
+      soundManager.play('toast-out');
+    } catch (e) {
+      console.error("[OpportunityToast] ❌ Error in handleView:", e);
+    }
   };
 
   const handleDismiss = async () => {
     if (!opportunity) return;
+
+    // Clear any active timeout
+    if (timeoutId) {
+      window.clearTimeout(timeoutId);
+      setTimeoutId(null);
+    }
 
     try {
       // Record dismissed
@@ -102,6 +153,7 @@ export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) 
     }
 
     setOpportunity(null);
+    setIsPinned(false);
   };
 
   // Render using Portal to escape parent overflow:hidden
@@ -116,6 +168,8 @@ export default function OpportunityToast({ onOpenDock }: OpportunityToastProps) 
           transition={SPRING_CONFIG}
           className=""
           data-testid="opportunity-toast"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
           style={{
             position: 'fixed',
             ...position,

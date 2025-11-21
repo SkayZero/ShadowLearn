@@ -40,7 +40,6 @@ const HeaderDraggable: React.FC<HeaderDraggableProps> = ({
     if (isClosing) return; // Prevent double clicks
     
     setIsClosing(true);
-    console.log('Close button clicked!'); // Debug log
     
     try {
       if (onClose) {
@@ -48,7 +47,6 @@ const HeaderDraggable: React.FC<HeaderDraggableProps> = ({
       } else {
         const window = getCurrentWindow();
         await window.hide();
-        console.log('Window hidden successfully'); // Debug log
       }
     } catch (error) {
       console.error('Failed to hide window:', error);
@@ -64,7 +62,6 @@ const HeaderDraggable: React.FC<HeaderDraggableProps> = ({
       } else {
         const window = getCurrentWindow();
         await window.minimize();
-        console.log('Window minimized successfully');
       }
     } catch (error) {
       console.error('Failed to minimize window:', error);

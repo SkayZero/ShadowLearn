@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>ShadowLearn utilise les raccourcis clavier globaux pour accéder rapidement au Spotlight d'apprentissage.</string>
+    <key>NSInputMonitoringUsageDescription</key>
+    <string>ShadowLearn a besoin de surveiller le clavier pour les raccourcis globaux (ex: Cmd+Shift+Y pour ouvrir Spotlight).</string>
+</dict>
+</plist>

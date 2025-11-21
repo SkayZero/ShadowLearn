@@ -4,8 +4,7 @@
  */
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
+import { useState } from "react";
 import { useEvent, EVENTS, type FlowStateData } from "../lib";
 import { useTheme } from "../contexts/ThemeContext";
 
@@ -27,6 +26,10 @@ export function AmbientLED({ className = "", size = 12 }: AmbientLEDProps) {
   });
 
   // Poll flow state periodically
+  // macOS Fix: Disabled to prevent glassmorphism flicker
+  // setInterval causes re-renders that destabilize backdrop-filter
+  // Flow state updates still come via useEvent(EVENTS.FLOW_STATE)
+  /*
   useEffect(() => {
     const detectFlow = async () => {
       try {
@@ -44,6 +47,7 @@ export function AmbientLED({ className = "", size = 12 }: AmbientLEDProps) {
     const interval = setInterval(detectFlow, 10000);
     return () => clearInterval(interval);
   }, []);
+  */
 
   // Animation configuration based on flow state
   const animationDuration = {

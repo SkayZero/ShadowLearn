@@ -21,8 +21,7 @@ export const COMMANDS: Command[] = [
     label: "Aide",
     description: "Afficher l'aide générale",
     icon: "❓",
-    action: async (args) => {
-      console.log("Help requested:", args);
+    action: async (_args) => {
     },
   },
   {
@@ -30,10 +29,10 @@ export const COMMANDS: Command[] = [
     label: "Résumer",
     description: "Résumer le texte sélectionné",
     icon: "📝",
-    action: async (args) => {
+    action: async (_args) => {
       await invoke("execute_slash_command", {
         command: "resume",
-        context: args,
+        context: _args,
       });
     },
   },
@@ -42,10 +41,10 @@ export const COMMANDS: Command[] = [
     label: "Expliquer",
     description: "Expliquer un concept",
     icon: "🔍",
-    action: async (args) => {
+    action: async (_args) => {
       await invoke("execute_slash_command", {
         command: "explain",
-        context: args,
+        context: _args,
       });
     },
   },
@@ -54,10 +53,10 @@ export const COMMANDS: Command[] = [
     label: "Débugger",
     description: "Analyser une erreur",
     icon: "🐛",
-    action: async (args) => {
+    action: async (_args) => {
       await invoke("execute_slash_command", {
         command: "debug",
-        context: args,
+        context: _args,
       });
     },
   },
@@ -66,10 +65,10 @@ export const COMMANDS: Command[] = [
     label: "Améliorer",
     description: "Suggérer des améliorations",
     icon: "✨",
-    action: async (args) => {
+    action: async (_args) => {
       await invoke("execute_slash_command", {
         command: "improve",
-        context: args,
+        context: _args,
       });
     },
   },
@@ -78,10 +77,10 @@ export const COMMANDS: Command[] = [
     label: "Traduire",
     description: "Traduire du texte",
     icon: "🌐",
-    action: async (args) => {
+    action: async (_args) => {
       await invoke("execute_slash_command", {
         command: "translate",
-        context: args,
+        context: _args,
       });
     },
   },

@@ -1,8 +1,11 @@
+// Allow deprecated warnings from generic-array 0.x used by aes_gcm
+#![allow(deprecated)]
+
 use aes_gcm::{
     aead::{Aead, KeyInit, OsRng},
     Aes256Gcm, Key, Nonce,
 };
-use base64;
+use base64::{Engine, engine::general_purpose};
 use keyring::Entry;
 use rand::RngCore;
 use std::{path::Path, sync::Arc};
@@ -57,7 +60,7 @@ impl KeyManager {
             KeyStorage::Keychain(entry) => {
                 match entry.get_password() {
                     Ok(b64) => {
-                        let bytes = base64::decode(&b64)
+                        let bytes = general_purpose::STANDARD.decode(&b64)
                             .map_err(|e| KeyManagerError::KeyDecodeFailed(e.to_string()))?;
                         if bytes.len() != 32 {
                             return Err(KeyManagerError::KeyDecodeFailed("Invalid key length".into()));
@@ -68,7 +71,7 @@ impl KeyManager {
                         // Generate new key
                         let mut k = [0u8; 32];
                         OsRng.fill_bytes(&mut k);
-                        entry.set_password(&base64::encode(k))
+                        entry.set_password(&general_purpose::STANDARD.encode(k))
                             .map_err(|e| KeyManagerError::KeyringUnavailable(e.to_string()))?;
                         tracing::info!("🔑 Generated new encryption key and stored in keychain");
                         Ok(*Key::<Aes256Gcm>::from_slice(&k))
@@ -138,7 +141,7 @@ impl KeyManager {
         }
         
         if let KeyStorage::Keychain(entry) = &self.storage {
-            entry.set_password(&base64::encode(nb)).map_err(|e| format!("store new key: {}", e))?;
+            entry.set_password(&general_purpose::STANDARD.encode(nb)).map_err(|e| format!("store new key: {}", e))?;
         }
         
         tracing::info!("✅ Key rotation complete");

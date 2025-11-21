@@ -67,15 +67,6 @@ export function usePerfMarks(componentName: string) {
       metrics.shift();
     }
 
-    // Log
-    const emoji = exceeded ? '⚠️' : '✅';
-    const color = exceeded ? 'color: orange' : 'color: green';
-    
-    console.log(
-      `${emoji} %c[Perf] ${metric.name}: ${duration.toFixed(2)}ms${maxMs ? ` (max: ${maxMs}ms)` : ''}`,
-      color
-    );
-
     // Auto-disable heavy features if too slow
     if (exceeded && maxMs && duration > maxMs * 2) {
       console.warn(`❌ Performance critically degraded for ${metric.name}. Consider reducing motion.`);
@@ -88,9 +79,8 @@ export function usePerfMarks(componentName: string) {
   /**
    * Simple timing function
    */
-  const mark = useCallback((name: string) => {
+  const mark = useCallback((_name: string) => {
     const now = performance.now();
-    console.log(`⏱️ [${componentName}] ${name}: ${now.toFixed(2)}ms`);
     return now;
   }, [componentName]);
 
@@ -180,7 +170,7 @@ export function getPerformanceReport(): string {
   for (const name of uniqueMetrics) {
     const filtered = metrics.filter(m => m.name === name);
     const durations = filtered.map(m => m.duration);
-    
+
     const count = filtered.length;
     const avg = durations.reduce((a, b) => a + b, 0) / count;
     const p95 = calculateP95(name);
@@ -212,7 +202,6 @@ export function getPerformanceReport(): string {
  */
 export function clearMetrics() {
   metrics.length = 0;
-  console.log('📊 Performance metrics cleared');
 }
 
 

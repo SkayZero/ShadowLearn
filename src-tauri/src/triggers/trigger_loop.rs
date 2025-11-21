@@ -5,9 +5,9 @@ use tokio::time::{interval, Duration};
 use tracing::{debug, error, info, trace, warn};
 
 use super::manager::{TriggerDecision, TriggerManager};
-use super::state_machine::{StateTransition, TriggerEvent, TriggerStateMachine};
+use super::state_machine::{TriggerEvent, TriggerStateMachine};
 use crate::context::aggregator::{Context, ContextAggregator};
-use crate::ml::{EventType as MLEventType, PersonalizationManager, UserEvent, UserResponse};
+use crate::ml::{EventType as MLEventType, PersonalizationManager, UserEvent};
 use crate::snooze::SnoozeManager;
 
 /// Lance la boucle de trigger en arrière-plan
@@ -27,7 +27,9 @@ async fn trigger_loop(app_handle: AppHandle) {
     let personalization_manager = app_handle.state::<Arc<Mutex<PersonalizationManager>>>();
     let state_machine = app_handle.state::<std::sync::Arc<tokio::sync::Mutex<TriggerStateMachine>>>();
 
-    let mut ticker = interval(Duration::from_millis(2000)); // Reduced from 500ms to 2s
+    // macOS Fix: Reduced frequency to prevent glassmorphism flicker
+    // Frequent events destabilize backdrop-filter on macOS transparent windows
+    let mut ticker = interval(Duration::from_millis(5000)); // 5s (was 2s)
     let mut consecutive_failures = 0;
     const MAX_FAILURES: u32 = 3;
 
@@ -179,7 +181,7 @@ async fn trigger_loop(app_handle: AppHandle) {
         trace!("🔍 Trigger loop iteration: app={}, idle={:.1}s", peek_result.app.name, peek_result.idle_seconds);
 
         // Update state machine with current decision
-        let state_change_result = {
+        let _state_change_result = {
             let mut sm = state_machine.lock().await;
             match decision {
                 TriggerDecision::Allow => {

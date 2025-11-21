@@ -53,7 +53,7 @@ export const THEMES: Record<Personality, Theme> = {
     name: "AERYA",
     description: "Assistant équilibré, bienveillant",
     icon: "🌊",
-    
+
     background: "#0a1520",
     gradient: ["#1a2f3f", "#1a3f3a"],
     accent: "#6ee7b7",
@@ -63,31 +63,31 @@ export const THEMES: Record<Personality, Theme> = {
       secondary: "#ccfbf1",
       muted: "#99f6e4",
     },
-    
+
     glass: {
-      bg: "rgba(110, 231, 183, 0.08)",
-      border: "rgba(110, 231, 183, 0.15)",
-      shadow: "0 8px 32px rgba(110, 231, 183, 0.1)",
+      bg: "rgba(110, 231, 183, 0.65)",  // Balanced opacity
+      border: "rgba(110, 231, 183, 0.25)",
+      shadow: "0 8px 32px rgba(110, 231, 183, 0.15)",
     },
-    
+
     led: {
       deep: "#34d399",
       normal: "#6ee7b7",
       blocked: "#a7f3d0",
     },
-    
+
     glow: "rgba(110, 231, 183, 0.3)",
     particleSpeed: 0.5,
     font: "'Inter', sans-serif",
     transitionSpeed: 500,
   },
-  
+
   aura: {
     id: "aura",
     name: "AURA",
     description: "Sage calme, méditatif",
     icon: "🔮",
-    
+
     background: "#0f0c1a",
     gradient: ["#1a1530", "#1a1a2e"],
     accent: "#c4b5fd",
@@ -97,31 +97,31 @@ export const THEMES: Record<Personality, Theme> = {
       secondary: "#e9d5ff",
       muted: "#c4b5fd",
     },
-    
+
     glass: {
-      bg: "rgba(196, 181, 253, 0.08)",
-      border: "rgba(196, 181, 253, 0.15)",
-      shadow: "0 8px 32px rgba(196, 181, 253, 0.1)",
+      bg: "rgba(196, 181, 253, 0.65)",  // Balanced opacity
+      border: "rgba(196, 181, 253, 0.25)",
+      shadow: "0 8px 32px rgba(196, 181, 253, 0.15)",
     },
-    
+
     led: {
       deep: "#a78bfa",
       normal: "#c4b5fd",
       blocked: "#ddd6fe",
     },
-    
+
     glow: "rgba(196, 181, 253, 0.3)",
     particleSpeed: 0.3,
     font: "'Inter', sans-serif",
     transitionSpeed: 800,
   },
-  
+
   spark: {
     id: "spark",
     name: "SPARK",
     description: "Énergique, motivant",
     icon: "⚡",
-    
+
     background: "#1a1512",
     gradient: ["#2a2015", "#2a1810"],
     accent: "#fbbf24",
@@ -131,31 +131,31 @@ export const THEMES: Record<Personality, Theme> = {
       secondary: "#fef3c7",
       muted: "#fde68a",
     },
-    
+
     glass: {
-      bg: "rgba(251, 191, 36, 0.08)",
-      border: "rgba(251, 191, 36, 0.15)",
-      shadow: "0 8px 32px rgba(251, 191, 36, 0.1)",
+      bg: "rgba(251, 191, 36, 0.65)",  // Balanced opacity
+      border: "rgba(251, 191, 36, 0.25)",
+      shadow: "0 8px 32px rgba(251, 191, 36, 0.15)",
     },
-    
+
     led: {
       deep: "#f59e0b",
       normal: "#fbbf24",
       blocked: "#fcd34d",
     },
-    
+
     glow: "rgba(251, 191, 36, 0.3)",
     particleSpeed: 1.2,
     font: "'Satoshi', sans-serif",
     transitionSpeed: 300,
   },
-  
+
   nova: {
     id: "nova",
     name: "NOVA",
     description: "Visionnaire, poétique",
     icon: "✨",
-    
+
     background: "#0a1520",
     gradient: ["#1a2535", "#1a2f3f"],
     accent: "#7dd3fc",
@@ -165,31 +165,31 @@ export const THEMES: Record<Personality, Theme> = {
       secondary: "#bae6fd",
       muted: "#7dd3fc",
     },
-    
+
     glass: {
-      bg: "rgba(125, 211, 252, 0.08)",
-      border: "rgba(125, 211, 252, 0.15)",
-      shadow: "0 8px 32px rgba(125, 211, 252, 0.1)",
+      bg: "rgba(125, 211, 252, 0.65)",  // Balanced opacity
+      border: "rgba(125, 211, 252, 0.25)",
+      shadow: "0 8px 32px rgba(125, 211, 252, 0.15)",
     },
-    
+
     led: {
       deep: "#38bdf8",
       normal: "#7dd3fc",
       blocked: "#bae6fd",
     },
-    
+
     glow: "rgba(125, 211, 252, 0.3)",
     particleSpeed: 0.6,
     font: "'Space Grotesk', sans-serif",
     transitionSpeed: 600,
   },
-  
+
   kai: {
     id: "kai",
     name: "KAI",
     description: "Pratique, mentor tech",
     icon: "⚙️",
-    
+
     background: "#0a1512",
     gradient: ["#1a2520", "#1a2f28"],
     accent: "#6ee7b7",
@@ -199,31 +199,31 @@ export const THEMES: Record<Personality, Theme> = {
       secondary: "#a7f3d0",
       muted: "#6ee7b7",
     },
-    
+
     glass: {
-      bg: "rgba(110, 231, 183, 0.08)",
-      border: "rgba(110, 231, 183, 0.15)",
-      shadow: "0 8px 32px rgba(110, 231, 183, 0.1)",
+      bg: "rgba(110, 231, 183, 0.65)",  // Balanced opacity
+      border: "rgba(110, 231, 183, 0.25)",
+      shadow: "0 8px 32px rgba(110, 231, 183, 0.15)",
     },
-    
+
     led: {
       deep: "#34d399",
       normal: "#6ee7b7",
       blocked: "#a7f3d0",
     },
-    
+
     glow: "rgba(110, 231, 183, 0.3)",
     particleSpeed: 0.4,
     font: "'IBM Plex Mono', monospace",
     transitionSpeed: 400,
   },
-  
+
   echo: {
     id: "echo",
     name: "ECHO",
     description: "Artiste rêveur",
     icon: "🎨",
-    
+
     background: "#1a0a1a",
     gradient: ["#2a1530", "#2a1a2e"],
     accent: "#f9a8d4",
@@ -233,31 +233,31 @@ export const THEMES: Record<Personality, Theme> = {
       secondary: "#f9a8d4",
       muted: "#f472b6",
     },
-    
+
     glass: {
-      bg: "rgba(249, 168, 212, 0.08)",
-      border: "rgba(249, 168, 212, 0.15)",
-      shadow: "0 8px 32px rgba(249, 168, 212, 0.1)",
+      bg: "rgba(249, 168, 212, 0.65)",  // Balanced opacity
+      border: "rgba(249, 168, 212, 0.25)",
+      shadow: "0 8px 32px rgba(249, 168, 212, 0.15)",
     },
-    
+
     led: {
       deep: "#ec4899",
       normal: "#f9a8d4",
       blocked: "#fbcfe8",
     },
-    
+
     glow: "rgba(249, 168, 212, 0.3)",
     particleSpeed: 0.5,
     font: "'Playfair Display', serif",
     transitionSpeed: 700,
   },
-  
+
   void: {
     id: "void",
     name: "VOID",
     description: "Minimaliste, silencieux",
     icon: "⬛",
-    
+
     background: "#0a0a0a",
     gradient: ["#121212", "#1a1a1a"],
     accent: "#e5e5e5",
@@ -267,10 +267,10 @@ export const THEMES: Record<Personality, Theme> = {
       secondary: "#e5e5e5",
       muted: "#a3a3a3",
     },
-    
+
     glass: {
-      bg: "rgba(255, 255, 255, 0.05)",
-      border: "rgba(255, 255, 255, 0.08)",
+      bg: "rgba(255, 255, 255, 0.65)",  // Balanced opacity
+      border: "rgba(255, 255, 255, 0.15)",
       shadow: "0 8px 32px rgba(0, 0, 0, 0.5)",
     },
     

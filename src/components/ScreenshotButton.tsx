@@ -26,12 +26,6 @@ export function ScreenshotButton() {
       const result = await invoke<CaptureResult>('capture_screenshot');
       const duration = performance.now() - start;
 
-      console.log('Screenshot captured:', {
-        path: result.path,
-        size: result.size_bytes,
-        duration: duration + 'ms'
-      });
-
       setScreenshotData(`data:image/jpeg;base64,${result.data}`);
       setFileSize(result.size_bytes);
       setCaptureTime(Math.round(duration));

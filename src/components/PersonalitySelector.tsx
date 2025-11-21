@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "../contexts/ThemeContext";
-import { Personality, THEMES } from "../lib/themes";
+import { Personality } from "../lib/themes";
 
 interface PersonalityOption {
   id: Personality;
@@ -73,23 +73,19 @@ export function PersonalitySelector({
   onPersonalityChange,
 }: PersonalitySelectorProps) {
   const { personality: selectedPersonality, setPersonality } = useTheme();
-  const [showExample, setShowExample] = useState(false);
+  const [hoveredPersonality, setHoveredPersonality] = useState<Personality | null>(null);
 
   const handlePersonalityChange = async (personality: Personality) => {
-    setShowExample(true);
-    
     try {
       await setPersonality(personality);
       onPersonalityChange?.(personality);
     } catch (error) {
       console.error("Failed to change personality:", error);
     }
-
-    // Hide example after 3s
-    setTimeout(() => setShowExample(false), 3000);
   };
 
   const selectedOption = PERSONALITIES.find((p) => p.id === selectedPersonality);
+  const previewOption = PERSONALITIES.find((p) => p.id === (hoveredPersonality || selectedPersonality));
 
   if (compact) {
     return (
@@ -154,6 +150,8 @@ export function PersonalitySelector({
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => handlePersonalityChange(personality.id)}
+            onMouseEnter={() => setHoveredPersonality(personality.id)}
+            onMouseLeave={() => setHoveredPersonality(null)}
             style={{
               padding: "12px 16px",
               background:
@@ -202,24 +200,41 @@ export function PersonalitySelector({
         ))}
       </div>
 
-      {/* Example preview */}
-      {showExample && selectedOption && (
+      {/* Example preview - shows on hover or selected */}
+      {previewOption && (
         <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
+          key={previewOption.id}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
           style={{
             marginTop: "16px",
-            padding: "12px",
-            background: "rgba(16, 185, 129, 0.1)",
+            padding: "12px 16px",
+            background: hoveredPersonality
+              ? "rgba(16, 185, 129, 0.15)"
+              : "rgba(16, 185, 129, 0.08)",
+            border: "1px solid rgba(16, 185, 129, 0.3)",
             borderRadius: "8px",
-            fontSize: "12px",
+            fontSize: "13px",
             color: "var(--text-primary)",
-            lineHeight: "1.5",
+            lineHeight: "1.6",
           }}
         >
-          <strong style={{ display: "block", marginBottom: "4px" }}>Exemple :</strong>
-          {selectedOption.example}
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            marginBottom: "6px"
+          }}>
+            <span style={{ fontSize: "16px" }}>{previewOption.icon}</span>
+            <strong style={{ fontSize: "12px", color: "var(--accent-primary)" }}>
+              {hoveredPersonality ? "Aperçu" : "Exemple"} - {previewOption.name}
+            </strong>
+          </div>
+          <div style={{ fontStyle: "italic", opacity: 0.95 }}>
+            "{previewOption.example}"
+          </div>
         </motion.div>
       )}
     </div>

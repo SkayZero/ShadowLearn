@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import HeaderDraggable from './components/HeaderDraggable';
 import WindowManager from './components/WindowManager';
 import { TriggerBubble } from './components/TriggerBubble';
-import { StatusIndicator } from './components/StatusIndicator';
 import { MessageFeedback } from './components/MessageFeedback';
 import OpportunityToast from './components/OpportunityToast';
 import { SlashCommands } from './components/SlashCommands';
@@ -14,12 +13,14 @@ import { DailyDigest } from './components/DailyDigest';
 import { StreakTracker } from './components/StreakTracker';
 import { PersonalitySelector } from './components/PersonalitySelector';
 import { PauseMode } from './components/PauseMode';
+import { OpportunityLayer } from './components/OpportunityLayer';
+import { HelpModal } from './components/HelpModal';
 import { LayoutProvider } from './contexts/LayoutContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import useWindowLifecycle from './hooks/useWindowLifecycle';
-import useDesktopFocus from './hooks/useDesktopFocus';
 import useActivityDetection from './hooks/useActivityDetection';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
+import type { Opportunity } from './lib';
 import './styles/island-globals.css';
 import './components/TriggerBubble.css';
 
@@ -43,7 +44,7 @@ function ChatWindow() {
   const [error, setError] = useState<string | null>(null);
   
   // Phase 2: Quick Actions context
-  const [currentContext] = useState({
+  const [currentContext, setCurrentContext] = useState({
     app: "Cursor",
     selectedText: "",
     url: "",
@@ -56,13 +57,31 @@ function ChatWindow() {
   
   // Phase 3: Daily Digest
   const [isDigestOpen, setIsDigestOpen] = useState(false);
-  
+
+  // Opportunity Layer
+  const [activeOpportunity, setActiveOpportunity] = useState<Opportunity | null>(null);
+
+  // Opportunity Context (for intelligent discussion)
+  const [opportunityContext, setOpportunityContext] = useState<{
+    opportunity: Opportunity;
+    isActive: boolean;
+  } | null>(null);
+
+  // Help Modal
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
+
+  // Pin Mode (always-on-top)
+  const [isPinned, setIsPinned] = useState(false);
+
   useWindowLifecycle({
     onFocus: () => {},
     onBlur: () => {},
   });
-  
-  useDesktopFocus({ enabled: true, delay: 150 });
+
+  // DISABLED: useDesktopFocus causes Chat window to become inaccessible on macOS
+  // The hook calls invoke('focus_window') which doesn't exist in backend
+  // Combined with skipTaskbar:true, this makes the window hide permanently
+  // useDesktopFocus({ enabled: true, delay: 150 });
   useActivityDetection(true);
 
   // Keyboard shortcuts (only work when window is focused)
@@ -77,11 +96,11 @@ function ChatWindow() {
     },
     onTogglePause: () => {
       // Pause mode toggle will be implemented with PauseMode component
-      console.log('Toggle pause mode');
     },
     onCloseModal: () => {
       if (isDockOpen) setIsDockOpen(false);
       if (isDigestOpen) setIsDigestOpen(false);
+      if (isHelpOpen) setIsHelpOpen(false);
     },
   });
 
@@ -90,20 +109,33 @@ function ChatWindow() {
     const setupListeners = async () => {
       const { listen } = await import('@tauri-apps/api/event');
       const unlisten = await listen('trigger_fired', (event: any) => {
-        console.log('🎯 Trigger fired event:', event);
-        console.log('🎯 Event payload:', event.payload);
         setTriggerContext(event.payload);
         setShowBubble(true); // Afficher la bulle
       });
-      
-      console.log('✅ trigger_fired listener registered');
-      
+
+
       return () => {
         unlisten();
       };
     };
-    
+
     setupListeners();
+  }, []);
+
+  // Clear selected text when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      const selection = window.getSelection();
+      if (!selection || selection.toString().trim() === '') {
+        setCurrentContext((prev) => ({
+          ...prev,
+          selectedText: '',
+        }));
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const generateMockSuggestion = (appName: string): string => {
@@ -128,6 +160,41 @@ function ChatWindow() {
     setMessages((prev) => [...prev, newMessage]);
   };
 
+  const togglePin = async () => {
+    try {
+      const { getCurrentWindow } = await import('@tauri-apps/api/window');
+      const window = getCurrentWindow();
+
+      const newPinnedState = !isPinned;
+      await window.setAlwaysOnTop(newPinnedState);
+      setIsPinned(newPinnedState);
+    } catch (e) {
+      console.error('Failed to toggle pin:', e);
+    }
+  };
+
+  const handleTextSelection = () => {
+    const selection = window.getSelection();
+    const selectedText = selection?.toString().trim() || '';
+
+    if (selectedText !== currentContext.selectedText) {
+      setCurrentContext((prev) => ({
+        ...prev,
+        selectedText,
+      }));
+    }
+  };
+
+  const handleNewChat = () => {
+    if (messages.length === 0) return;
+
+    const confirmed = window.confirm('Voulez-vous vraiment effacer tous les messages et commencer une nouvelle conversation ?');
+    if (confirmed) {
+      setMessages([]);
+      setOpportunityContext(null);
+    }
+  };
+
   const handleSend = async () => {
     if (!inputValue.trim() || isLoading) return;
 
@@ -146,8 +213,22 @@ function ChatWindow() {
 
     try {
       const { invoke } = await import('@tauri-apps/api/core');
+
+      // Enrich message with opportunity context if active
+      let enrichedMessage = messageText;
+      if (opportunityContext?.isActive) {
+        const contextInfo = typeof opportunityContext.opportunity.context === 'object' && opportunityContext.opportunity.context.app_name
+          ? opportunityContext.opportunity.context.app_name
+          : 'Contexte détecté';
+
+        enrichedMessage = `[CONTEXTE: Opportunité détectée - ${contextInfo}]
+Suggestion en cours de discussion : "${opportunityContext.opportunity.suggestion}"
+
+Question de l'utilisateur : ${messageText}`;
+      }
+
       const response = await invoke<string>('chat_with_ai', {
-        message: messageText,
+        message: enrichedMessage,
         includeContext: true,
       });
 
@@ -186,12 +267,109 @@ function ChatWindow() {
       <LayoutProvider>
         <WindowManager>
           <div className="sl-island">
-        <HeaderDraggable 
+        <HeaderDraggable
           title="ShadowLearn"
           showMinimize={true}
           rightContent={
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <button 
+              <button
+                onClick={async () => {
+                  try {
+                    const { invoke } = await import('@tauri-apps/api/core');
+                    await invoke('show_window', { windowLabel: 'settings' });
+                  } catch (error) {
+                    console.error('❌ Failed to show settings:', error);
+                  }
+                }}
+                style={{
+                  padding: '6px 12px',
+                  background: 'rgba(147, 51, 234, 0.2)',
+                  border: '1px solid rgba(147, 51, 234, 0.5)',
+                  borderRadius: '6px',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontSize: '0.85em',
+                  fontWeight: '600',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(147, 51, 234, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(147, 51, 234, 0.2)';
+                }}
+              >
+                ⚙️ Réglages
+              </button>
+              <button
+                onClick={() => setIsHelpOpen(true)}
+                style={{
+                  padding: '6px 12px',
+                  background: 'rgba(135, 206, 235, 0.2)',
+                  border: '1px solid rgba(135, 206, 235, 0.5)',
+                  borderRadius: '6px',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontSize: '0.85em',
+                  fontWeight: '600',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(135, 206, 235, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(135, 206, 235, 0.2)';
+                }}
+              >
+                ❓ Aide
+              </button>
+              {messages.length > 0 && (
+                <button
+                  onClick={handleNewChat}
+                  style={{
+                    padding: '6px 12px',
+                    background: 'rgba(255, 107, 107, 0.2)',
+                    border: '1px solid rgba(255, 107, 107, 0.5)',
+                    borderRadius: '6px',
+                    color: 'white',
+                    cursor: 'pointer',
+                    fontSize: '0.85em',
+                    fontWeight: '600',
+                    transition: 'all 0.2s',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 107, 107, 0.3)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 107, 107, 0.2)';
+                  }}
+                >
+                  🔄 Nouveau
+                </button>
+              )}
+              <button
+                onClick={togglePin}
+                style={{
+                  padding: '6px 12px',
+                  background: isPinned ? 'rgba(255, 193, 7, 0.2)' : 'rgba(135, 206, 235, 0.2)',
+                  border: `1px solid ${isPinned ? 'rgba(255, 193, 7, 0.5)' : 'rgba(135, 206, 235, 0.5)'}`,
+                  borderRadius: '6px',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontSize: '0.85em',
+                  fontWeight: '600',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = isPinned ? 'rgba(255, 193, 7, 0.3)' : 'rgba(135, 206, 235, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = isPinned ? 'rgba(255, 193, 7, 0.2)' : 'rgba(135, 206, 235, 0.2)';
+                }}
+              >
+                {isPinned ? '📌 Épinglé' : '📌 Épingler'}
+              </button>
+              <button
                 onClick={() => setIsActive(!isActive)}
                 style={{
                   padding: '6px 12px',
@@ -212,6 +390,83 @@ function ChatWindow() {
         </HeaderDraggable>
 
       <div className="sl-body">
+        {/* Opportunity Layer */}
+        {activeOpportunity && (
+          <OpportunityLayer
+            opportunity={activeOpportunity}
+            onClose={() => setActiveOpportunity(null)}
+            onDiscuss={(_text) => {
+              // Activate opportunity context for intelligent discussion
+              setOpportunityContext({
+                opportunity: activeOpportunity,
+                isActive: true,
+              });
+              setActiveOpportunity(null);
+            }}
+            onApply={() => {
+              // Add confirmation message
+              addMessage('assistant', `✓ Suggestion appliquée avec succès !`);
+              setActiveOpportunity(null);
+            }}
+          />
+        )}
+
+        {/* Opportunity Context Banner */}
+        {opportunityContext?.isActive && (
+          <div
+            style={{
+              padding: '12px 16px',
+              background: 'linear-gradient(135deg, rgba(135, 206, 235, 0.2), rgba(16, 185, 129, 0.2))',
+              border: '1px solid rgba(135, 206, 235, 0.5)',
+              borderRadius: '8px',
+              marginBottom: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
+              <span style={{ fontSize: '18px' }}>💡</span>
+              <div>
+                <div
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: '600',
+                    color: 'rgba(255, 255, 255, 0.9)',
+                  }}
+                >
+                  Discussion en cours
+                </div>
+                <div
+                  style={{
+                    fontSize: '12px',
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    marginTop: '2px',
+                  }}
+                >
+                  {opportunityContext.opportunity.suggestion}
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => setOpportunityContext(null)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: 'rgba(255, 255, 255, 0.7)',
+                cursor: 'pointer',
+                fontSize: '18px',
+                padding: '4px 8px',
+                transition: 'color 0.2s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 1)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)')}
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
         {messages.length === 0 ? (
           <div style={{ 
             display: 'flex', 
@@ -234,7 +489,7 @@ function ChatWindow() {
             </p>
           </div>
         ) : (
-          <div className="messages-container">
+          <div className="messages-container" onMouseUp={handleTextSelection}>
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -244,13 +499,12 @@ function ChatWindow() {
               >
                 <div>{message.content}</div>
                 <div className="message-timestamp">{formatTime(message.timestamp)}</div>
-                
+
                 {/* Clueless Phase 1: Message Feedback */}
                 {message.role === 'assistant' && (
-                  <MessageFeedback 
+                  <MessageFeedback
                     messageId={message.id.toString()}
-                    onFeedback={(helpful) => {
-                      console.log(`Feedback for message ${message.id}:`, helpful);
+                    onFeedback={(_helpful) => {
                     }}
                   />
                 )}
@@ -310,7 +564,6 @@ function ChatWindow() {
             <button
               onClick={() => {
                 addMessage('user', '👍 Utile');
-                console.log('✅ Feedback: utile');
                 // TODO: Logger feedback dans DB
               }}
               style={{
@@ -328,7 +581,6 @@ function ChatWindow() {
             <button
               onClick={() => {
                 addMessage('user', '👎 Pas utile');
-                console.log('❌ Feedback: pas utile');
                 // TODO: Logger feedback dans DB
               }}
               style={{
@@ -354,11 +606,9 @@ function ChatWindow() {
           context={triggerContext}
           isVisible={showBubble}
           onHide={() => {
-            console.log('🔴 Hiding bubble');
             setShowBubble(false);
           }}
           onUserInteraction={() => {
-            console.log('✅ User interaction');
             setShowBubble(false);
             // Ajouter une carte mock basée sur l'app
             const appName = triggerContext?.app?.name || 'Application';
@@ -368,13 +618,17 @@ function ChatWindow() {
         />
       )}
 
-      {/* Status Indicator (J2) */}
-      <StatusIndicator />
+      {/* Status Indicator (J2) - DISABLED: Causes macOS glassmorphism flicker */}
+      {/* setInterval(1000ms) causes constant re-renders that destabilize backdrop-filter */}
+      {/* <StatusIndicator /> */}
 
       {/* Clueless Phase 1: Opportunity Toast */}
-      <OpportunityToast 
+      <OpportunityToast
         onOpenDock={() => setIsDockOpen(true)}
         onOpenDigest={() => setIsDigestOpen(true)}
+        onOpenChat={(opportunity) => {
+          setActiveOpportunity(opportunity);
+        }}
       />
 
       {/* Clueless Phase 2: Quick Actions */}
@@ -398,15 +652,15 @@ function ChatWindow() {
           <StreakTracker compact={false} />
           
           {/* Personality Selector */}
-          <PersonalitySelector 
+          <PersonalitySelector
             compact={false}
-            onPersonalityChange={(p) => console.log("Personality changed to:", p)}
+            onPersonalityChange={() => {}}
           />
-          
+
           {/* Pause Mode */}
-          <PauseMode 
+          <PauseMode
             compact={false}
-            onPauseChange={(isPaused) => console.log("Pause mode:", isPaused)}
+            onPauseChange={() => {}}
           />
           
           {/* Quick actions */}
@@ -452,6 +706,12 @@ function ChatWindow() {
       <DailyDigest
         isOpen={isDigestOpen}
         onClose={() => setIsDigestOpen(false)}
+      />
+
+      {/* Help Modal */}
+      <HelpModal
+        isOpen={isHelpOpen}
+        onClose={() => setIsHelpOpen(false)}
       />
         </WindowManager>
       </LayoutProvider>

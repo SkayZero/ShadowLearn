@@ -13,6 +13,21 @@
     "macOSPrivateApi": true,
     "windows": [
       {
+        "label": "main",
+        "title": "ShadowLearn — Dashboard",
+        "url": "index.html",
+        "width": 1200,
+        "height": 800,
+        "resizable": true,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": false,
+        "center": true,
+        "visible": true,
+        "skipTaskbar": false,
+        "shadow": true
+      },
+      {
         "label": "chat",
         "title": "ShadowLearn — Chat",
         "url": "chat.html",
@@ -21,49 +36,136 @@
         "resizable": true,
         "decorations": false,
         "transparent": true,
-        "alwaysOnTop": true,
+        "alwaysOnTop": false,
         "shadow": true,
         "center": false,
         "dragDropEnabled": false,
         "visible": true,
-        "skipTaskbar": true,
+        "skipTaskbar": false,
         "visibleOnAllWorkspaces": true,
         "acceptFirstMouse": true,
         "tabbingIdentifier": "shadowlearn"
       },
       {
-        "label": "context",
-        "title": "ShadowLearn — Context",
-        "url": "context.html",
-        "width": 300,
-        "height": 420,
+        "label": "settings",
+        "title": "ShadowLearn — Réglages",
+        "url": "settings.html",
+        "width": 380,
+        "height": 520,
         "resizable": true,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": false,
+        "shadow": true,
+        "center": false,
+        "visible": false,
+        "skipTaskbar": false,
+        "visibleOnAllWorkspaces": true,
+        "acceptFirstMouse": true,
+        "tabbingIdentifier": "shadowlearn"
+      },
+      {
+        "label": "spotlight",
+        "title": "ShadowLearn — Spotlight",
+        "url": "spotlight.html",
+        "width": 600,
+        "height": 500,
+        "resizable": false,
         "decorations": false,
         "transparent": true,
         "alwaysOnTop": true,
         "shadow": true,
         "center": false,
-        "dragDropEnabled": false,
+        "visible": false,
+        "skipTaskbar": true,
+        "visibleOnAllWorkspaces": true,
+        "acceptFirstMouse": true,
+        "focus": true
+      },
+      {
+        "label": "hud",
+        "title": "ShadowLearn — HUD",
+        "url": "hud.html",
+        "width": 60,
+        "height": 60,
+        "resizable": false,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "shadow": false,
+        "center": false,
         "visible": true,
         "skipTaskbar": true,
         "visibleOnAllWorkspaces": true,
         "acceptFirstMouse": true,
-        "tabbingIdentifier": "shadowlearn"
+        "focus": false,
+        "x": 20,
+        "y": 20
       }
     ],
     "security": {
       "csp": null,
       "capabilities": [
         {
-          "identifier": "draggable-window",
-          "windows": ["chat", "context"],
+          "identifier": "global-shortcuts",
+          "description": "Global keyboard shortcuts for all windows",
+          "permissions": [
+            "global-shortcut:allow-is-registered",
+            "global-shortcut:allow-register",
+            "global-shortcut:allow-register-all",
+            "global-shortcut:allow-unregister",
+            "global-shortcut:allow-unregister-all"
+          ]
+        },
+        {
+          "identifier": "main-window",
+          "windows": ["main"],
           "permissions": [
             "core:window:allow-start-dragging",
             "core:window:allow-hide",
             "core:window:allow-show",
             "core:window:allow-set-focus",
             "core:window:allow-minimize",
+            "core:window:allow-close",
             "core:event:allow-listen",
+            "core:event:default"
+          ]
+        },
+        {
+          "identifier": "draggable-window",
+          "windows": ["chat", "settings"],
+          "permissions": [
+            "core:window:allow-start-dragging",
+            "core:window:allow-hide",
+            "core:window:allow-show",
+            "core:window:allow-set-focus",
+            "core:window:allow-minimize",
+            "core:window:allow-set-always-on-top",
+            "core:event:allow-listen",
+            "core:event:default"
+          ]
+        },
+        {
+          "identifier": "spotlight-window",
+          "windows": ["spotlight"],
+          "permissions": [
+            "core:window:allow-hide",
+            "core:window:allow-show",
+            "core:window:allow-set-focus",
+            "core:window:allow-close",
+            "core:event:allow-listen",
+            "core:event:default"
+          ]
+        },
+        {
+          "identifier": "hud-window",
+          "windows": ["hud"],
+          "permissions": [
+            "core:window:allow-set-position",
+            "core:window:allow-start-dragging",
+            "core:window:allow-set-always-on-top",
+            "core:event:allow-listen",
+            "core:event:allow-emit",
             "core:event:default"
           ]
         }
@@ -79,6 +181,15 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "macOS": {
+      "minimumSystemVersion": "10.13",
+      "entitlements": "entitlements.plist",
+      "infoPlist": "Info.plist",
+      "exceptionDomain": null,
+      "frameworks": [],
+      "providerShortName": null,
+      "signingIdentity": null
+    }
   }
 }

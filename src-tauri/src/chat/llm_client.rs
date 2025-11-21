@@ -163,13 +163,13 @@ impl LLMChatClient {
                 })
             }
             Ok(Err(e)) => {
-                let ttfr = start.elapsed().as_millis() as u64;
+                let _ttfr = start.elapsed().as_millis() as u64;
                 self.record_failure().await;
                 error!("❌ Both providers failed. Last error: {}", e);
                 Err(format!("LLM unavailable (both providers failed): {}", e))
             }
             Err(_) => {
-                let ttfr = start.elapsed().as_millis() as u64;
+                let _ttfr = start.elapsed().as_millis() as u64;
                 self.record_failure().await;
                 error!("❌ Fallback timeout after 12s");
                 Err("LLM timeout (both providers)".to_string())

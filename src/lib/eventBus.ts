@@ -177,7 +177,7 @@ export const eventBus = new EventBus();
 // React Hook for Event Listening
 // ============================================================================
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 
 /**
  * React hook for listening to Tauri events
@@ -200,7 +200,6 @@ export function useEvent<T>(
     let unlistenTauriFn: UnlistenFn | undefined;
     let isMounted = true;
     
-    console.log(`[useEvent] Setting up listeners for: ${event}`);
     
     // === PART 1: Tauri Events (from backend) ===
     const setupTauriListener = async () => {
@@ -210,7 +209,6 @@ export function useEvent<T>(
         unlistenTauriFn = await tauriEvent.listen<T>(event, (tauriEvent) => {
           if (!isMounted) return;
           
-          console.log(`[useEvent] ✅ Tauri event received: ${event}`, tauriEvent.payload);
           
           try {
             // Try to extract payload, fallback to direct payload if no wrapper
@@ -235,7 +233,6 @@ export function useEvent<T>(
           }
         });
         
-        console.log(`[useEvent] ✅ Tauri listener registered for: ${event}`);
         
         if (!isMounted && unlistenTauriFn) {
           unlistenTauriFn();
@@ -251,7 +248,6 @@ export function useEvent<T>(
       if (!isMounted) return;
       
       const customEvent = e as CustomEvent;
-      console.log(`[useEvent] ✅ DOM event received: ${event}`, customEvent.detail);
       
       try {
         const result = savedHandler.current(customEvent.detail as T);
@@ -268,7 +264,6 @@ export function useEvent<T>(
     
     // Register DOM listener
     window.addEventListener(event, handleDOMEvent);
-    console.log(`[useEvent] ✅ DOM listener registered for: ${event}`);
     
     // Setup Tauri listener
     setupTauriListener();
@@ -281,7 +276,6 @@ export function useEvent<T>(
       if (unlistenTauriFn) {
         try {
           unlistenTauriFn();
-          console.log(`[useEvent] 🧹 Tauri listener cleaned up: ${event}`);
         } catch (err) {
           console.error(`[useEvent ${event}] Tauri cleanup error:`, err);
         }
@@ -289,7 +283,6 @@ export function useEvent<T>(
       
       // Cleanup DOM
       window.removeEventListener(event, handleDOMEvent);
-      console.log(`[useEvent] 🧹 DOM listener cleaned up: ${event}`);
     };
   }, [event]);
 }

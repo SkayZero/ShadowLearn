@@ -1,11 +1,9 @@
 use crate::chat::llm_client::{ChatMessage, ChatRequest, LLMChatClient};
 use chrono::Utc;
-use serde_json::json;
 use std::fs::OpenOptions;
 use std::io::Write;
 use std::sync::Arc;
 use std::time::Instant;
-use tokio::sync::Mutex;
 use tracing::info;
 
 /// Send a chat message to the LLM
@@ -16,7 +14,7 @@ pub async fn chat_with_ai(
     llm_client: tauri::State<'_, Arc<tokio::sync::Mutex<LLMChatClient>>>,
 ) -> Result<String, String> {
     let start = Instant::now();
-    let timestamp = Utc::now().to_rfc3339();
+    let _timestamp = Utc::now().to_rfc3339();
 
     info!("💬 Chat request: {}", message);
     tracing::info!("Building ChatRequest...");

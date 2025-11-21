@@ -24,6 +24,9 @@ body,
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
     Inter, sans-serif;
+
+  /* Ensure text visibility on all backgrounds */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 /* ============================================
@@ -36,15 +39,30 @@ body,
   display: flex;
   flex-direction: column;
 
-  /* Use Cluely glass tokens - Toujours transparent */
+  /* Platform-specific glassmorphism
+   * macOS: Gradient background without backdrop-filter (stable, no flicker)
+   * Windows/Linux: Backdrop-filter glassmorphism (full effect)
+   */
   background: var(--glass-bg) !important;
-  backdrop-filter: var(--glass-backdrop) !important;
-  -webkit-backdrop-filter: var(--glass-backdrop) !important;
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-2xl);
   box-shadow: var(--glass-shadow);
 
+  /* Backdrop filter for glassmorphism (Windows/Linux) */
+  backdrop-filter: var(--glass-backdrop) !important;
+  -webkit-backdrop-filter: var(--glass-backdrop) !important;
+
+  /* GPU optimizations for smooth rendering */
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+
   overflow: hidden;
+}
+
+/* macOS: Ensure backdrop-filter is disabled (prevents flicker) */
+.platform-macos .sl-island {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 /* ============================================
@@ -55,9 +73,9 @@ body,
   padding: 16px 20px;
   font-weight: 600;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.95); /* Toujours visible */
+  color: rgba(255, 255, 255, 0.95);
 
-  /* Toujours transparent même quand focus */
+  /* Transparent header with backdrop blur (Windows/Linux) */
   background: var(--glass-emerald-tint) !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
@@ -67,15 +85,25 @@ body,
   align-items: center;
   justify-content: space-between;
   min-height: 56px;
-  
+
   /* Always draggable - cursor changes to move on hover */
   cursor: move;
   user-select: none;
   -webkit-user-select: none;
   -webkit-app-region: drag;
-  
+
   /* Ensure drag is always active */
   pointer-events: auto;
+
+  /* GPU compositing */
+  transform: translateZ(0);
+}
+
+/* macOS: Disable header backdrop-filter and use theme color */
+.platform-macos .sl-header {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: var(--glass-header-bg) !important;
 }
 
 /* Force ALL children of header to be draggable */
@@ -254,16 +282,12 @@ body,
 
 .sl-input {
   padding: 12px;
-  background: rgba(26, 61, 110, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: transparent;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .input-field {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 10px 14px;
@@ -300,9 +324,7 @@ body,
 }
 
 .message-user {
-  background: rgba(26, 61, 110, 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(26, 61, 110, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 18px;
   padding: 10px 14px;
@@ -315,9 +337,7 @@ body,
 }
 
 .message-assistant {
-  background: rgba(81, 130, 108, 0.4);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(81, 130, 108, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 18px;
   padding: 10px 14px;
@@ -339,9 +359,7 @@ body,
    ============================================ */
 
 .context-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 12px;
@@ -404,24 +422,28 @@ body,
    ============================================ */
 
 .sl-button {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
   border-radius: 8px;
   padding: 8px 16px;
   color: #ffffff;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .sl-button:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
 
 .sl-button:active {
-  transform: scale(0.98);
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* ============================================
@@ -455,76 +477,94 @@ body,
 
 /* J18: Personalization Button */
 .personalization-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
   border-radius: 6px;
-  padding: 6px 8px;
-  color: rgba(255, 255, 255, 0.7);
+  padding: 6px 12px;
+  color: rgba(255, 255, 255, 0.95);
   cursor: pointer;
   font-size: 0.9em;
+  font-weight: 600;
   transition: all 0.2s ease;
   -webkit-app-region: no-drag;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .personalization-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
   color: white;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
 
 /* J21.5: Settings Button */
 .settings-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
   border-radius: 6px;
-  padding: 6px 8px;
-  color: rgba(255, 255, 255, 0.7);
+  padding: 6px 12px;
+  color: rgba(255, 255, 255, 0.95);
   cursor: pointer;
   font-size: 0.9em;
+  font-weight: 600;
   transition: all 0.2s ease;
   -webkit-app-region: no-drag;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .settings-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
   color: white;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
 
 /* J23: Artifact Button */
 .artifact-btn {
-  background: rgba(102, 126, 234, 0.2);
-  border: none;
+  background: rgba(102, 126, 234, 0.3);
+  border: 1.5px solid rgba(102, 126, 234, 0.5);
   border-radius: 6px;
-  padding: 6px 8px;
-  color: rgba(255, 255, 255, 0.7);
+  padding: 6px 12px;
+  color: rgba(255, 255, 255, 0.95);
   cursor: pointer;
   font-size: 0.9em;
+  font-weight: 600;
   transition: all 0.2s ease;
   -webkit-app-region: no-drag;
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .artifact-btn:hover {
-  background: rgba(102, 126, 234, 0.3);
+  background: rgba(102, 126, 234, 0.45);
+  border-color: rgba(102, 126, 234, 0.7);
   color: white;
-  transform: scale(1.05);
+  box-shadow: 0 3px 8px rgba(102, 126, 234, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px) scale(1.02);
 }
 
 /* J25: Test Bubble Button */
 .test-bubble-btn {
-  background: rgba(16, 185, 129, 0.2);
-  border: none;
+  background: rgba(16, 185, 129, 0.3);
+  border: 1.5px solid rgba(16, 185, 129, 0.5);
   border-radius: 6px;
-  padding: 6px 8px;
-  color: rgba(255, 255, 255, 0.7);
+  padding: 6px 12px;
+  color: rgba(255, 255, 255, 0.95);
   cursor: pointer;
   font-size: 0.9em;
+  font-weight: 600;
   transition: all 0.2s ease;
   -webkit-app-region: no-drag;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .test-bubble-btn:hover {
-  background: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.45);
+  border-color: rgba(16, 185, 129, 0.7);
   color: white;
-  transform: scale(1.05);
+  box-shadow: 0 3px 8px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px) scale(1.02);
 }
 
 /* Window Controls */

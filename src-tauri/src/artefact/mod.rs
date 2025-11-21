@@ -49,7 +49,7 @@ impl ArtefactSystem {
         let duration = start_time.elapsed();
         
         match &result {
-            Ok(artifact) => {
+            Ok(_artifact) => {
                 self.stats.record_success(duration);
                 info!("[ARTEFACT SYSTEM] Generated successfully in {:?}", duration);
             }

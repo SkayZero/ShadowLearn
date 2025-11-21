@@ -56,7 +56,6 @@ export function useSnooze() {
   const snooze = async (duration: SnoozeDuration) => {
     try {
       await invoke('snooze_triggers', { duration });
-      console.log(`😴 Snoozed for ${duration}`);
       await fetchStatus();
     } catch (e) {
       console.error('Failed to snooze:', e);
@@ -67,7 +66,6 @@ export function useSnooze() {
   const unsnooze = async () => {
     try {
       await invoke('unsnooze_triggers');
-      console.log('⏰ Unsnooze');
       await fetchStatus();
     } catch (e) {
       console.error('Failed to unsnooze:', e);

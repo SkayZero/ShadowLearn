@@ -34,7 +34,7 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
     const generateActions = async () => {
       const contextActions: QuickAction[] = [];
 
-      // Actions universelles toujours visibles
+      // Action universelle: Ouvrir Dock (toujours visible)
       if (onOpenDock) {
         contextActions.push({
           id: "open-dock",
@@ -42,22 +42,7 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
           icon: "🎛️",
           description: "Afficher le panneau principal",
           action: async () => {
-            console.log("Opening dock");
             onOpenDock();
-          },
-        });
-      }
-      
-      // Action: Stats/Digest
-      if (onOpenDigest) {
-        contextActions.push({
-          id: "view-stats",
-          label: "Voir mes stats",
-          icon: "📊",
-          description: "Digest du jour",
-          action: async () => {
-            console.log("Opening digest");
-            onOpenDigest();
           },
         });
       }
@@ -70,7 +55,6 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
           icon: "💡",
           description: "Expliquer la sélection",
           action: async () => {
-            console.log("Explaining:", context.selectedText);
             await invoke("chat_with_ai", {
               message: `/expliquer ${context.selectedText}`,
             });
@@ -83,7 +67,6 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
           icon: "🔄",
           description: "Reformuler plus simplement",
           action: async () => {
-            console.log("Simplifying:", context.selectedText);
             await invoke("chat_with_ai", {
               message: `/pasclair ${context.selectedText}`,
             });
@@ -96,38 +79,8 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
           icon: "🌐",
           description: "Traduire le texte",
           action: async () => {
-            console.log("Translating:", context.selectedText);
             await invoke("chat_with_ai", {
               message: `/traduire ${context.selectedText}`,
-            });
-          },
-        });
-      }
-
-      // Si dans un IDE (VSCode, Cursor, etc.)
-      if (context?.app?.includes("Code") || context?.app?.includes("Cursor")) {
-        contextActions.push({
-          id: "debug",
-          label: "Débugger",
-          icon: "🐛",
-          description: "Analyser l'erreur",
-          action: async () => {
-            console.log("Debugging code");
-            await invoke("chat_with_ai", {
-              message: "/debug",
-            });
-          },
-        });
-
-        contextActions.push({
-          id: "improve",
-          label: "Améliorer",
-          icon: "✨",
-          description: "Suggérer des améliorations",
-          action: async () => {
-            console.log("Improving code");
-            await invoke("chat_with_ai", {
-              message: "/améliorer",
             });
           },
         });
@@ -141,7 +94,6 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
           icon: "📝",
           description: "Résumer la page",
           action: async () => {
-            console.log("Summarizing page");
             await invoke("chat_with_ai", {
               message: "/résumer cette page",
             });
@@ -149,26 +101,12 @@ export function QuickActions({ context, onOpenDock, onOpenDigest }: ContextualAc
         });
       }
 
-      // Action universelle: Aide
-      contextActions.push({
-        id: "help",
-        label: "Aide",
-        icon: "❓",
-        description: "Afficher l'aide",
-        action: async () => {
-          console.log("Showing help");
-          await invoke("chat_with_ai", {
-            message: "/help",
-          });
-        },
-      });
-
       setActions(contextActions);
       setIsVisible(contextActions.length > 0);
     };
 
     generateActions();
-  }, [context]);
+  }, [context, onOpenDock, onOpenDigest]);
 
   if (!isVisible || actions.length === 0) {
     return null;

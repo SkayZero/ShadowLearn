@@ -35,7 +35,6 @@ export function SmartPills({ context }: SmartPillsProps) {
         type: "suggestion" as const,
         confidence: 0.8,
         action: async () => {
-          console.log("Micro-suggestion clicked:", s.text);
           await invoke("dismiss_pill", { pillId: s.id });
           dismissPill(s.id);
         },
@@ -63,7 +62,6 @@ export function SmartPills({ context }: SmartPillsProps) {
           type: "suggestion",
           confidence: 0.85,
           action: async () => {
-            console.log("Code review triggered");
             await invoke("chat_with_ai", {
               message: "/améliorer le code actuel",
             });
@@ -78,7 +76,6 @@ export function SmartPills({ context }: SmartPillsProps) {
           type: "suggestion",
           confidence: 0.75,
           action: async () => {
-            console.log("Explain code triggered");
             await invoke("chat_with_ai", {
               message: "/expliquer ce code",
             });
@@ -96,7 +93,6 @@ export function SmartPills({ context }: SmartPillsProps) {
           type: "suggestion",
           confidence: 0.9,
           action: async () => {
-            console.log("Summarize triggered");
             await invoke("chat_with_ai", {
               message: `/résumer ${context.selectedText}`,
             });
@@ -114,7 +110,6 @@ export function SmartPills({ context }: SmartPillsProps) {
           type: "info",
           confidence: 0.7,
           action: async () => {
-            console.log("Take break triggered");
             dismissPill("take-break");
           },
         });
@@ -129,7 +124,6 @@ export function SmartPills({ context }: SmartPillsProps) {
           type: "info",
           confidence: 0.6,
           action: async () => {
-            console.log("Keyboard shortcut info");
             dismissPill("keyboard-shortcut");
           },
         });

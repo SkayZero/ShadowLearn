@@ -1,8 +1,8 @@
 use std::sync::Arc;
-use tauri::{AppHandle, Emitter, Manager, PhysicalPosition};
+use tauri::{AppHandle, Emitter, Listener, Manager, PhysicalPosition};
 use tauri_plugin_window_state::StateFlags;
 use tokio::sync::Mutex;
-use tracing::{info, warn};
+use tracing::{error, info, warn};
 
 mod adaptive;
 mod chat;
@@ -10,22 +10,31 @@ mod commands; // Clueless: Slash Commands
 mod config; // J5
 mod crypto;
 mod permissions;
+mod privacy; // Privacy zones for screen monitoring
 mod artefact;
 mod clustering;
 mod context;
 mod digest; // Clueless: Daily Digest
 mod features;
 mod flow; // Clueless: Flow State Detection
+mod focus; // Killer Feature: Focus Mode
+mod learn; // Killer Feature: Learn by Doing
+mod productivity; // Phase 3: Productivity Dashboard & Weekly Insights
 mod health;
 mod intent;
 mod learning;
 mod ml;
+mod monitor; // Screen Monitoring avec détection de changements
+mod shortcuts; // Global keyboard shortcuts
 mod opportunities; // Clueless: One-Tap Toast
 mod pause; // Clueless Phase 3: Pause Mode
+mod patterns; // Phase 2.1: Pattern Recognition ML
 mod persistence;
 mod personality; // Clueless Phase 3: Personalities
 mod pills; // Clueless: Smart Pills / Micro Suggestions
+mod plugins; // Phase 4: Plugin System
 mod recovery;
+mod replay; // Killer Feature: Shadow Replay
 mod streaks; // Clueless Phase 3: Streaks
 mod screenshot;
 mod snooze;
@@ -65,6 +74,42 @@ async fn toggle_window(app: AppHandle, label: String) -> Result<(), String> {
     } else {
         warn!("⚠️ Window '{}' not found", label);
         Err(format!("Window '{}' not found", label))
+    }
+}
+
+#[tauri::command]
+async fn ensure_chat_visible(app: AppHandle) -> Result<(), String> {
+    info!("🔍 ensure_chat_visible called");
+    if let Some(window) = app.get_webview_window("chat") {
+        info!("📍 Chat window found, checking visibility...");
+        let is_visible = window.is_visible().unwrap_or(false);
+        info!("👁️ Chat window visibility before: {}", is_visible);
+
+        // Force window to stay visible and focused (without always_on_top)
+        window.show().map_err(|e| {
+            error!("❌ Failed to show window: {}", e);
+            e.to_string()
+        })?;
+        info!("✅ Window.show() succeeded");
+
+        window.set_focus().map_err(|e| {
+            error!("❌ Failed to set focus: {}", e);
+            e.to_string()
+        })?;
+        info!("✅ Window.set_focus() succeeded");
+
+        // Unminimize if minimized
+        window.unminimize().ok();
+        info!("✅ Window.unminimize() called");
+
+        let is_visible_after = window.is_visible().unwrap_or(false);
+        info!("👁️ Chat window visibility after: {}", is_visible_after);
+
+        info!("💬 Chat window ensured visible and focused");
+        Ok(())
+    } else {
+        error!("⚠️ Chat window not found in app");
+        Err("Chat window not found".to_string())
     }
 }
 
@@ -174,7 +219,7 @@ async fn record_bubble_dismissed(
 }
 
 #[tauri::command]
-async fn record_user_action(
+async fn record_trigger_action(
     trigger_manager: tauri::State<'_, Arc<Mutex<TriggerManager>>>,
 ) -> Result<(), String> {
     trigger_manager.lock().await.record_action();
@@ -840,7 +885,7 @@ async fn generate_artifact(
 ) -> Result<crate::artefact::GeneratedArtifact, String> {
     // TODO: Get learning system from app state
     // For now, return a placeholder
-    use crate::artefact::{ArtefactGenerator, GeneratedArtifact};
+    use crate::artefact::ArtefactGenerator;
     use crate::validator::ArtefactType;
     
     let artefact_type_enum = match artefact_type.as_str() {
@@ -972,6 +1017,37 @@ pub async fn run() {
     let pills_manager = Arc::new(Mutex::new(pills::PillsManager::new()));
     info!("✅ Pills manager initialized");
 
+    // Initialize productivity manager (Phase 3)
+    let productivity_manager = Arc::new(Mutex::new(productivity::ProductivityManager::new()));
+    info!("✅ Productivity manager initialized");
+
+    // Initialize plugin manager (Phase 4)
+    let plugin_manager = match plugins::PluginManager::new() {
+        Ok(mut manager) => {
+            match manager.load_all_plugins() {
+                Ok(count) => info!("✅ Plugin manager initialized with {} plugins", count),
+                Err(e) => warn!("⚠️ Failed to load plugins: {}", e),
+            }
+            Arc::new(Mutex::new(manager))
+        }
+        Err(e) => {
+            warn!("⚠️ Plugin manager initialization failed: {}", e);
+            Arc::new(Mutex::new(plugins::PluginManager::new().unwrap_or_else(|_| panic!("Failed to create plugin manager"))))
+        }
+    };
+
+    // Initialize replay manager (Killer Feature)
+    let replay_manager = Arc::new(Mutex::new(replay::ReplayManager::new(10000))); // Store last 10k events
+    info!("✅ Replay manager initialized");
+
+    // Initialize focus manager (Killer Feature)
+    let focus_manager = Arc::new(Mutex::new(focus::FocusManager::new()));
+    info!("✅ Focus manager initialized");
+
+    // Initialize learn manager (Killer Feature)
+    let learn_manager = Arc::new(Mutex::new(learn::LearnManager::new(100))); // Store 100 workflows
+    info!("✅ Learn manager initialized");
+
     // Initialize screenshot capturer
     if let Err(e) = screenshot::init_capturer() {
         info!(
@@ -979,6 +1055,36 @@ pub async fn run() {
             e
         );
     }
+
+    // Initialize screen monitor
+    let monitor_config = monitor::MonitorConfig::default();
+    let screen_monitor = Arc::new(Mutex::new(monitor::ScreenMonitor::new(monitor_config)));
+    info!("✅ Screen monitor initialized");
+
+    // Initialize shortcut manager
+    let shortcut_config = shortcuts::manager::ShortcutConfig::default();
+    let shortcut_manager = Arc::new(Mutex::new(shortcuts::ShortcutManager::new(shortcut_config)));
+    info!("✅ Shortcut manager initialized");
+
+    // Initialize privacy zone manager
+    let privacy_config = privacy::PrivacyZonesConfig::default();
+    let privacy_manager = Arc::new(Mutex::new(privacy::PrivacyZoneManager::new(privacy_config)));
+    info!("✅ Privacy zone manager initialized");
+
+    // Initialize pattern recognition manager (Phase 2.1)
+    let app_dir = std::env::current_dir()
+        .unwrap_or_else(|_| std::path::PathBuf::from("."))
+        .join("shadowlearn_data");
+    let pattern_manager = match patterns::commands::PatternManager::new(app_dir) {
+        Ok(manager) => {
+            info!("✅ Pattern recognition manager initialized");
+            Arc::new(manager)
+        }
+        Err(e) => {
+            error!("❌ Failed to initialize pattern manager: {}", e);
+            panic!("Cannot start without pattern manager");
+        }
+    };
 
     // Log feature state
     let state = feature_flags.get_state();
@@ -991,29 +1097,35 @@ pub async fn run() {
                 .with_state_flags(StateFlags::all())
                 .build(),
         )
-        .setup(|app| {
-            // Setup ESC=hide for existing windows
-            if let Some(main_window) = app.get_webview_window("main") {
-                info!("🔧 Setting up ESC=hide for main window");
-                let window = main_window.clone();
-                main_window.on_window_event(move |event| {
-                    if let tauri::WindowEvent::CloseRequested { api, .. } = event {
-                        api.prevent_close();
-                        if let Err(e) = window.hide() {
-                            warn!("Failed to hide window: {}", e);
-                        } else {
-                            info!("🔒 Window hidden (ESC pressed)");
-                        }
-                    }
-                });
-            }
-            Ok(())
-        })
+        .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .on_window_event(|window, event| {
-            // Global handler for all windows - only hide chat window, keep context visible
+            // Global handler for all windows - LOG ALL EVENTS for debugging
+            let label = window.label();
+
+            // Log all events for chat window to diagnose hiding issue
+            if label == "chat" {
+                match event {
+                    tauri::WindowEvent::CloseRequested { .. } => {
+                        info!("🚨 [{}] CloseRequested event", label);
+                    }
+                    tauri::WindowEvent::Focused(focused) => {
+                        info!("🎯 [{}] Focused event: {}", label, focused);
+                    }
+                    tauri::WindowEvent::Moved(_) => {
+                        // Too verbose, skip
+                    }
+                    tauri::WindowEvent::Resized(_) => {
+                        // Too verbose, skip
+                    }
+                    _ => {
+                        info!("📡 [{}] Window event: {:?}", label, event);
+                    }
+                }
+            }
+
+            // Only hide chat window on CloseRequested, keep context visible
             match event {
                 tauri::WindowEvent::CloseRequested { api, .. } => {
-                    // Only hide chat window, not context
                     if window.label() == "chat" {
                         api.prevent_close();
                         if let Err(e) = window.hide() {
@@ -1048,8 +1160,18 @@ pub async fn run() {
         .manage(personality_manager)
         .manage(digest_manager) // Clueless: Daily Digest
         .manage(pills_manager) // Clueless: Smart Pills
+        .manage(productivity_manager) // Phase 3: Productivity Dashboard
+        .manage(plugin_manager) // Phase 4: Plugin System
+        .manage(replay_manager) // Killer Feature: Shadow Replay
+        .manage(focus_manager) // Killer Feature: Focus Mode
+        .manage(learn_manager) // Killer Feature: Learn by Doing
+        .manage(screen_monitor) // Screen Monitor
+        .manage(shortcut_manager) // Global Shortcuts
+        .manage(privacy_manager) // Privacy Zones
+        .manage(pattern_manager) // Phase 2.1: Pattern Recognition ML
         .invoke_handler(tauri::generate_handler![
             toggle_window,
+            ensure_chat_visible,
             broadcast_event,
             get_health_status,
             get_telemetry_stats,
@@ -1062,7 +1184,7 @@ pub async fn run() {
             check_should_trigger,
             record_trigger_fired,
             record_bubble_dismissed,
-            record_user_action,
+            record_trigger_action,
             get_trigger_stats,
             add_to_allowlist,
             remove_from_allowlist,
@@ -1138,6 +1260,16 @@ pub async fn run() {
             pills::dismiss_pill,
             // Clueless: Slash Commands
             commands::slash::execute_slash_command,
+            // Phase 2.1: Pattern Recognition ML commands
+            patterns::commands::record_user_action,
+            patterns::commands::get_next_action_prediction,
+            patterns::commands::get_learned_patterns,
+            patterns::commands::get_patterns_by_tag,
+            patterns::commands::get_all_repetitive_tasks,
+            patterns::commands::get_high_priority_repetitive_tasks,
+            patterns::commands::get_pattern_system_stats,
+            patterns::commands::save_patterns_to_disk,
+            patterns::commands::clear_pattern_storage,
             // J18: Personnalisation ML commands
             record_ml_event,
             get_usage_patterns,
@@ -1166,11 +1298,139 @@ pub async fn run() {
             // J5: Config & Privacy commands
             config::manager::get_config,
             config::manager::update_config,
-            config::manager::get_config_path
+            config::manager::get_config_path,
+            // Screen Monitor commands
+            monitor::commands::start_screen_monitor,
+            monitor::commands::stop_screen_monitor,
+            monitor::commands::get_monitor_status,
+            monitor::commands::reset_monitor_detector,
+            monitor::commands::reset_monitor_cache,
+            monitor::commands::get_monitor_cache_stats,
+            // Keyboard Shortcuts commands
+            shortcuts::commands::get_shortcuts_config,
+            shortcuts::commands::list_shortcuts,
+            shortcuts::commands::trigger_shortcut_action,
+            shortcuts::commands::toggle_spotlight,
+            // Privacy Zones commands
+            privacy::commands::get_privacy_zones_config,
+            privacy::commands::add_privacy_zone,
+            privacy::commands::remove_privacy_zone,
+            privacy::commands::set_privacy_zones_enabled,
+            privacy::commands::is_app_protected,
+            // Phase 3: Productivity Dashboard commands
+            productivity::get_productivity_metrics,
+            productivity::record_productivity_event,
+            productivity::record_flow_session_event,
+            // Phase 4: Plugin System commands
+            plugins::get_all_plugins,
+            plugins::get_plugin_info,
+            plugins::enable_plugin,
+            plugins::disable_plugin,
+            plugins::uninstall_plugin,
+            plugins::reload_plugins,
+            plugins::get_plugin_stats,
+            plugins::execute_plugin_hook,
+            // Killer Feature: Shadow Replay commands
+            replay::get_replay_events,
+            replay::get_replay_sessions,
+            replay::get_replay_stats,
+            replay::start_replay_playback,
+            replay::stop_replay_playback,
+            replay::set_replay_speed,
+            replay::get_next_replay_event,
+            replay::get_playback_state,
+            replay::seek_replay_to,
+            replay::record_replay_suggestion,
+            replay::record_replay_flow_session,
+            // Killer Feature: Focus Mode commands
+            focus::get_focus_state,
+            focus::get_focus_stats,
+            focus::get_focus_config,
+            focus::update_focus_config,
+            focus::detect_focus_mode,
+            focus::should_block_notification,
+            focus::should_block_trigger,
+            focus::end_focus_session,
+            focus::get_recent_focus_sessions,
+            // Killer Feature: Learn by Doing commands
+            learn::start_workflow_recording,
+            learn::stop_workflow_recording,
+            learn::add_workflow_comment,
+            learn::generate_workflow_tutorial,
+            learn::get_recording_state,
+            learn::get_all_workflows,
+            learn::get_all_tutorials,
+            learn::export_tutorial_as_markdown
         ])
         .setup(|app| {
+            // Setup ESC=hide for existing windows
+            if let Some(main_window) = app.get_webview_window("main") {
+                info!("🔧 Setting up ESC=hide for main window");
+                let window = main_window.clone();
+                main_window.on_window_event(move |event| {
+                    if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                        api.prevent_close();
+                        if let Err(e) = window.hide() {
+                            warn!("Failed to hide window: {}", e);
+                        } else {
+                            info!("🔒 Window hidden (ESC pressed)");
+                        }
+                    }
+                });
+            }
+
+            // Register global shortcuts
+            info!("🎹 About to register global shortcuts...");
+            let shortcut_mgr = app.state::<Arc<Mutex<shortcuts::ShortcutManager>>>();
+            let shortcut_mgr_clone = shortcut_mgr.inner().clone();
+            let app_handle = app.handle().clone();
+
+            // Spawn async task to register shortcuts (cannot use block_on inside Tauri runtime)
+            tauri::async_runtime::spawn(async move {
+                info!("🎹 Inside async block - acquiring lock...");
+                let manager = shortcut_mgr_clone.lock().await;
+                info!("🎹 Lock acquired - calling register_all...");
+                if let Err(e) = manager.register_all(&app_handle).await {
+                    error!("❌ Failed to register shortcuts: {}", e);
+                } else {
+                    info!("✅ All global shortcuts registered");
+                }
+            });
+            info!("🎹 Shortcut registration task spawned");
+
+            // Setup HUD click listener to show Spotlight
+            let app_handle_for_hud = app.handle().clone();
+            app.listen("hud:click", move |_event| {
+                info!("🔍 HUD clicked - showing Spotlight");
+                if let Some(spotlight_window) = app_handle_for_hud.get_webview_window("spotlight") {
+                    if let Err(e) = spotlight_window.show() {
+                        error!("Failed to show spotlight: {}", e);
+                    }
+                    if let Err(e) = spotlight_window.set_focus() {
+                        error!("Failed to focus spotlight: {}", e);
+                    }
+                    // Emit event to tell Spotlight frontend to show content
+                    if let Err(e) = app_handle_for_hud.emit("spotlight:show", ()) {
+                        error!("Failed to emit spotlight:show: {}", e);
+                    }
+                } else {
+                    error!("Spotlight window not found");
+                }
+            });
+            info!("✅ HUD click listener registered");
+
             info!("🔍 Checking available windows...");
-            
+
+            // macOS Fix: Use Regular activation policy so app appears in dock
+            // Previous: Accessory policy prevented Stage Manager glitches but made windows inaccessible
+            // Tradeoff: App now appears in dock and windows are accessible, but may have occasional
+            // Stage Manager visual glitches on focus change (acceptable vs inaccessible windows)
+            #[cfg(target_os = "macos")]
+            {
+                app.set_activation_policy(tauri::ActivationPolicy::Regular);
+                info!("🍎 macOS: Activation policy set to Regular (app accessible in dock)");
+            }
+
             // Force show and position chat window
             if let Some(chat) = app.get_webview_window("chat") {
                 info!("✅ Found chat window, showing...");
@@ -1188,20 +1448,71 @@ pub async fn run() {
                 warn!("⚠️ chat window NOT FOUND!");
             }
 
-            // Force show and position context window
-            if let Some(context) = app.get_webview_window("context") {
-                info!("✅ Found context window, showing...");
-                let _ = context.show();
-                let _ = context.set_focus();
-                if let Ok(Some(monitor)) = context.current_monitor() {
-                    let size = monitor.size();
-                    let _ = context.set_position(PhysicalPosition::new(20, 100));
-                    info!("📍 Context window positioned and visible");
+            // Configure Spotlight window for macOS fullscreen support
+            if let Some(spotlight) = app.get_webview_window("spotlight") {
+                info!("✅ Found spotlight window, configuring...");
+
+                // Ensure it's hidden initially
+                let _ = spotlight.hide();
+
+                // Set always on top to ensure visibility over fullscreen apps
+                if let Err(e) = spotlight.set_always_on_top(true) {
+                    warn!("⚠️ Failed to set spotlight always on top: {}", e);
+                } else {
+                    info!("🔍 Spotlight configured: always-on-top enabled");
                 }
+
+                info!("🔍 Spotlight window ready (hidden, will show on Cmd+Shift+Y)");
             } else {
-                warn!("⚠️ context window NOT FOUND!");
+                warn!("⚠️ spotlight window NOT FOUND!");
             }
-            
+
+            // Configure HUD window for macOS fullscreen support (luciole)
+            if let Some(hud) = app.get_webview_window("hud") {
+                info!("✅ Found HUD window, configuring for fullscreen visibility...");
+
+                // Ensure it's visible
+                let _ = hud.show();
+                let _ = hud.set_always_on_top(true);
+
+                #[cfg(target_os = "macos")]
+                {
+                    use cocoa::appkit::{NSWindow, NSWindowCollectionBehavior, NSMainMenuWindowLevel};
+                    use cocoa::base::id;
+
+                    if let Ok(ns_window_ptr) = hud.ns_window() {
+                        let ns_window = ns_window_ptr as id;
+
+                        unsafe {
+                            // Configure window behavior to appear on all Spaces and in fullscreen
+                            let behavior = NSWindowCollectionBehavior::NSWindowCollectionBehaviorCanJoinAllSpaces
+                                | NSWindowCollectionBehavior::NSWindowCollectionBehaviorStationary
+                                | NSWindowCollectionBehavior::NSWindowCollectionBehaviorFullScreenAuxiliary;
+
+                            ns_window.setCollectionBehavior_(behavior);
+
+                            // Set window level above fullscreen apps (menu bar level + 1)
+                            let level = (NSMainMenuWindowLevel as i64) + 1;
+                            ns_window.setLevel_(level);
+
+                            info!("🔥 HUD configured with NSWindowCollectionBehavior for fullscreen visibility");
+                            info!("🔥 HUD window level set to {} (above menu bar)", level);
+                        }
+                    } else {
+                        warn!("⚠️ Failed to get HUD ns_window");
+                    }
+                }
+
+                #[cfg(not(target_os = "macos"))]
+                {
+                    info!("🔥 HUD configured (non-macOS: always-on-top only)");
+                }
+
+                info!("🔥 HUD ready - visible as ambient LED indicator");
+            } else {
+                warn!("⚠️ HUD window NOT FOUND!");
+            }
+
             // 🔥 Lance automatiquement la boucle de triggers
             tauri::async_runtime::spawn(triggers::trigger_loop::start_trigger_loop(
                 app.handle().clone(),
