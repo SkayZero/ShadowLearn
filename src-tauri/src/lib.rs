@@ -1098,65 +1098,6 @@ pub async fn run() {
                 .build(),
         )
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
-        .setup(|app| {
-            // Setup ESC=hide for existing windows
-            if let Some(main_window) = app.get_webview_window("main") {
-                info!("🔧 Setting up ESC=hide for main window");
-                let window = main_window.clone();
-                main_window.on_window_event(move |event| {
-                    if let tauri::WindowEvent::CloseRequested { api, .. } = event {
-                        api.prevent_close();
-                        if let Err(e) = window.hide() {
-                            warn!("Failed to hide window: {}", e);
-                        } else {
-                            info!("🔒 Window hidden (ESC pressed)");
-                        }
-                    }
-                });
-            }
-
-            // Register global shortcuts
-            info!("🎹 About to register global shortcuts...");
-            let shortcut_mgr = app.state::<Arc<Mutex<shortcuts::ShortcutManager>>>();
-            let shortcut_mgr_clone = shortcut_mgr.inner().clone();
-            let app_handle = app.handle().clone();
-
-            // Use block_on instead of spawn to ensure shortcuts are registered before continuing
-            tauri::async_runtime::block_on(async move {
-                info!("🎹 Inside async block - acquiring lock...");
-                let manager = shortcut_mgr_clone.lock().await;
-                info!("🎹 Lock acquired - calling register_all...");
-                if let Err(e) = manager.register_all(&app_handle).await {
-                    error!("❌ Failed to register shortcuts: {}", e);
-                } else {
-                    info!("✅ All global shortcuts registered");
-                }
-            });
-            info!("🎹 After shortcut registration block");
-
-            // Setup HUD click listener to show Spotlight
-            let app_handle_for_hud = app.handle().clone();
-            app.listen("hud:click", move |_event| {
-                info!("🔍 HUD clicked - showing Spotlight");
-                if let Some(spotlight_window) = app_handle_for_hud.get_webview_window("spotlight") {
-                    if let Err(e) = spotlight_window.show() {
-                        error!("Failed to show spotlight: {}", e);
-                    }
-                    if let Err(e) = spotlight_window.set_focus() {
-                        error!("Failed to focus spotlight: {}", e);
-                    }
-                    // Emit event to tell Spotlight frontend to show content
-                    if let Err(e) = app_handle_for_hud.emit("spotlight:show", ()) {
-                        error!("Failed to emit spotlight:show: {}", e);
-                    }
-                } else {
-                    error!("Spotlight window not found");
-                }
-            });
-            info!("✅ HUD click listener registered");
-
-            Ok(())
-        })
         .on_window_event(|window, event| {
             // Global handler for all windows - LOG ALL EVENTS for debugging
             let label = window.label();
@@ -1422,6 +1363,62 @@ pub async fn run() {
             learn::export_tutorial_as_markdown
         ])
         .setup(|app| {
+            // Setup ESC=hide for existing windows
+            if let Some(main_window) = app.get_webview_window("main") {
+                info!("🔧 Setting up ESC=hide for main window");
+                let window = main_window.clone();
+                main_window.on_window_event(move |event| {
+                    if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                        api.prevent_close();
+                        if let Err(e) = window.hide() {
+                            warn!("Failed to hide window: {}", e);
+                        } else {
+                            info!("🔒 Window hidden (ESC pressed)");
+                        }
+                    }
+                });
+            }
+
+            // Register global shortcuts
+            info!("🎹 About to register global shortcuts...");
+            let shortcut_mgr = app.state::<Arc<Mutex<shortcuts::ShortcutManager>>>();
+            let shortcut_mgr_clone = shortcut_mgr.inner().clone();
+            let app_handle = app.handle().clone();
+
+            // Use block_on instead of spawn to ensure shortcuts are registered before continuing
+            tauri::async_runtime::block_on(async move {
+                info!("🎹 Inside async block - acquiring lock...");
+                let manager = shortcut_mgr_clone.lock().await;
+                info!("🎹 Lock acquired - calling register_all...");
+                if let Err(e) = manager.register_all(&app_handle).await {
+                    error!("❌ Failed to register shortcuts: {}", e);
+                } else {
+                    info!("✅ All global shortcuts registered");
+                }
+            });
+            info!("🎹 After shortcut registration block");
+
+            // Setup HUD click listener to show Spotlight
+            let app_handle_for_hud = app.handle().clone();
+            app.listen("hud:click", move |_event| {
+                info!("🔍 HUD clicked - showing Spotlight");
+                if let Some(spotlight_window) = app_handle_for_hud.get_webview_window("spotlight") {
+                    if let Err(e) = spotlight_window.show() {
+                        error!("Failed to show spotlight: {}", e);
+                    }
+                    if let Err(e) = spotlight_window.set_focus() {
+                        error!("Failed to focus spotlight: {}", e);
+                    }
+                    // Emit event to tell Spotlight frontend to show content
+                    if let Err(e) = app_handle_for_hud.emit("spotlight:show", ()) {
+                        error!("Failed to emit spotlight:show: {}", e);
+                    }
+                } else {
+                    error!("Spotlight window not found");
+                }
+            });
+            info!("✅ HUD click listener registered");
+
             info!("🔍 Checking available windows...");
 
             // macOS Fix: Use Regular activation policy so app appears in dock
