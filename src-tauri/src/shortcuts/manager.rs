@@ -18,13 +18,12 @@ pub struct ShortcutConfig {
 
 impl Default for ShortcutConfig {
     fn default() -> Self {
-        // Using Cmd+Shift+K to avoid conflicts with common app shortcuts
-        // K for "Knowledge" or "Kompanion" (ShadowLearn companion)
-        // Less commonly used than L, Space, etc.
+        // Using Ctrl+Shift+L (Cmd+Shift+L on macOS)
+        // L for "Learn" - ShadowLearn's primary function
         #[cfg(target_os = "macos")]
-        let spotlight_shortcut = "Cmd+Shift+K";
+        let spotlight_shortcut = "Cmd+Shift+L";
         #[cfg(not(target_os = "macos"))]
-        let spotlight_shortcut = "Ctrl+Shift+K";
+        let spotlight_shortcut = "Ctrl+Shift+L";
 
         Self {
             screenshot_analyze: "Ctrl+Shift+S".to_string(),
