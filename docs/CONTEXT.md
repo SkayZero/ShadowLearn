@@ -482,9 +482,125 @@ Pour fenêtres visibles en fullscreen macOS :
 
 ---
 
-## 7. Ce qui est fait vs ce qui reste
+## 7. Phases du système d'opportunités (Roadmap CONTRACTUELLE)
 
-### ✅ Fait (Phase 3 complete)
+Le système d'opportunités est conçu en **4 phases distinctes**.
+⚠️ **Ce découpage est CONTRACTUEL** pour la suite du développement.
+
+### 🔵 Phase 1 — MVP Spotlight (UX de base) [✅ FAIT]
+
+**Objectif** : Avoir une fenêtre Spotlight utilisable, même avec des opportunités mock.
+
+**Réalisations** :
+- [x] Fenêtre Spotlight centrée (600×500, style glassmorphism)
+- [x] Raccourci global `Cmd+Shift+Y` (macOS) pour ouvrir/fermer
+- [x] Pas de backdrop qui bloque l'application derrière
+- [x] Spotlight ne s'ouvre JAMAIS automatiquement (uniquement action utilisateur)
+- [x] Fermeture par `Esc` ou clic hors zone
+- [x] Tests en plein écran (FL Studio, Cursor)
+
+**Statut** : ✅ Complete
+
+---
+
+### 🟣 Phase 2 — HUD "Luciole" (Ambient LED) [✅ FAIT]
+
+**Objectif** : Créer la luciole qui signale les opportunités sans interrompre.
+
+**Réalisations** :
+- [x] Petite fenêtre HUD (60x60) always on top
+- [x] Glassmorphism cohérent avec le reste de l'app
+- [x] Déplaçable (drag & drop) avec position sauvegardée
+- [x] Signaux LED : 🟢 Vert (RAS) / 🟡 Jaune (Opportunité) / 🔴 Rouge (Blocked)
+- [x] Double-clic HUD → ouvre Spotlight
+- [x] HUD visible même en fullscreen macOS (via cocoa FFI)
+  - `NSWindowCollectionBehaviorCanJoinAllSpaces`
+  - `NSWindowCollectionBehaviorStationary`
+  - `NSWindowCollectionBehaviorFullScreenAuxiliary`
+
+**Statut** : ✅ Complete
+
+---
+
+### 🟡 Phase 3A — Spotlight avec opportunités MOCK [🚧 EN COURS]
+
+**Objectif** : Tester l'expérience complète **AVANT** la détection réelle.
+
+**À implémenter** :
+- [ ] Système interne d'opportunités (store frontend)
+- [ ] Trigger manuel pour tests :
+  - Bouton debug caché OU
+  - Commande Rust `trigger_mock_opportunity()`
+- [ ] Spotlight affiche la dernière opportunité mock avec :
+  - Titre court
+  - Mini contexte
+  - 3 actions : **[Discuter]** / **[Voir]** / **[Ignorer]**
+- [ ] Brancher les 3 actions :
+  - **Discuter** → ouvre le chat avec contexte pré-rempli
+  - **Voir** → exécute l'action associée (ou détails)
+  - **Ignorer** → marque l'opportunité comme ignorée
+- [ ] Historique minimal (opportunités stockées en mémoire)
+- [ ] Flow complet fonctionnel : HUD pulse → Spotlight → Action → Ferme
+
+🔥 **TRÈS IMPORTANT** :
+Phase 3A = **AUCUNE dépendance à `idle_seconds` ni à la vraie détection**.
+Objectif = **Valider l'expérience utilisateur avec des données fictives**.
+
+**Résultat attendu** :
+Tu peux démontrer le produit complet, même sans vrai moteur d'opportunités.
+
+---
+
+### 🔴 Phase 3B — Détection intelligente MVP [⏳ NEXT]
+
+**Objectif** : Première version **VRAIMENT utile**, pas basée sur idle seconds.
+
+**PRIORITÉ ABSOLUE** :
+
+⚠️ **Désactiver complètement le trigger actuel basé uniquement sur `idle_seconds > 15`.**
+Ce comportement est considéré comme **LEGACY** et ne doit **PLUS** être utilisé tel quel.
+→ Ça produit des opportunités débiles qui **détruisent l'expérience**.
+
+**À implémenter** :
+
+**1️⃣ Pattern : Refactorisation suggérée**
+- Détection de code répété ≥ 3 fois dans le même fichier
+- Focus dessus > 3 minutes
+- Pas déjà refactorisé
+- ➡️ Opportunité : *"Tu répètes ce pattern 3 fois, veux-tu le refactoriser ?"*
+
+**2️⃣ Pattern : Debug assisté**
+- Erreur de compilation présente > 60 secondes
+- 3 tentatives de fix (undo/redo/recompile)
+- ➡️ Opportunité : *"Tu sembles bloqué sur cette erreur, veux-tu de l'aide ?"*
+
+**Système de scoring** :
+- Confidence / Relevance (0.0 → 1.0)
+- Ne déclencher qu'au-dessus d'un seuil (ex: 0.6)
+
+**Anti-spam** :
+- Max 1 opportunité toutes les X minutes
+- Pas d'opportunité si HUD déjà en état "non lu"
+
+**Architecture** :
+Ces opportunités réelles alimentent le **même store utilisé en Phase 3A**.
+→ Spotlight ne change pas, seule la source change.
+
+---
+
+### 🚀 Phase 4 — Production [FUTUR]
+
+**Phases suivantes (4+)** pourront étendre :
+- Nombre de patterns (clipboard analysis, learning suggestions, etc.)
+- Personnalisation ML basée sur feedbacks utilisateurs
+- Intégration LLM pour suggestions contextuelles
+- Apprentissage multi-session
+
+---
+
+## 8. Ce qui est fait vs ce qui reste (État actuel)
+
+### ✅ Fait (Phases 1 & 2 complètes)
 
 - [x] HUD ambient LED avec états visuels
 - [x] HUD visible en fullscreen macOS (cocoa FFI)
@@ -498,21 +614,29 @@ Pour fenêtres visibles en fullscreen macOS :
 - [x] Thèmes (Orya, etc.) avec couleurs LED
 - [x] Code optimisé (console.log removed, utils/, hooks/)
 - [x] Build system (Vite + Tauri)
-- [x] Documentation complète
+- [x] Documentation complète réorganisée
 
-### 🚧 En cours / À faire
+### 🚧 En cours (Phase 3A)
 
 #### Priorité HAUTE
-- [ ] Système détection opportunités (triggers) — Backend existe, besoin polish
-- [ ] Communication HUD ↔ Backend (events) — Partiellement fait
-- [ ] Spotlight affiche vraies opportunités — Actuellement mock data
-- [ ] Intégration Chat ↔ Spotlight (passer contexte)
+- [ ] **Phase 3A : Spotlight avec opportunités MOCK** — Critère de succès : flow complet fonctionnel
+- [ ] Store d'opportunités frontend
+- [ ] Debug trigger (commande Rust)
+- [ ] Actions Spotlight [Discuter/Voir/Ignorer] fonctionnelles
+
+### ⏳ À faire (Phase 3B & autres)
+
+#### Priorité HAUTE
+- [ ] **Phase 3B : Détection intelligente MVP** — Patterns refacto + debug
+- [ ] **Désactiver idle_seconds trigger** (legacy)
+- [ ] 🐛 Bug Settings window (logs "shown" mais fenêtre invisible)
+- [ ] ⚠️ Corriger ~55 warnings TypeScript
 
 #### Priorité MOYENNE
 - [ ] Tests E2E (shortcuts, windows, flows)
 - [ ] Build automatisé CI/CD
 - [ ] Signatures macOS (pour distribution)
-- [ ] Persistence settings utilisateur (partiellement fait)
+- [ ] Persistence settings utilisateur (complet)
 
 #### Priorité BASSE
 - [ ] Windows/Linux support complet

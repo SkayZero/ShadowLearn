@@ -127,7 +127,38 @@ input: {
 
 ---
 
-### 🔴 Critique #4: HUD double-click logic
+### 🔴 Critique #4: Trigger `idle_seconds` est LEGACY (NE PAS UTILISER)
+
+**Fichier** : `src-tauri/src/triggers/trigger_loop.rs`
+**Lignes** : ~50-80 (trigger loop)
+
+**⚠️ RÈGLE ABSOLUE** :
+
+❌ **NE JAMAIS utiliser `idle_seconds > 15` comme trigger principal.**
+
+Le trigger basé uniquement sur l'inactivité utilisateur est **LEGACY** et produit des opportunités **non pertinentes** qui **détruisent l'expérience**.
+
+**Pourquoi** :
+- Utilisateur idle ≠ utilisateur bloqué
+- Produit des faux positifs massifs
+- Interrompt le flow créatif sans raison
+
+**Architecture contractuelle** :
+Les vraies opportunités doivent passer par les **patterns définis en Phase 3B** (voir `docs/CONTEXT.md` Section 7) :
+
+1. **Pattern Refacto** : Code répété ≥ 3 fois
+2. **Pattern Debug** : Erreur persistante > 60s + 3 tentatives
+
+**Si tu dois modifier triggers** :
+1. Lis `docs/CONTEXT.md` Section 7 (Phases 3A/3B)
+2. Implémente d'abord Phase 3A (mock data)
+3. Puis Phase 3B (patterns intelligents)
+
+**Historique** : Cette décision architecturale est **contractuelle** pour éviter un MVP avec UX cassée.
+
+---
+
+### 🔴 Critique #5: HUD double-click logic
 
 **Fichier** : `src/hud.tsx`
 **Lignes** : 49-71
@@ -148,7 +179,7 @@ if (timeSinceLastClick < 300) {  // ⚠️ Timing fragile
 
 ---
 
-### 🔴 Critique #5: macOS FFI unsafe code
+### 🔴 Critique #6: macOS FFI unsafe code
 
 **Fichier** : `src-tauri/src/lib.rs`
 **Lignes** : 1486-1496

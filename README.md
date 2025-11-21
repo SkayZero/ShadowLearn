@@ -49,6 +49,29 @@ pnpm tauri dev
 
 ---
 
+## 🎯 Next Steps (Priorités actuelles - Jan 2025)
+
+**Phases du système d'opportunités** (voir [docs/CONTEXT.md](docs/CONTEXT.md) Section 7) :
+
+1. ✅ **Phase 1** : Spotlight (UX de base) — FAIT
+2. ✅ **Phase 2** : HUD "Luciole" (Ambient LED) — FAIT
+3. 🚧 **Phase 3A** : Spotlight avec opportunités MOCK (EN COURS)
+   - Store d'opportunités frontend
+   - Debug trigger pour tests
+   - Actions [Discuter/Voir/Ignorer] fonctionnelles
+4. ⏳ **Phase 3B** : Détection intelligente MVP (NEXT)
+   - ⚠️ **IMPORTANT** : Désactiver trigger `idle_seconds` (legacy)
+   - Pattern Refacto (code répété ≥ 3x)
+   - Pattern Debug (erreur persistante)
+
+**Bugs critiques** :
+- 🐛 Settings window invisible (logs "shown" mais pas visible)
+- ⚠️ ~55 warnings TypeScript à corriger
+
+**Voir la roadmap complète** : [docs/CONTEXT.md](docs/CONTEXT.md) Section 7
+
+---
+
 ## 🔑 Glossaire rapide
 
 | Terme | Définition |
