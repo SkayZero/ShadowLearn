@@ -254,6 +254,176 @@ async fn remove_from_allowlist(
     Ok(())
 }
 
+// ========== PHASE 3A: OPPORTUNITY MOCK TRIGGER (DEBUG) ==========
+
+#[tauri::command]
+async fn trigger_mock_opportunity(
+    app: AppHandle,
+    opportunity_type: String,
+) -> Result<(), String> {
+    use chrono::Utc;
+    use serde_json::json;
+
+    info!("🧪 Triggering mock opportunity: {}", opportunity_type);
+
+    let timestamp = Utc::now().timestamp();
+    let mock_id = format!("mock_{}_{}", opportunity_type, timestamp);
+
+    // Create mock opportunity based on type
+    let mock_data = match opportunity_type.as_str() {
+        "refacto" => json!({
+            "id": mock_id,
+            "title": "Code répété détecté",
+            "description": "Tu utilises le même pattern 3 fois dans UserService.ts. Veux-tu créer une fonction réutilisable ?",
+            "context": {
+                "app": "VS Code",
+                "file": "src/services/UserService.ts",
+                "line": 42,
+                "codeSnippet": "const user = await db.users.findOne({ id });\nif (!user) throw new Error('Not found');"
+            },
+            "type": "refacto",
+            "confidence": 0.85,
+            "timestamp": timestamp,
+            "status": "pending",
+            "actions": [
+                {
+                    "id": "discuss",
+                    "label": "Discuter",
+                    "icon": "💬",
+                    "type": "discuss"
+                },
+                {
+                    "id": "view",
+                    "label": "Voir",
+                    "icon": "👁",
+                    "type": "view"
+                },
+                {
+                    "id": "ignore",
+                    "label": "Ignorer",
+                    "icon": "🚫",
+                    "type": "ignore"
+                }
+            ]
+        }),
+        "debug" => json!({
+            "id": mock_id,
+            "title": "Erreur persistante détectée",
+            "description": "TypeError sur la ligne 42 depuis 90 secondes. Besoin d'aide pour déboguer ?",
+            "context": {
+                "app": "VS Code",
+                "file": "src/components/Dashboard.tsx",
+                "line": 42,
+                "codeSnippet": "const data = response.data.map(item => item.value);"
+            },
+            "type": "debug",
+            "confidence": 0.92,
+            "timestamp": timestamp,
+            "status": "pending",
+            "actions": [
+                {
+                    "id": "discuss",
+                    "label": "Discuter",
+                    "icon": "💬",
+                    "type": "discuss"
+                },
+                {
+                    "id": "view",
+                    "label": "Voir",
+                    "icon": "👁",
+                    "type": "view"
+                },
+                {
+                    "id": "ignore",
+                    "label": "Ignorer",
+                    "icon": "🚫",
+                    "type": "ignore"
+                }
+            ]
+        }),
+        "learn" => json!({
+            "id": mock_id,
+            "title": "Opportunité d'apprentissage",
+            "description": "Tu viens d'utiliser une technique avancée de React Hooks. Veux-tu en savoir plus ?",
+            "context": {
+                "app": "VS Code",
+                "file": "src/hooks/useCustomHook.ts",
+                "line": 15
+            },
+            "type": "learn",
+            "confidence": 0.78,
+            "timestamp": timestamp,
+            "status": "pending",
+            "actions": [
+                {
+                    "id": "discuss",
+                    "label": "Discuter",
+                    "icon": "💬",
+                    "type": "discuss"
+                },
+                {
+                    "id": "view",
+                    "label": "Voir",
+                    "icon": "👁",
+                    "type": "view"
+                },
+                {
+                    "id": "ignore",
+                    "label": "Ignorer",
+                    "icon": "🚫",
+                    "type": "ignore"
+                }
+            ]
+        }),
+        "tip" => json!({
+            "id": mock_id,
+            "title": "Raccourci clavier disponible",
+            "description": "Savais-tu que Cmd+D peut dupliquer une ligne ? Ça pourrait t'aider ici.",
+            "context": {
+                "app": "VS Code",
+                "file": "src/utils/helpers.ts",
+                "line": 8
+            },
+            "type": "tip",
+            "confidence": 0.65,
+            "timestamp": timestamp,
+            "status": "pending",
+            "actions": [
+                {
+                    "id": "view",
+                    "label": "Voir",
+                    "icon": "👁",
+                    "type": "view"
+                },
+                {
+                    "id": "ignore",
+                    "label": "Ignorer",
+                    "icon": "🚫",
+                    "type": "ignore"
+                }
+            ]
+        }),
+        _ => {
+            warn!("⚠️ Unknown opportunity type: {}", opportunity_type);
+            return Err(format!("Unknown opportunity type: {}", opportunity_type));
+        }
+    };
+
+    // Emit opportunity:new event
+    app.emit("opportunity:new", mock_data.clone())
+        .map_err(|e| format!("Failed to emit opportunity:new: {}", e))?;
+
+    info!("✅ Mock opportunity emitted: {}", mock_id);
+
+    // Also emit hud:pulse event to trigger HUD animation
+    app.emit("hud:pulse", json!({ "state": "opportunity" }))
+        .map_err(|e| format!("Failed to emit hud:pulse: {}", e))?;
+
+    info!("✅ HUD pulse event emitted");
+
+    Ok(())
+}
+
 // ========== J17: PERSISTANCE & MÉMOIRE COMMANDS ==========
 
 #[tauri::command]
@@ -1095,6 +1265,7 @@ pub async fn run() {
         .plugin(
             tauri_plugin_window_state::Builder::default()
                 .with_state_flags(StateFlags::all())
+                .with_denylist(&["spotlight"]) // Exclude spotlight from window-state saving
                 .build(),
         )
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
@@ -1188,6 +1359,7 @@ pub async fn run() {
             get_trigger_stats,
             add_to_allowlist,
             remove_from_allowlist,
+            trigger_mock_opportunity,
             screenshot::capture_screenshot,
             screenshot::check_screenshot_permission,
             screenshot::request_screenshot_permission,
@@ -1451,6 +1623,34 @@ pub async fn run() {
             // Configure Spotlight window for macOS fullscreen support
             if let Some(spotlight) = app.get_webview_window("spotlight") {
                 info!("✅ Found spotlight window, configuring...");
+
+                // Force window size to 1200×900
+                // IMPORTANT: Must override window-state plugin which restores saved size
+                use tauri::Size;
+
+                // Try immediately
+                if let Err(e) = spotlight.set_size(Size::Physical(tauri::PhysicalSize {
+                    width: 1200,
+                    height: 900,
+                })) {
+                    warn!("⚠️ Failed to set spotlight size (immediate): {}", e);
+                } else {
+                    info!("📐 Spotlight size set to 1200×900 (immediate)");
+                }
+
+                // Also set after delay to override window-state restoration
+                let spotlight_clone = spotlight.clone();
+                tokio::spawn(async move {
+                    tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
+                    if let Err(e) = spotlight_clone.set_size(Size::Physical(tauri::PhysicalSize {
+                        width: 1200,
+                        height: 900,
+                    })) {
+                        warn!("⚠️ Failed to set spotlight size (delayed): {}", e);
+                    } else {
+                        info!("📐 Spotlight size FORCED to 1200×900 (delayed, overriding window-state)");
+                    }
+                });
 
                 // Ensure it's hidden initially
                 let _ = spotlight.hide();
