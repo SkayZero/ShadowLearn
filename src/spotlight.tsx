@@ -135,7 +135,7 @@ function SpotlightWindow() {
       style={{
         width: '100vw',
         height: '100vh',
-        padding: '40px',
+        padding: '30px',
         boxSizing: 'border-box',
         display: 'flex',
         alignItems: 'flex-start',
@@ -154,20 +154,19 @@ function SpotlightWindow() {
             onClick={(e) => e.stopPropagation()}
             style={{
               width: '100%',
-              maxWidth: '850px',
-              height: 'auto',
-              maxHeight: 'calc(100vh - 80px)',
+              maxWidth: '880px',
+              height: 'calc(100vh - 60px)',
               background: 'var(--glass-bg)',
               backdropFilter: 'var(--glass-backdrop)',
               WebkitBackdropFilter: 'var(--glass-backdrop)',
               border: '1px solid var(--glass-border)',
               borderRadius: '24px',
               boxShadow: 'var(--glass-shadow)',
-              padding: '24px',
-              overflowY: 'auto',
+              padding: '20px',
+              overflow: 'hidden',
               display: 'flex',
               flexDirection: 'column',
-              gap: '20px',
+              gap: '14px',
             }}
           >
             {/* Header - Draggable */}
@@ -176,17 +175,17 @@ function SpotlightWindow() {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '12px',
-                paddingBottom: '12px',
+                gap: '10px',
+                paddingBottom: '10px',
                 borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
                 cursor: 'move',
                 flexShrink: 0,
               }}
             >
-              <span style={{ fontSize: '28px' }}>🔍</span>
+              <span style={{ fontSize: '24px' }}>🔍</span>
               <h2
                 style={{
-                  fontSize: '20px',
+                  fontSize: '18px',
                   fontWeight: '700',
                   color: 'var(--text-primary)',
                   margin: 0,
@@ -241,13 +240,13 @@ function SpotlightWindow() {
               </div>
             )}
 
-            {/* Content Area - scrollable */}
+            {/* Content Area */}
             <div
               style={{
                 flex: '1 1 auto',
-                overflowY: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
+                overflow: 'hidden',
               }}
             >
               {latestOpportunity ? (
@@ -255,10 +254,10 @@ function SpotlightWindow() {
                   {/* Title */}
                   <h3
                     style={{
-                      fontSize: '18px',
+                      fontSize: '17px',
                       fontWeight: '700',
                       color: 'var(--text-primary)',
-                      marginBottom: '12px',
+                      marginBottom: '8px',
                       letterSpacing: '-0.3px',
                     }}
                   >
@@ -268,10 +267,10 @@ function SpotlightWindow() {
                   {/* Description */}
                   <p
                     style={{
-                      fontSize: '15px',
-                      lineHeight: '1.6',
+                      fontSize: '14px',
+                      lineHeight: '1.5',
                       color: 'rgba(255, 255, 255, 0.85)',
-                      marginBottom: '20px',
+                      marginBottom: '12px',
                       fontWeight: '400',
                     }}
                   >
@@ -295,17 +294,16 @@ function SpotlightWindow() {
               {latestOpportunity && latestOpportunity.context && (
                 <div
                   style={{
-                    fontSize: '14px',
+                    fontSize: '13px',
                     color: 'rgba(255, 255, 255, 0.75)',
-                    padding: '14px 16px',
+                    padding: '10px 12px',
                     background: 'rgba(255, 255, 255, 0.05)',
-                    borderRadius: '10px',
-                    marginBottom: '20px',
+                    borderRadius: '8px',
                     borderLeft: '3px solid var(--accent-primary)',
                   }}
                 >
-                  <strong style={{ color: '#87CEEB' }}>📍 Contexte</strong>
-                  <div style={{ marginTop: '6px', fontSize: '13px', color: 'rgba(255, 255, 255, 0.75)' }}>
+                  <strong style={{ color: '#87CEEB', fontSize: '13px' }}>📍 Contexte</strong>
+                  <div style={{ marginTop: '4px', fontSize: '12px', color: 'rgba(255, 255, 255, 0.75)' }}>
                     {latestOpportunity.context.app}
                     {latestOpportunity.context.file && ` • ${latestOpportunity.context.file}`}
                     {latestOpportunity.context.line && ` • Ligne ${latestOpportunity.context.line}`}
@@ -313,14 +311,14 @@ function SpotlightWindow() {
                   {latestOpportunity.context.codeSnippet && (
                     <pre
                       style={{
-                        marginTop: '8px',
-                        padding: '8px',
+                        marginTop: '6px',
+                        padding: '6px',
                         background: 'rgba(0, 0, 0, 0.3)',
-                        borderRadius: '6px',
-                        fontSize: '12px',
+                        borderRadius: '4px',
+                        fontSize: '11px',
                         fontFamily: 'monospace',
                         overflow: 'auto',
-                        maxHeight: '100px',
+                        maxHeight: '60px',
                       }}
                     >
                       {latestOpportunity.context.codeSnippet}
@@ -376,21 +374,22 @@ function SpotlightWindow() {
               <div
                 style={{
                   display: 'flex',
-                  gap: '12px',
+                  gap: '10px',
                   marginTop: 'auto',
+                  flexShrink: 0,
                 }}
               >
                 <button
                 onClick={handleView}
                 style={{
                   flex: 1,
-                  padding: '14px 24px',
+                  padding: '12px 20px',
                   background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-light))',
                   border: 'none',
-                  borderRadius: '12px',
+                  borderRadius: '10px',
                   color: 'white',
                   fontWeight: '600',
-                  fontSize: '15px',
+                  fontSize: '14px',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
@@ -411,13 +410,13 @@ function SpotlightWindow() {
                 onClick={handleDiscuss}
                 style={{
                   flex: 1,
-                  padding: '14px 24px',
+                  padding: '12px 20px',
                   background: 'rgba(255, 255, 255, 0.08)',
                   border: '1px solid var(--glass-border)',
-                  borderRadius: '12px',
+                  borderRadius: '10px',
                   color: 'var(--text-primary)',
                   fontWeight: '600',
-                  fontSize: '15px',
+                  fontSize: '14px',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                 }}
@@ -436,13 +435,13 @@ function SpotlightWindow() {
               <button
                 onClick={handleIgnore}
                 style={{
-                  padding: '14px 20px',
+                  padding: '12px 16px',
                   background: 'transparent',
                   border: '1px solid var(--glass-border)',
-                  borderRadius: '12px',
+                  borderRadius: '10px',
                   color: 'var(--text-muted)',
                   fontWeight: '500',
-                  fontSize: '15px',
+                  fontSize: '14px',
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                 }}
@@ -465,8 +464,7 @@ function SpotlightWindow() {
             {/* Hint */}
             <p
               style={{
-                marginTop: '16px',
-                fontSize: '13px',
+                fontSize: '12px',
                 color: 'rgba(255, 255, 255, 0.6)',
                 textAlign: 'center',
                 flexShrink: 0,
