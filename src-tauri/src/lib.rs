@@ -1623,18 +1623,18 @@ pub async fn run() {
             if let Some(spotlight) = app.get_webview_window("spotlight") {
                 info!("✅ Found spotlight window, configuring...");
 
-                // Force window size to 1000×800 (content is 900×700, window needs margin)
+                // Force window size to 1200×900
                 // IMPORTANT: Must override window-state plugin which restores saved size
                 use tauri::Size;
 
                 // Try immediately
                 if let Err(e) = spotlight.set_size(Size::Physical(tauri::PhysicalSize {
-                    width: 1000,
-                    height: 800,
+                    width: 1200,
+                    height: 900,
                 })) {
                     warn!("⚠️ Failed to set spotlight size (immediate): {}", e);
                 } else {
-                    info!("📐 Spotlight size set to 1000×800 (immediate)");
+                    info!("📐 Spotlight size set to 1200×900 (immediate)");
                 }
 
                 // Also set after delay to override window-state restoration
@@ -1642,12 +1642,12 @@ pub async fn run() {
                 tokio::spawn(async move {
                     tokio::time::sleep(tokio::time::Duration::from_millis(100)).await;
                     if let Err(e) = spotlight_clone.set_size(Size::Physical(tauri::PhysicalSize {
-                        width: 1000,
-                        height: 800,
+                        width: 1200,
+                        height: 900,
                     })) {
                         warn!("⚠️ Failed to set spotlight size (delayed): {}", e);
                     } else {
-                        info!("📐 Spotlight size FORCED to 1000×800 (delayed, overriding window-state)");
+                        info!("📐 Spotlight size FORCED to 1200×900 (delayed, overriding window-state)");
                     }
                 });
 

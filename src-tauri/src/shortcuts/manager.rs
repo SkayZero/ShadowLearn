@@ -165,14 +165,14 @@ impl ShortcutManager {
                                         warn!("📏 [DEBUG] Size BEFORE set_size: {}×{}", size_before.width, size_before.height);
                                     }
 
-                                    // FORCE size to 1000×800 BEFORE centering (content is 900×700, window needs margin)
+                                    // FORCE size to 1200×900 BEFORE centering
                                     if let Err(e) = spotlight_window.set_size(Size::Physical(PhysicalSize {
-                                        width: 1000,
-                                        height: 800,
+                                        width: 1200,
+                                        height: 900,
                                     })) {
                                         error!("❌ Failed to set spotlight size: {}", e);
                                     } else {
-                                        info!("📐 set_size(1000×800) called successfully");
+                                        info!("📐 set_size(1200×900) called successfully");
                                     }
 
                                     // DEBUG: Check size AFTER set_size
