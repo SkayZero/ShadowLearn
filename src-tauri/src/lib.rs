@@ -1265,6 +1265,7 @@ pub async fn run() {
         .plugin(
             tauri_plugin_window_state::Builder::default()
                 .with_state_flags(StateFlags::all())
+                .with_denylist(&["spotlight"]) // Exclude spotlight from window-state saving
                 .build(),
         )
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
