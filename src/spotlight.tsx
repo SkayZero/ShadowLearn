@@ -270,7 +270,7 @@ function SpotlightWindow() {
                     style={{
                       fontSize: '15px',
                       lineHeight: '1.6',
-                      color: 'var(--text-secondary)',
+                      color: 'rgba(255, 255, 255, 0.85)',
                       marginBottom: '20px',
                       fontWeight: '400',
                     }}
@@ -281,10 +281,10 @@ function SpotlightWindow() {
               ) : (
                 <div style={{ textAlign: 'center', padding: '40px 20px' }}>
                   <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔍</div>
-                  <p style={{ fontSize: '16px', color: 'var(--text-primary)', marginBottom: '8px', fontWeight: '600' }}>
+                  <p style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.95)', marginBottom: '8px', fontWeight: '600' }}>
                     Aucune opportunité disponible
                   </p>
-                  <p style={{ fontSize: '14px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                  <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)', lineHeight: '1.5' }}>
                     Trigger une nouvelle opportunité depuis le panneau debug<br/>
                     pour tester le système.
                   </p>
@@ -296,7 +296,7 @@ function SpotlightWindow() {
                 <div
                   style={{
                     fontSize: '14px',
-                    color: 'var(--text-secondary)',
+                    color: 'rgba(255, 255, 255, 0.75)',
                     padding: '14px 16px',
                     background: 'rgba(255, 255, 255, 0.05)',
                     borderRadius: '10px',
@@ -304,8 +304,8 @@ function SpotlightWindow() {
                     borderLeft: '3px solid var(--accent-primary)',
                   }}
                 >
-                  <strong style={{ color: 'var(--accent-primary)' }}>📍 Contexte</strong>
-                  <div style={{ marginTop: '6px', fontSize: '13px' }}>
+                  <strong style={{ color: '#87CEEB' }}>📍 Contexte</strong>
+                  <div style={{ marginTop: '6px', fontSize: '13px', color: 'rgba(255, 255, 255, 0.75)' }}>
                     {latestOpportunity.context.app}
                     {latestOpportunity.context.file && ` • ${latestOpportunity.context.file}`}
                     {latestOpportunity.context.line && ` • Ligne ${latestOpportunity.context.line}`}
@@ -359,7 +359,7 @@ function SpotlightWindow() {
                         ✕
                       </button>
                     </div>
-                    <div style={{ color: 'var(--text-secondary)' }}>
+                    <div style={{ color: 'rgba(255, 255, 255, 0.85)' }}>
                       <p><strong>ID:</strong> {currentOpp.id}</p>
                       <p><strong>Type:</strong> {currentOpp.type}</p>
                       <p><strong>Confiance:</strong> {Math.round(currentOpp.confidence * 100)}%</p>
@@ -467,12 +467,12 @@ function SpotlightWindow() {
               style={{
                 marginTop: '16px',
                 fontSize: '13px',
-                color: 'var(--text-muted)',
+                color: 'rgba(255, 255, 255, 0.6)',
                 textAlign: 'center',
-                flexShrink: 0, // Don't shrink hint
+                flexShrink: 0,
               }}
             >
-              Appuyez sur <kbd style={{ padding: '3px 8px', background: 'rgba(255,255,255,0.1)', borderRadius: '6px', fontSize: '12px', fontWeight: '600' }}>Esc</kbd> pour fermer
+              Appuyez sur <kbd style={{ padding: '3px 8px', background: 'rgba(255,255,255,0.1)', borderRadius: '6px', fontSize: '12px', fontWeight: '600', color: 'rgba(255, 255, 255, 0.9)' }}>Esc</kbd> pour fermer
             </p>
           </motion.div>
         )}
