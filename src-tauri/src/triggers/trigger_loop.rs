@@ -245,25 +245,27 @@ async fn trigger_loop(app_handle: AppHandle) {
                     let _ = sm.transition(TriggerEvent::ShowPrompt { suggestion_id });
                 }
 
-                // 🔥 EMIT OPPORTUNITY EVENT - Notify frontend about new opportunity
-                {
-                    let opp_id = format!("opp_{}", chrono::Utc::now().timestamp());
-                    let opp_payload = serde_json::json!({
-                        "id": opp_id,
-                        "title": format!("J'ai une idée pour {}", full_ctx.app.name),
-                        "confidence": 0.8,
-                        "preview": format!("Tu travailles sur {} depuis {} secondes. Besoin d'aide ?", full_ctx.app.name, full_ctx.idle_seconds as u32),
-                        "app": full_ctx.app.name,
-                        "context": {
-                            "app_name": full_ctx.app.name,
-                            "idle_seconds": full_ctx.idle_seconds,
-                        }
-                    });
-                    
-                    if let Err(e) = app_handle.emit("shadow:opportunity", &opp_payload) {
-                        debug!("Failed to emit opportunity event: {}", e);
-                    }
-                }
+                // 🔥 EMIT OPPORTUNITY EVENT - DISABLED in Phase 3B
+                // Phase 3B: Opportunities are now triggered by real pattern detection (file watcher)
+                // instead of idle_seconds. See detection::file_watcher module.
+                // {
+                //     let opp_id = format!("opp_{}", chrono::Utc::now().timestamp());
+                //     let opp_payload = serde_json::json!({
+                //         "id": opp_id,
+                //         "title": format!("J'ai une idée pour {}", full_ctx.app.name),
+                //         "confidence": 0.8,
+                //         "preview": format!("Tu travailles sur {} depuis {} secondes. Besoin d'aide ?", full_ctx.app.name, full_ctx.idle_seconds as u32),
+                //         "app": full_ctx.app.name,
+                //         "context": {
+                //             "app_name": full_ctx.app.name,
+                //             "idle_seconds": full_ctx.idle_seconds,
+                //         }
+                //     });
+                //
+                //     if let Err(e) = app_handle.emit("shadow:opportunity", &opp_payload) {
+                //         debug!("Failed to emit opportunity event: {}", e);
+                //     }
+                // }
 
                 // 🔥 EMIT MICRO SUGGESTIONS - Notify pills component
                 {

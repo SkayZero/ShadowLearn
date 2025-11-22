@@ -14,6 +14,7 @@ mod privacy; // Privacy zones for screen monitoring
 mod artefact;
 mod clustering;
 mod context;
+mod detection; // Phase 3B: Real Opportunity Detection
 mod digest; // Clueless: Daily Digest
 mod features;
 mod flow; // Clueless: Flow State Detection
@@ -1718,7 +1719,18 @@ pub async fn run() {
                 app.handle().clone(),
             ));
 
-            info!("✅ Setup complete – trigger loop launched");
+            // 🔍 Phase 3B: Start file watcher for real opportunity detection
+            if let Ok(current_dir) = std::env::current_dir() {
+                info!("🔍 Starting file watcher for: {:?}", current_dir);
+                detection::file_watcher::start_file_watcher(
+                    app.handle().clone(),
+                    current_dir,
+                );
+            } else {
+                warn!("⚠️ Failed to get current directory for file watcher");
+            }
+
+            info!("✅ Setup complete – trigger loop and file watcher launched");
 
             Ok(())
         })

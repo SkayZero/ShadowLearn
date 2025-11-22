@@ -54,6 +54,10 @@ lru = "0.12"
 reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
 simd-json = "0.13"
 
+# Phase 3B: Real Opportunity Detection
+notify = { version = "6", default-features = false, features = ["macos_kqueue"] }
+regex = "1"
+
 # Platform-specific dependencies
 [target.'cfg(target_os = "macos")'.dependencies]
 cocoa = "0.25"
