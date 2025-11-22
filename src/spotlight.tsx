@@ -135,8 +135,10 @@ function SpotlightWindow() {
       style={{
         width: '100vw',
         height: '100vh',
+        padding: '40px',
+        boxSizing: 'border-box',
         display: 'flex',
-        alignItems: 'center', // Center vertically (Tauri centers window already)
+        alignItems: 'flex-start',
         justifyContent: 'center',
         background: 'transparent',
       }}
@@ -151,19 +153,21 @@ function SpotlightWindow() {
             transition={{ type: 'spring', damping: 30, stiffness: 400 }}
             onClick={(e) => e.stopPropagation()}
             style={{
-              width: '900px',
-              height: '700px',
-              boxSizing: 'border-box',
+              width: '100%',
+              maxWidth: '850px',
+              height: 'auto',
+              maxHeight: 'calc(100vh - 80px)',
               background: 'var(--glass-bg)',
               backdropFilter: 'var(--glass-backdrop)',
               WebkitBackdropFilter: 'var(--glass-backdrop)',
               border: '1px solid var(--glass-border)',
               borderRadius: '24px',
               boxShadow: 'var(--glass-shadow)',
-              padding: '32px',
-              overflow: 'auto',
+              padding: '24px',
+              overflowY: 'auto',
               display: 'flex',
               flexDirection: 'column',
+              gap: '20px',
             }}
           >
             {/* Header - Draggable */}
@@ -173,10 +177,10 @@ function SpotlightWindow() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '12px',
-                marginBottom: '24px',
-                paddingBottom: '16px',
+                paddingBottom: '12px',
                 borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
                 cursor: 'move',
+                flexShrink: 0,
               }}
             >
               <span style={{ fontSize: '28px' }}>🔍</span>
@@ -204,7 +208,7 @@ function SpotlightWindow() {
                   background: 'linear-gradient(135deg, rgba(135, 206, 235, 0.25), rgba(16, 185, 129, 0.25))',
                   border: '1px solid var(--accent-light)',
                   borderRadius: '12px',
-                  marginBottom: '20px',
+                  flexShrink: 0,
                 }}
               >
                 <span style={{ fontSize: '18px' }}>{getTypeEmoji(latestOpportunity.type)}</span>
@@ -237,13 +241,13 @@ function SpotlightWindow() {
               </div>
             )}
 
-            {/* Content Area - flex grow to take available space */}
+            {/* Content Area - scrollable */}
             <div
               style={{
                 flex: '1 1 auto',
+                overflowY: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
-                minHeight: 0, // Allow shrinking
               }}
             >
               {latestOpportunity ? (
