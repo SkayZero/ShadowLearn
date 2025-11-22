@@ -160,11 +160,6 @@ impl ShortcutManager {
                                 Ok(false) => {
                                     info!("🔍 Spotlight currently hidden - showing");
 
-                                    // DEBUG: Check current size BEFORE any changes
-                                    if let Ok(size_before) = spotlight_window.outer_size() {
-                                        warn!("📏 [DEBUG] Size BEFORE set_size: {}×{}", size_before.width, size_before.height);
-                                    }
-
                                     // FORCE size to 1200×900 BEFORE centering
                                     if let Err(e) = spotlight_window.set_size(Size::Physical(PhysicalSize {
                                         width: 1200,
@@ -173,11 +168,6 @@ impl ShortcutManager {
                                         error!("❌ Failed to set spotlight size: {}", e);
                                     } else {
                                         info!("📐 set_size(1200×900) called successfully");
-                                    }
-
-                                    // DEBUG: Check size AFTER set_size
-                                    if let Ok(size_after) = spotlight_window.outer_size() {
-                                        warn!("📏 [DEBUG] Size AFTER set_size: {}×{}", size_after.width, size_after.height);
                                     }
 
                                     // Center the window on screen
@@ -192,11 +182,6 @@ impl ShortcutManager {
                                         error!("❌ Failed to show spotlight: {}", e);
                                     } else {
                                         info!("✅ Spotlight shown");
-                                    }
-
-                                    // DEBUG: Final size check AFTER show
-                                    if let Ok(size_final) = spotlight_window.outer_size() {
-                                        warn!("📏 [DEBUG] Size AFTER show: {}×{}", size_final.width, size_final.height);
                                     }
 
                                     // Try to focus

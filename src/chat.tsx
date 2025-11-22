@@ -15,7 +15,6 @@ import { PersonalitySelector } from './components/PersonalitySelector';
 import { PauseMode } from './components/PauseMode';
 import { OpportunityLayer } from './components/OpportunityLayer';
 import { HelpModal } from './components/HelpModal';
-import { DebugOpportunities } from './components/DebugOpportunities';
 import { LayoutProvider } from './contexts/LayoutContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import useWindowLifecycle from './hooks/useWindowLifecycle';
@@ -714,9 +713,6 @@ Question de l'utilisateur : ${messageText}`;
         isOpen={isHelpOpen}
         onClose={() => setIsHelpOpen(false)}
       />
-
-      {/* Phase 3A Debug Panel - TO BE REMOVED after validation */}
-      <DebugOpportunities />
         </WindowManager>
       </LayoutProvider>
     </ThemeProvider>
